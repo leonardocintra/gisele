@@ -1,6 +1,7 @@
-export interface ITipoItem {
+export interface ITipoItemConsumivel {
   descricao: string;
-  exibirPrecoItem: boolean;
+  exibirPreco: boolean;
+  imagem: string;
 }
 
 /**

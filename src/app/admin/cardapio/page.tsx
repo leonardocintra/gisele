@@ -1,6 +1,4 @@
-import MenuHeader from "@/app/components/admin/MenuHeader";
 import CardTile from "@/app/components/admin/cardapio/CardTile";
-import Image from "next/image";
 
 export default function AdminCardapioPage() {
   return (
