@@ -72,4 +72,28 @@ Maionese
 Vinagrete
 Beterraba
 
+-----------------------------
+Carnes  🍗🥩🍖
+
+Carne moída
+Frango empanado 
+Costelinha 
+
+
+Guarnições🥦🌽🍟
+
+Canelone presunto/ mussarela 
+Macarrão alho e óleo com bacon
+Farofa de abobrinha 
+Chuchu
+Batata doce
+Batata frita 
+Mandioca frita 
+
+Saladas🍎🥬🍆  
+
+Maionese 
+Vinagrete
+Beterraba
+
 
