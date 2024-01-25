@@ -16,8 +16,8 @@ export default function NovoTipoItemPage() {
 
   function fetchTipoItems() {
     fetch("/api/tipoItem").then((res) =>
-      res.json().then((categories) => {
-        setTipoItems(categories);
+      res.json().then((items) => {
+        setTipoItems(items);
       })
     );
   }
@@ -34,9 +34,8 @@ export default function NovoTipoItemPage() {
       const data: Partial<TipoItemDocument> = {
         descricao,
         exibirPreco,
+        imagem: "/img/sem-imagem.webp"
       };
-
-      console.log(data);
 
       const response = await fetch("/api/tipoItem/", {
         method: "POST",
@@ -87,7 +86,7 @@ export default function NovoTipoItemPage() {
                 type="checkbox"
                 checked={exibirPreco}
                 className="toggle toggle-primary toggle-lg"
-                onClick={() => setExibirPreco(!exibirPreco)}
+                onChange={() => setExibirPreco(!exibirPreco)}
               />
             </label>
           </div>
@@ -150,8 +149,8 @@ export default function NovoTipoItemPage() {
           </table>
         </div>
       ) : (
-        <div>
-          <h2>Nehum item cadastrado ainda</h2>
+        <div className="flex items-center justify-center my-9 p-2">
+          <span className="loading loading-spinner loading-lg"></span>
         </div>
       )}
     </div>
