@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 type CardTileProps = {
   id: string;
@@ -21,7 +22,12 @@ export default function CardTile(props: CardTileProps) {
       <div className="card-body items-center text-center">
         <h2 className="card-title">{props.descricao}</h2>
         <div className="card-actions">
-          <button className="btn btn-primary">Gerenciar</button>
+          <Link
+            href={`/admin/cardapio/${props.id}`}
+            className="btn btn-primary"
+          >
+            Gerenciar
+          </Link>
         </div>
       </div>
     </div>

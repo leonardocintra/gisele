@@ -8,7 +8,7 @@ export default function AdminLayout({
   return (
     <section className="p-2">
       <MenuHeader />
-      <div className="mt-3">{children}</div>
+      <div className="my-3">{children}</div>
     </section>
   );
 }

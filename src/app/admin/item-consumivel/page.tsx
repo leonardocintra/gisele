@@ -45,8 +45,8 @@ export default function AdminItemConsumivelPage() {
         <table className="table">
           <thead>
             <tr>
-              <th>Tipo item</th>
-              <th>Descrição</th>
+              <th>Nome do item</th>
+              <th>Tipo</th>
               <th>Preço</th>
               <th></th>
             </tr>
@@ -55,6 +55,7 @@ export default function AdminItemConsumivelPage() {
             {items ? (
               items.map((item) => (
                 <tr key={item._id}>
+                  <td>{item.descricao}</td>
                   <td>
                     <div className="flex items-center gap-3">
                       <div className="avatar">
@@ -69,11 +70,15 @@ export default function AdminItemConsumivelPage() {
                       </div>
                       <div>
                         <div className="font-bold">{item.tipo.descricao}</div>
-                        <div className="text-sm opacity-50">{item.tipo.exibirPreco ? "Exibir preço" : "Não exibir preço"}</div>
+                        <div className="text-sm opacity-50">
+                          {item.tipo.exibirPreco
+                            ? "Exibir preço"
+                            : "Não exibir preço"}
+                        </div>
                       </div>
                     </div>
                   </td>
-                  <td>{item.descricao}</td>
+
                   <td>{item.preco}</td>
                   <th>
                     <button className="btn btn-ghost btn-xs">Gerenciar</button>
