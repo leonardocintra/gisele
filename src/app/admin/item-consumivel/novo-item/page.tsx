@@ -86,7 +86,7 @@ export default function NovoItemPage() {
   return (
     <div>
       <form className="max-w-96 mx-auto">
-        <label className="form-control w-full max-w-xs">
+        <label className="form-control w-full">
           <div className="label">
             <span className="label-text">Descrição</span>
           </div>
@@ -95,11 +95,11 @@ export default function NovoItemPage() {
             onChange={(e) => setDescricao(e.target.value)}
             value={descricao}
             placeholder="Descrição ..."
-            className="input input-bordered w-full max-w-xs"
+            className="input input-bordered w-full"
           />
         </label>
 
-        <label className="form-control w-full max-w-xs">
+        <label className="form-control w-full">
           <div className="label">
             <span className="label-text">Preço</span>
           </div>
@@ -109,7 +109,7 @@ export default function NovoItemPage() {
             onChange={(e) => setPreco(parseFloat(e.target.value))}
             value={preco}
             placeholder="Preço ..."
-            className="input input-bordered w-full max-w-xs"
+            className="input input-bordered w-full"
           />
         </label>
 
@@ -119,7 +119,7 @@ export default function NovoItemPage() {
 
         {tipoItems && tipoItems.length > 0 && (
           <select
-            className={`select select-bordered select-lg w-80 ${tipoItemSelectError}`}
+            className={`select select-bordered select-lg w-full ${tipoItemSelectError}`}
             name="tipoItem"
             id="tipoItem"
             value={tipoItem?._id}
@@ -138,7 +138,7 @@ export default function NovoItemPage() {
           <button
             type="submit"
             onClick={(e) => handleTipoItem(e)}
-            className="btn btn-accent px-16"
+            className="btn btn-accent px-16 text-2xl"
           >
             Salvar
           </button>

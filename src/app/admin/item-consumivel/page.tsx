@@ -48,7 +48,6 @@ export default function AdminItemConsumivelPage() {
               <th>Nome do item</th>
               <th>Tipo</th>
               <th>Preço</th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -80,9 +79,6 @@ export default function AdminItemConsumivelPage() {
                   </td>
 
                   <td>{item.preco}</td>
-                  <th>
-                    <button className="btn btn-ghost btn-xs">Gerenciar</button>
-                  </th>
                 </tr>
               ))
             ) : (

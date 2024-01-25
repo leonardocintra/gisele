@@ -67,7 +67,7 @@ export default function NovoTipoItemPage() {
   return (
     <div>
       <form className="max-w-96 mx-auto">
-        <label className="form-control w-full max-w-xs">
+        <label className="form-control w-full">
           <div className="label">
             <span className="label-text">Descrição</span>
           </div>
@@ -76,11 +76,11 @@ export default function NovoTipoItemPage() {
             onChange={(e) => setDescricao(e.target.value)}
             value={descricao}
             placeholder="Descrição ..."
-            className="input input-bordered w-full max-w-xs"
+            className="input input-bordered w-full"
           />
         </label>
 
-        <label className="form-control w-full max-w-xs">
+        <label className="form-control w-full">
           <div className="label">
             <span className="label-text">Imagem</span>
           </div>
@@ -89,11 +89,11 @@ export default function NovoTipoItemPage() {
             onChange={(e) => setImagem(e.target.value)}
             value={imagem}
             placeholder="Imagem ..."
-            className="input input-bordered w-full max-w-xs"
+            className="input input-bordered w-full"
           />
         </label>
 
-        <div className="flex items-center space-x-4 my-7">
+        <div className="flex justify-center space-x-4 my-7">
           <div className="form-control">
             <label className="cursor-pointer label space-x-3">
               <span className="label-text">Exibir o preço ?</span>
@@ -110,7 +110,7 @@ export default function NovoTipoItemPage() {
           </div>
         </div>
 
-        <div className="flex justify-center mt-3">
+        <div className="flex justify-center my-3">
           <button
             type="submit"
             onClick={(e) => handleTipoItem(e)}
@@ -123,14 +123,13 @@ export default function NovoTipoItemPage() {
 
       {tipoItems ? (
         <div className="overflow-x-auto max-w-2xl mx-auto mt-8">
-          <table className="table">
+          <table className="table table-xs sm:table-md">
             {/* head */}
             <thead>
               <tr>
                 <th>Descrição</th>
                 <th>Exibi o preço</th>
                 <th>Imagem</th>
-                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -155,9 +154,6 @@ export default function NovoTipoItemPage() {
                   </td>
                   <td>{item.exibirPreco ? "SIM" : "NÃO"}</td>
                   <td>{item.imagem || "não informado"}</td>
-                  <th>
-                    <button className="btn btn-ghost">Editar</button>
-                  </th>
                 </tr>
               ))}
             </tbody>

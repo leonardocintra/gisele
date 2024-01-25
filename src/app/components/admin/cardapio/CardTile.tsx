@@ -9,14 +9,14 @@ type CardTileProps = {
 
 export default function CardTile(props: CardTileProps) {
   return (
-    <div className="card w-96 bg-base-100 shadow-xl">
-      <figure className="px-10 pt-10">
+    <div className="card w-64 sm:w-96 bg-base-100 shadow-xl">
+      <figure className="px-10 pt-10 max-h-52">
         <Image
-          className="rounded-xl"
+          className="rounded-full"
           src={props.image}
           alt={props.descricao}
-          width={277}
-          height={384}
+          width={377}
+          height={484}
         />
       </figure>
       <div className="card-body items-center text-center">

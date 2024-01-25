@@ -24,12 +24,12 @@ export default function AdminCardapioPage() {
   return (
     <div>
       <div className="text-center">
-        <h2 className="text-4xl my-3 text-gray-500">
+        <h2 className="sm:text-4xl sm:my-3 text-gray-500">
           Configurar cardapio do dia
         </h2>
-        <h3 className="text-3xl my-8 text-gray-600">{getDataFormatada()}</h3>
+        <h3 className="sm:text-3xl sm:my-8 text-gray-600">{getDataFormatada()}</h3>
       </div>
-      <div className="flex space-x-3 justify-center">
+      <div className="flex flex-wrap gap-2 justify-center">
         {tipoItems ? (
           tipoItems.map((item) => (
             <div key={item._id}>
