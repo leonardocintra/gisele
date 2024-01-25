@@ -1,5 +1,6 @@
 "use client";
 
+import IdentificadorDaPagina from "@/app/components/admin/IdentificadorDaPagina";
 import { ItemConsumivelDocument } from "@/model/ItemConsumivel";
 import Image from "next/image";
 import Link from "next/link";
@@ -23,21 +24,19 @@ export default function AdminItemConsumivelPage() {
   return (
     <div>
       <div>
-        <h1 className="text-2xl font-bold text-gray-700 text-center mt-8">
-          Item consumível
-        </h1>
+        <IdentificadorDaPagina descricao="Itens vendidos" />
         <div className="flex justify-center my-3 space-x-2">
           <Link
             href={"/admin/item-consumivel/novo-tipo-item"}
             className="btn btn-info"
           >
-            Novo tipo de item
+            Tipo de item
           </Link>
           <Link
             href={"/admin/item-consumivel/novo-item"}
             className="btn btn-success"
           >
-            Novo item consumivel
+            Item consumivel
           </Link>
         </div>
       </div>

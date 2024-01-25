@@ -5,7 +5,7 @@ export interface ItemConsumivelDocument extends IItemConsumivel, Document {}
 
 const itemSchema = new Schema<ItemConsumivelDocument>(
   {
-    descricao: { type: String, required: true },
+    descricao: { type: String, required: true, unique: true },
     preco: { type: Number, required: true },
     tipo: {
       type: Schema.Types.ObjectId,
