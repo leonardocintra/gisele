@@ -12,6 +12,6 @@ const tipoItemSchema = new Schema<TipoItemDocument>(
   { timestamps: true }
 );
 
-export const TipoItem =
-  mongoose.models.TipoItem ||
-  mongoose.model<TipoItemDocument>("TipoItem", tipoItemSchema);
+export const TipoItemConsumivel =
+  mongoose.models.TipoItemConsumivel ||
+  mongoose.model<TipoItemDocument>("TipoItemConsumivel", tipoItemSchema);

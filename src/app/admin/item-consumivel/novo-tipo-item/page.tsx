@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 export default function NovoTipoItemPage() {
   const [exibirPreco, setExibirPreco] = useState<boolean>(false);
   const [descricao, setDescricao] = useState<string>("");
+  const [imagem, setImagem] = useState<string>("sem-imagem.webp");
   const [tipoItems, setTipoItems] = useState<TipoItemDocument[]>();
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export default function NovoTipoItemPage() {
       const data: Partial<TipoItemDocument> = {
         descricao,
         exibirPreco,
-        imagem: "/img/sem-imagem.webp"
+        imagem: `/img/${imagem}`,
       };
 
       const response = await fetch("/api/tipoItem/", {
@@ -50,6 +51,7 @@ export default function NovoTipoItemPage() {
         fetchTipoItems();
         setDescricao("");
         setExibirPreco(false);
+        setImagem("sem-imagem.webp");
       } else {
         reject();
       }
@@ -74,6 +76,19 @@ export default function NovoTipoItemPage() {
             onChange={(e) => setDescricao(e.target.value)}
             value={descricao}
             placeholder="Descrição ..."
+            className="input input-bordered w-full max-w-xs"
+          />
+        </label>
+
+        <label className="form-control w-full max-w-xs">
+          <div className="label">
+            <span className="label-text">Imagem</span>
+          </div>
+          <input
+            type="text"
+            onChange={(e) => setImagem(e.target.value)}
+            value={imagem}
+            placeholder="Imagem ..."
             className="input input-bordered w-full max-w-xs"
           />
         </label>

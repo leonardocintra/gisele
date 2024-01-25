@@ -24,11 +24,13 @@ export default function AdminCardapioPage() {
       <div className="flex space-x-3 justify-center">
         {tipoItems ? (
           tipoItems.map((item) => (
-            <CardTile
-              image={item.imagem}
-              descricao={item.descricao}
-              key={item._id}
-            />
+            <div key={item._id}>
+              <CardTile
+                image={item.imagem}
+                descricao={item.descricao}
+                id={item._id}
+              />
+            </div>
           ))
         ) : (
           <div>
