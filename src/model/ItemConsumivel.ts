@@ -3,7 +3,7 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export interface ItemConsumivelDocument extends IItemConsumivel, Document {}
 
-const itemSchema = new Schema<ItemConsumivelDocument>(
+export const itemConsumivelSchema = new Schema<ItemConsumivelDocument>(
   {
     descricao: { type: String, required: true, unique: true },
     preco: { type: Number, required: true },
@@ -18,4 +18,4 @@ const itemSchema = new Schema<ItemConsumivelDocument>(
 
 export const ItemConsumivel =
   mongoose.models.ItemConsumivel ||
-  mongoose.model<ItemConsumivelDocument>("ItemConsumivel", itemSchema);
+  mongoose.model<ItemConsumivelDocument>("ItemConsumivel", itemConsumivelSchema);

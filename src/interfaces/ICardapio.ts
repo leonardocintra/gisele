@@ -1,6 +1,6 @@
-import { IItemCardapio } from "./IItemCardapio";
+import { IItemConsumivel } from "./IItemConsumivel";
 
 export interface ICardapio {
   data: Date;
-  itens: IItemCardapio[];
+  itens: IItemConsumivel[];
 }

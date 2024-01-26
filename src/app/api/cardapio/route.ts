@@ -20,3 +20,13 @@ export async function POST(req: NextRequest) {
 
   return Response.json(doc, { status: 201 });
 }
+
+export async function PUT(req: NextRequest) {
+  mongoose.connect(process.env.MONGODB_URI as string);
+
+  const { _id, ...data } = await req.json();
+
+  await Cardapio.findByIdAndUpdate(_id, data);
+
+  return Response.json(true);
+}
