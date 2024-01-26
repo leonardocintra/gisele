@@ -41,7 +41,7 @@ export default function AdminItemConsumivelPage() {
         </div>
       </div>
       <div className="overflow-x-auto max-w-screen-md mx-auto">
-        <table className="table">
+        <table className="table table-xs">
           <thead>
             <tr>
               <th>Nome do item</th>
@@ -53,7 +53,9 @@ export default function AdminItemConsumivelPage() {
             {items ? (
               items.map((item) => (
                 <tr key={item._id}>
-                  <td>{item.descricao}</td>
+                  <td>
+                    <span className="font-semibold text-gray-600 text-xl">{item.descricao}</span>
+                  </td>
                   <td>
                     <div className="flex items-center gap-3">
                       <div className="avatar">

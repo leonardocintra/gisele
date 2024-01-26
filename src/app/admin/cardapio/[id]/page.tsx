@@ -1,7 +1,7 @@
 "use client";
 
 import IdentificadorDaPagina from "@/app/components/admin/IdentificadorDaPagina";
-import { IItemCardapio } from "@/interfaces/IItemCardapio";
+import { CardapioDocument } from "@/model/Cardapio";
 import { ItemConsumivelDocument } from "@/model/ItemConsumivel";
 import { useParams } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
@@ -13,41 +13,46 @@ export default function CardapioItemPage() {
 
   const [items, setItems] = useState<ItemConsumivelDocument[]>();
   const [descricaoItem, setDescricaoItem] = useState<string>("");
-  const [itemsCardapio, setItemsCardapio] = useState<IItemCardapio[]>([]);
+  const [cardapio, setCardapio] = useState<CardapioDocument>();
+  const [itemsCardapio, setItemsCardapio] = useState<string[]>([]);
 
   const fetchItems = useCallback(() => {
     fetch(`/api/item/${tipo}`).then((res) =>
       res.json().then((items) => {
+        items.sort((a: any, b: any) => a.descricao.localeCompare(b.descricao));
         setItems(items);
       })
     );
   }, [tipo]);
 
+  function fetchCardapio() {
+    fetch("/api/cardapio").then((res) =>
+      res.json().then((c) => {
+        setCardapio(c);
+      })
+    );
+  }
+
   useEffect(() => {
     fetchItems();
+    fetchCardapio();
     if (items && items.length > 0 && descricaoItem === "") {
       setDescricaoItem(items[0].tipo.descricao);
     }
   }, [descricaoItem, fetchItems, items]);
 
-  function handleItemCardapio(itemId: string) {
-    if (!items) {
-      return;
-    }
+  function handleItemCardapio(itemId: string, nomeItem: string) {
+    setItemsCardapio((prevItems) => {
+      const isItemInArray = prevItems.includes(itemId);
 
-    const item = items.find((item) => item._id === itemId);
-
-    if (!item) {
-      toast.error(`Item ${itemId} not found`);
-      console.error(`Item com ID ${itemId} não encontrado.`);
-      return;
-    }
-
-    itemsCardapio.forEach(element => {
-      
+      if (isItemInArray) {
+        // Se o item já estiver no array, remova-o
+        return prevItems.filter((item) => item !== itemId);
+      } else {
+        // Se o item não estiver no array, adicione-o
+        return [...prevItems, itemId];
+      }
     });
-
-    console.log(itemId);
   }
 
   return (
@@ -55,32 +60,46 @@ export default function CardapioItemPage() {
       <div className="my-4">
         <IdentificadorDaPagina descricao={descricaoItem} />
       </div>
-      <div className="flex flex-wrap gap-3 justify-center">
-        {items && items.length > 0 ? (
-          items.map((item) => (
-            <div
-              className="card w-72 bg-base-100 shadow-xl text-center hover:bg-slate-100 hover:shadow-accent transition-colors"
-              key={item._id}
-            >
-              <div className="card-body justify-center items-center">
-                <h2 className="card-title">{item.descricao}</h2>
-                <div className="card-actions justify-center">
-                  <button
-                    onClick={() => handleItemCardapio(item._id)}
-                    className="btn btn-primary"
-                  >
-                    Ativo hoje
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))
-        ) : (
-          <div className="text-center">
-            <span className="loading loading-spinner loading-lg"></span>
-            <h2 className="my-8">Atenção: Pode não ter nada cadastrado para esse tipo ...</h2>
-          </div>
-        )}
+
+      <div className="overflow-x-auto max-w-xl mx-auto">
+        <table className="table">
+          {/* head */}
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Ativar/Desativar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items && items.length > 0 ? (
+              items.map((item) => (
+                <tr
+                  key={item._id}
+                  onClick={() => handleItemCardapio(item._id, item.descricao)}
+                  className={` ${
+                    itemsCardapio.includes(item._id)
+                      ? "hover:bg-red-200 bg-accent"
+                      : "hover:bg-green-200"
+                  }`}
+                >
+                  <td>{item.descricao}</td>
+                  <td>
+                    <button type="button">
+                      {itemsCardapio.includes(item._id)
+                        ? "Desativar"
+                        : "Ativar"}
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td>Carregando ...</td>
+                <td>Carregando ...</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );
