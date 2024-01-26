@@ -47,7 +47,7 @@ export default function AdminCardapioPage() {
         )}
       </div>
 
-      <div className="divider divider-secondary">Ultimo cardápio</div>
+      <div className="divider divider-secondary">Cardapio atual</div>
 
       <div className="max-w-md mx-auto mt-10">
         <Cardapio />

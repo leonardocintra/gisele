@@ -4,7 +4,7 @@ import IdentificadorDaPagina from "@/app/components/admin/IdentificadorDaPagina"
 import { CardapioDocument } from "@/model/Cardapio";
 import { ItemConsumivelDocument } from "@/model/ItemConsumivel";
 import { useParams } from "next/navigation";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
 export default function CardapioItemPage() {
@@ -12,34 +12,29 @@ export default function CardapioItemPage() {
   const tipo = id;
 
   const [items, setItems] = useState<ItemConsumivelDocument[]>();
-  const [descricaoItem, setDescricaoItem] = useState<string>("");
   const [cardapio, setCardapio] = useState<CardapioDocument>();
   const [itemsCardapio, setItemsCardapio] = useState<string[]>([]);
 
-  const fetchItems = useCallback(() => {
-    fetch(`/api/item/${tipo}`).then((res) =>
-      res.json().then((items) => {
-        items.sort((a: any, b: any) => a.descricao.localeCompare(b.descricao));
-        setItems(items);
-      })
-    );
-  }, [tipo]);
-
-  function fetchCardapio() {
-    fetch("/api/cardapio").then((res) =>
-      res.json().then((c) => {
-        setCardapio(c);
-      })
-    );
-  }
-
   useEffect(() => {
-    fetchItems();
-    fetchCardapio();
-    if (items && items.length > 0 && descricaoItem === "") {
-      setDescricaoItem(items[0].tipo.descricao);
-    }
-  }, [descricaoItem, fetchItems, items]);
+    const fetchData = async () => {
+      try {
+        const [resCardapio, resItems] = await Promise.all([
+          fetch("/api/cardapio"),
+          fetch(`/api/item/${tipo}`),
+        ]);
+
+        const cardapioData = await resCardapio.json();
+        const itemsData = await resItems.json();
+
+        setCardapio(cardapioData);
+        setItems(itemsData);
+      } catch (error: any) {
+        toast.error(error.message);
+      }
+    };
+
+    fetchData();
+  }, [tipo]);
 
   function handleItemCardapio(itemId: string, nomeItem: string) {
     setItemsCardapio((prevItems) => {
@@ -58,7 +53,15 @@ export default function CardapioItemPage() {
   return (
     <div>
       <div className="my-4">
-        <IdentificadorDaPagina descricao={descricaoItem} />
+        <IdentificadorDaPagina
+          descricao={items ? items[0]?.tipo.descricao : "Carregando ..."}
+        />
+      </div>
+
+      <div className="flex items-center justify-center my-3">
+        <button type="button" className="btn px-10">
+          Salvar
+        </button>
       </div>
 
       <div className="overflow-x-auto max-w-xl mx-auto">
@@ -82,13 +85,11 @@ export default function CardapioItemPage() {
                       : "hover:bg-green-200"
                   }`}
                 >
-                  <td>{item.descricao}</td>
+                  <td className="font-semibold hover:underline">
+                    {item.descricao}
+                  </td>
                   <td>
-                    <button type="button">
-                      {itemsCardapio.includes(item._id)
-                        ? "Desativar"
-                        : "Ativar"}
-                    </button>
+                    {itemsCardapio.includes(item._id) ? "Desativar" : "Ativar"}
                   </td>
                 </tr>
               ))
