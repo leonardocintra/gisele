@@ -95,8 +95,12 @@ export default function CardapioItemPage() {
               ))
             ) : (
               <tr>
-                <td>Carregando ...</td>
-                <td>Carregando ...</td>
+                <td>
+                  <span className="loading loading-spinner loading-md"></span>
+                </td>
+                <td>
+                  <span className="loading loading-spinner loading-md"></span>
+                </td>
               </tr>
             )}
           </tbody>
