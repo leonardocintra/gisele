@@ -8,8 +8,10 @@ export async function GET(req: NextRequest) {
 
   try {
     // Buscar todos os itens populando o campo 'tipo'
-    const items: ItemConsumivelDocument[] =
-      await ItemConsumivel.find().populate("tipo");
+    const items: ItemConsumivelDocument[] = await ItemConsumivel.find()
+      .populate("tipo")
+      .sort({ descricao: 1 })
+      .lean(false);
 
     // Retornar a resposta JSON com os itens populados
     return Response.json(items, { status: 200 });

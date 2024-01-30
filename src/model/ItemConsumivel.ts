@@ -1,9 +1,9 @@
 import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
 import mongoose, { Schema, Document } from "mongoose";
 
-export interface ItemConsumivelDocument extends IItemConsumivel, Document {}
+export interface ItemConsumivelDocument extends IItemConsumivel {}
 
-export const itemConsumivelSchema = new Schema<ItemConsumivelDocument>(
+const itemConsumivelSchema = new Schema<ItemConsumivelDocument>(
   {
     descricao: { type: String, required: true, unique: true },
     preco: { type: Number, required: true },
@@ -18,4 +18,7 @@ export const itemConsumivelSchema = new Schema<ItemConsumivelDocument>(
 
 export const ItemConsumivel =
   mongoose.models.ItemConsumivel ||
-  mongoose.model<ItemConsumivelDocument>("ItemConsumivel", itemConsumivelSchema);
+  mongoose.model<ItemConsumivelDocument>(
+    "ItemConsumivel",
+    itemConsumivelSchema
+  );

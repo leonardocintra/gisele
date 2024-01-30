@@ -52,7 +52,7 @@ export default function AdminItemConsumivelPage() {
           <tbody>
             {items ? (
               items.map((item) => (
-                <tr key={item._id}>
+                <tr key={item._id} className="hover:bg-gray-200">
                   <td>
                     <span className="font-semibold text-gray-600 text-xl">{item.descricao}</span>
                   </td>

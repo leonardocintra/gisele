@@ -1,6 +1,7 @@
 import { ITipoItemConsumivel } from "./ITipoItemConsumivel";
 
 export interface IItemConsumivel {
+  _id: string;
   descricao: string;
   preco: number;
   tipo: ITipoItemConsumivel;
