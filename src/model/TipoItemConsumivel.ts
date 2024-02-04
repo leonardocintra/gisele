@@ -1,7 +1,7 @@
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import mongoose, { Schema, Document } from "mongoose";
 
-export interface TipoItemDocument extends ITipoItemConsumivel, Document {}
+export interface TipoItemDocument extends ITipoItemConsumivel {}
 
 const tipoItemSchema = new Schema<TipoItemDocument>(
   {

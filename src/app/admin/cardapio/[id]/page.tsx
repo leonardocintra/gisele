@@ -23,6 +23,7 @@ export default function CardapioItemPage() {
   const URL_API_ITEM = "/api/item";
 
   useEffect(() => {
+
     const fetchData = async () => {
       try {
         const [resCardapio, resItems] = await Promise.all([
@@ -38,7 +39,7 @@ export default function CardapioItemPage() {
 
         if (cardapioData.length > 0) {
           const itensNoCardapio = cardapioData[0].itens;
-          itensNoCardapio.forEach((element: any) => {
+          itensNoCardapio.forEach((element: ItemConsumivelDocument) => {
             incluirOuRemoverItemSelecionado(element, true);
           });
         }
@@ -50,6 +51,7 @@ export default function CardapioItemPage() {
     fetchData();
   }, [tipo]);
 
+
   if (redirectPage) {
     return redirect("/admin/item-consumivel/");
   }
@@ -58,9 +60,11 @@ export default function CardapioItemPage() {
   const items = itensDocument ? itensDocument : [];
 
   function incluirOuRemoverItemSelecionado(
-    itemId: string,
+    itemConsumivel: ItemConsumivelDocument,
     carregamentoInicial: boolean
   ) {
+    const itemId = itemConsumivel._id
+
     setItensSelecionado((prevItems) => {
       const isItemInArray = prevItems.includes(itemId);
 
@@ -184,13 +188,12 @@ export default function CardapioItemPage() {
                 <tr
                   key={item._id}
                   onClick={() =>
-                    incluirOuRemoverItemSelecionado(item._id, false)
+                    incluirOuRemoverItemSelecionado(item, false)
                   }
-                  className={` ${
-                    itensSelecionados.includes(item._id)
-                      ? "bg-accent"
-                      : "hover:bg-green-200"
-                  }`}
+                  className={` ${itensSelecionados.includes(item._id)
+                    ? "bg-accent"
+                    : "hover:bg-green-200"
+                    }`}
                 >
                   <td className="font-semibold hover:underline">
                     <div className="">

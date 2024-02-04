@@ -6,7 +6,9 @@ import { NextRequest } from "next/server";
 export async function GET(req: NextRequest) {
   mongoose.connect(process.env.MONGODB_URI as string);
 
-  return Response.json(await Cardapio.find(), { status: 200 });
+  const cardapio = await Cardapio.find().populate("itens");
+
+  return Response.json(cardapio, { status: 200 });
 }
 
 export async function POST(req: NextRequest) {
