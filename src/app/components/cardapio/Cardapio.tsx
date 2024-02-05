@@ -1,35 +1,61 @@
+"use client"
+
+import { CardapioDocument } from "@/model/Cardapio";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+
+
 export default function Cardapio() {
+
+  const URL_API_CARDAPIO = "/api/cardapio";
+
+  const [cardapioDocument, setCardapioDocument] =
+    useState<CardapioDocument[]>();
+
+  useEffect(() => {
+
+    const fetchData = async () => {
+      try {
+        const [resCardapio] = await Promise.all([
+          fetch(URL_API_CARDAPIO)
+        ]);
+
+        const cardapioData = await resCardapio.json();
+
+        setCardapioDocument(cardapioData);
+
+
+      } catch (error: any) {
+        toast.error(error.message);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (!cardapioDocument || cardapioDocument === undefined) {
+    return (
+      <div>
+        <h2>Carregando ...</h2>
+      </div>
+    )
+  }
+
   return (
     <div>
-      <div>Carnes 🍗🥩🍖</div>
-      <div>
-        <ul>
-          <li>- Carne panela</li>
-          <li>- Frango frito</li>
-          <li>- Copa Lombo</li>
-        </ul>
-      </div>
 
-      <div>Guarnições🥦🌽🍟 </div>
-      <div>
-        <ul>
-          <li> - Lasanha de abobrinha molho </li>
-          <li> - Macarrão ao molho sugo </li>
-          <li> - Quiabo </li>
-          <li> - Banana empanada </li>
-          <li> - Batata frita </li>
-          <li> - Mandioca frita </li>
-        </ul>
-      </div>
+      {cardapioDocument.map((cardapio) => (
+        <div key={cardapio._id}>
+          {cardapio.itens.map((item) => (
+            <div key={item._id}>
+              {item.tipo.descricao} | {item.descricao}
+            </div>
+          ))}
+        </div>
+      ))}
 
-      <div>Saladas🍎🥬🍆 </div>
-      <div>
-        <ul>
-          <li> - Maionese </li>
-          <li> - Vinagrete </li>
-          <li> - Beterraba </li>
-        </ul>
-      </div>
+      <br />
     </div>
   );
 }
+

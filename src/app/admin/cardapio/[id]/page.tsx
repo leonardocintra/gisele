@@ -220,17 +220,14 @@ export default function CardapioItemPage() {
 
   function tratamentoDeItensSelecionados(): IItemConsumivel[] | undefined {
     let itensIdSelecionados: IItemConsumivel[] = [];
+    let itensDeOutroTipo: IItemConsumivel[] = [];
     let idsOutroItem: string[] = [];
 
-    // adicionar itens de outro tipo 
-
-    if (cardapioDocument === undefined) {
-      return;
+    if (cardapioDocument !== undefined && cardapioDocument.length > 0) {
+      itensDeOutroTipo = cardapioDocument[0].itens.filter((item) => {
+        return item.tipo._id !== tipo;
+      });
     }
-
-    const itensDeOutroTipo = cardapioDocument[0].itens.filter((item) => {
-      return item.tipo._id !== tipo;
-    });
 
     if (itensDeOutroTipo.length > 0) {
       itensDeOutroTipo.forEach(element => {
@@ -243,16 +240,16 @@ export default function CardapioItemPage() {
       let item = items.find((item) => item._id === itensSelecionados[i]);
 
       // Se não encontrado em 'items', verificar em 'itensDeOutroTipo'
-      if (item === undefined || !item) {        
+      if (item === undefined || !item) {
         item = itensDeOutroTipo.find((item) => item._id === itensSelecionados[i]);
-        
-        // Se ainda não encontrado, exibir um erro e interromper o loop
-        if (item === undefined || !item) {
-          toast.error(
-            "Não foi encontrado o item ID \n Favor, entrar em contato com leonardo.ncintra@outlook.com"
-          );
-          return;
-        }
+      }
+
+      // Se ainda não encontrado, exibir um erro e interromper o loop
+      if (item === undefined || !item) {
+        toast.error(
+          "Não foi encontrado o item ID \n Favor, entrar em contato com leonardo.ncintra@outlook.com"
+        );
+        return;
       }
 
       // O que precisa mesmo aqui é somente o _id. Mas a inteface obriga a passar o restante dos dados
