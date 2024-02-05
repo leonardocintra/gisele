@@ -13,24 +13,15 @@ export default function Cardapio() {
     useState<CardapioDocument[]>();
 
   useEffect(() => {
-
-    const fetchData = async () => {
-      try {
-        const [resCardapio] = await Promise.all([
-          fetch(URL_API_CARDAPIO)
-        ]);
-
-        const cardapioData = await resCardapio.json();
-
-        setCardapioDocument(cardapioData);
-
-
-      } catch (error: any) {
-        toast.error(error.message);
-      }
-    };
-
-    fetchData();
+    try {
+      fetch(URL_API_CARDAPIO).then((res) =>
+        res.json().then((cardapios) => {
+          setCardapioDocument(cardapios);
+        })
+      );
+    } catch (err: any) {
+      toast.error(err.message)
+    }
   }, []);
 
   if (!cardapioDocument || cardapioDocument === undefined) {
@@ -41,20 +32,33 @@ export default function Cardapio() {
     )
   }
 
+  const itensPorTipo = cardapioDocument[0].itens.reduce((acc: any, item: any) => {
+    const tipoDescricao = item.tipo.descricao;
+
+    if (!acc[tipoDescricao]) {
+      acc[tipoDescricao] = [];
+    }
+
+    acc[tipoDescricao].push(item);
+
+    return acc;
+  }, {});
+
+  // Mapear e renderizar cada tipo com suas descrições em ordem alfabética
+  const tiposOrdenados = Object.keys(itensPorTipo).sort();
+
   return (
     <div>
-
-      {cardapioDocument.map((cardapio) => (
-        <div key={cardapio._id}>
-          {cardapio.itens.map((item) => (
-            <div key={item._id}>
-              {item.tipo.descricao} | {item.descricao}
-            </div>
-          ))}
+      {tiposOrdenados.map((tipo) => (
+        <div key={tipo}>
+          <h3 className="font-bold mt-4 text-2xl">{tipo}</h3>
+          {itensPorTipo[tipo]
+            .sort((a: any, b: any) => a.descricao.localeCompare(b.descricao))
+            .map((item: any) => (
+              <div className="my-1" key={item._id}>- {item.descricao}</div>
+            ))}
         </div>
       ))}
-
-      <br />
     </div>
   );
 }
