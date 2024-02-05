@@ -39,8 +39,8 @@ export default function CardapioItemPage() {
 
         if (cardapioData.length > 0) {
           const itensNoCardapio = cardapioData[0].itens;
-          itensNoCardapio.forEach((element: ItemConsumivelDocument) => {
-            incluirOuRemoverItemSelecionado(element, true);
+          itensNoCardapio.forEach((itemConsumivel: ItemConsumivelDocument) => {
+            incluirOuRemoverItemSelecionado(itemConsumivel, true);
           });
         }
       } catch (error: any) {
@@ -61,12 +61,13 @@ export default function CardapioItemPage() {
 
   function incluirOuRemoverItemSelecionado(
     itemConsumivel: ItemConsumivelDocument,
-    carregamentoInicial: boolean
+    carregamentoInicial: boolean = false
   ) {
     const itemId = itemConsumivel._id
 
     setItensSelecionado((prevItems) => {
       const isItemInArray = prevItems.includes(itemId);
+
 
       if (carregamentoInicial) {
         if (isItemInArray) {
@@ -92,45 +93,22 @@ export default function CardapioItemPage() {
       return;
     }
 
-    let method = "POST";
-    if (
-      cardapioDocument == null ||
-      Object.keys(cardapioDocument).length === 0
-    ) {
-      method = "POST";
-    } else {
-      method = "PUT";
-    }
 
-    let itensIdSelecionados: IItemConsumivel[] = [];
+    const creationPromise = new Promise<void>(async (resolve, reject) => {
 
-    console.log(itensSelecionados);
+      const itensIdSelecionados = tratamentoDeItensSelecionados();
 
-    for (let i = 0; i < itensSelecionados.length; i++) {
-      const item = items.find((item) => item._id === itensSelecionados[i]);
-
-      if (item === undefined || !item) {
-        toast.error(
-          "Não foi encontrado o item ID \n Favor, entrar em contato com leonardo.ncintra@outlook.com"
-        );
+      if (itensIdSelecionados === undefined) {
+        reject();
         return;
       }
 
-      // O que precisa mesmo aqui é somente o _id. Mas a inteface obriga a passar o restante dos dados
-      itensIdSelecionados.push({
-        _id: item._id,
-        descricao: item.descricao,
-        preco: item.preco,
-        tipo: item.tipo,
-      });
-    }
-
-    const creationPromise = new Promise<void>(async (resolve, reject) => {
       let data: Partial<CardapioDocument> = {
         data: new Date(),
         itens: itensIdSelecionados,
       };
 
+      const method = defineCriarOuAtualizarCardapio();
       if (method === "PUT" && cardapioDocument !== undefined) {
         data = { _id: cardapioDocument[0]._id, ...data };
       }
@@ -188,7 +166,7 @@ export default function CardapioItemPage() {
                 <tr
                   key={item._id}
                   onClick={() =>
-                    incluirOuRemoverItemSelecionado(item, false)
+                    incluirOuRemoverItemSelecionado(item)
                   }
                   className={` ${itensSelecionados.includes(item._id)
                     ? "bg-accent"
@@ -226,4 +204,66 @@ export default function CardapioItemPage() {
       </div>
     </div>
   );
+
+  // FUNCOES PRIVADAS
+
+  function defineCriarOuAtualizarCardapio(): string {
+    let method = "POST";
+    if (cardapioDocument == null ||
+      Object.keys(cardapioDocument).length === 0) {
+      method = "POST";
+    } else {
+      method = "PUT";
+    }
+    return method;
+  }
+
+  function tratamentoDeItensSelecionados(): IItemConsumivel[] | undefined {
+    let itensIdSelecionados: IItemConsumivel[] = [];
+    let idsOutroItem: string[] = [];
+
+    // adicionar itens de outro tipo 
+
+    if (cardapioDocument === undefined) {
+      return;
+    }
+
+    const itensDeOutroTipo = cardapioDocument[0].itens.filter((item) => {
+      return item.tipo._id !== tipo;
+    });
+
+    if (itensDeOutroTipo.length > 0) {
+      itensDeOutroTipo.forEach(element => {
+        idsOutroItem.push(element._id)
+      });
+    }
+
+    for (let i = 0; i < itensSelecionados.length; i++) {
+      // Verificar se o item está em 'items'
+      let item = items.find((item) => item._id === itensSelecionados[i]);
+
+      // Se não encontrado em 'items', verificar em 'itensDeOutroTipo'
+      if (item === undefined || !item) {        
+        item = itensDeOutroTipo.find((item) => item._id === itensSelecionados[i]);
+        
+        // Se ainda não encontrado, exibir um erro e interromper o loop
+        if (item === undefined || !item) {
+          toast.error(
+            "Não foi encontrado o item ID \n Favor, entrar em contato com leonardo.ncintra@outlook.com"
+          );
+          return;
+        }
+      }
+
+      // O que precisa mesmo aqui é somente o _id. Mas a inteface obriga a passar o restante dos dados
+      itensIdSelecionados.push({
+        _id: item._id,
+        descricao: item.descricao,
+        preco: item.preco,
+        tipo: item.tipo,
+      });
+    }
+
+    return itensIdSelecionados;
+  }
 }
