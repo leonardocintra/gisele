@@ -9,6 +9,8 @@ export default function NovoMarmitexPage() {
   const [tipoItems, setTipoItems] = useState<TipoItemDocument[]>();
   const [descricao, setDescricao] = useState<string>("");
   const [descricaoBotao, setDescricaoBotao] = useState<string>("Proximo");
+  const [step, setStep] = useState<number>(-1);
+  const [stepsOk, setStepsOk] = useState<number[]>([])
 
   useEffect(() => {
     fetchTipoItems();
@@ -30,7 +32,19 @@ export default function NovoMarmitexPage() {
     )
   }
 
-  function step() {
+  console.log(stepsOk)
+
+  function handleStep() {
+    if (tipoItems === undefined) {
+      return;
+    }
+
+    if (step > tipoItems.length) {
+      return;
+    }
+
+    setStep(step + 1)
+    setStepsOk([...stepsOk, step])
     setDescricaoBotao("Ola proximo")
   }
 
@@ -38,20 +52,17 @@ export default function NovoMarmitexPage() {
     <div className="flex flex-col justify-center p-3">
 
       <div className="flex justify-center mb-4">
-
         <button className="btn btn-primary">Novo marmitex</button>
       </div>
-
-
 
       <div className="flex justify-center">
 
         <ul className="steps steps-vertical text-xs sm:text-xl sm:steps-horizontal">
-          <li className="step step-primary">Descrição</li>
-          {tipoItems.map((tipo) => (
-            <li key={tipo._id} className="step">{tipo.descricao.split(" ")[0]}</li>
+          <li className={`step step-secondary`}>Descrição</li>
+          {tipoItems.map((tipo, index) => (
+            <li key={tipo._id} className={`step ${stepsOk.includes(index) ? "step-secondary" : ""}`}>{tipo.descricao.split(" ")[0]}</li>
           ))}
-          <li className="step">Salvar</li>
+          <li className={`step ${step === tipoItems.length + 1 ? "step-secondary" : ""}`}>Salvar</li>
         </ul>
       </div>
 
@@ -68,7 +79,7 @@ export default function NovoMarmitexPage() {
           </label>
         </div>
         <div className="flex flex-col space-y-3">
-          <button onClick={step} className="btn btn-secondary">{descricaoBotao}</button>
+          <button onClick={handleStep} className="btn btn-secondary">{descricaoBotao}</button>
           <Link href={"/admin/marmitex"} className="btn btn-link">Cancelar</Link>
         </div>
       </div>
