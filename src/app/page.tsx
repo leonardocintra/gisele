@@ -9,8 +9,7 @@ import { CardapioDocument } from "@/model/Cardapio";
 export default function Home() {
 
   const [carregado, setCarregado] = useState<boolean>(false);
-  const [cardapioDocument, setCardapioDocument] =
-    useState<CardapioDocument[]>();
+  const [cardapioDocument, setCardapioDocument] = useState<CardapioDocument[]>();
 
   useEffect(() => {
 
@@ -29,7 +28,6 @@ export default function Home() {
         if (response) {
           setCarregado(true);
         }
-
 
       } catch (error: any) {
         toast.error(error.message);

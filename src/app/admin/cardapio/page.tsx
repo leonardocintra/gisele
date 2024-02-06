@@ -1,7 +1,6 @@
 "use client";
 
 import CardTile from "@/app/components/admin/cardapio/CardTile";
-import Cardapio from "@/app/components/cardapio/Cardapio";
 import { getDataFormatada } from "@/commons/date";
 import { TipoItemDocument } from "@/model/TipoItemConsumivel";
 import { useState, useEffect } from "react";

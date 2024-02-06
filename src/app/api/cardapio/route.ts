@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
 
   const cardapio = await Cardapio.find().populate({
     path: "itens",
-    populate: { path: "tipo", select: '_id descricao' }
+    populate: { path: "tipo", select: '_id descricao exibirPreco' }
   });
 
   return Response.json(cardapio, { status: 200 });
