@@ -7,6 +7,7 @@ import { ItemConsumivelDocument } from "@/model/ItemConsumivel";
 import { redirect, useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { URL_API_CARDAPIO, URL_API_ITEM } from '@/constants/constants'
 
 export default function CardapioItemPage() {
   const { id } = useParams();
@@ -19,8 +20,7 @@ export default function CardapioItemPage() {
   const [itensSelecionados, setItensSelecionado] = useState<string[]>([]);
   const [redirectPage, setRedirectPage] = useState<boolean>(false);
 
-  const URL_API_CARDAPIO = "/api/cardapio";
-  const URL_API_ITEM = "/api/item";
+
 
   useEffect(() => {
 

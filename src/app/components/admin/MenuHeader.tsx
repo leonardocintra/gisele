@@ -4,8 +4,8 @@ export default function MenuHeader() {
   return (
     <div className="flex p-2 flex-wrap gap-3 justify-center">
       <div>
-        <Link href={"/admin"} className="btn btn-sm btn-outline btn-warning">
-          Inicio
+        <Link href={"/admin/marmitex"} className="btn btn-sm btn-outline btn-warning">
+          Marmitex
         </Link>
       </div>
 
