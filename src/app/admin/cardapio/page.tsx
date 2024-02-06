@@ -46,12 +46,6 @@ export default function AdminCardapioPage() {
           </div>
         )}
       </div>
-
-      <div className="divider divider-secondary">Cardapio atual</div>
-
-      <div className="max-w-md mx-auto mt-10">
-        <Cardapio />
-      </div>
     </div>
   );
 }

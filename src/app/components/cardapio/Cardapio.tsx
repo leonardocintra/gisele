@@ -4,35 +4,16 @@ import { CardapioDocument } from "@/model/Cardapio";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+type CardapioProps = {
+  cardapios: CardapioDocument[]
+}
 
-export default function Cardapio() {
 
-  const URL_API_CARDAPIO = "/api/cardapio";
+export default function Cardapio(props: CardapioProps) {
 
-  const [cardapioDocument, setCardapioDocument] =
-    useState<CardapioDocument[]>();
+  const cardapio = props.cardapios[0];
 
-  useEffect(() => {
-    try {
-      fetch(URL_API_CARDAPIO).then((res) =>
-        res.json().then((cardapios) => {
-          setCardapioDocument(cardapios);
-        })
-      );
-    } catch (err: any) {
-      toast.error(err.message)
-    }
-  }, []);
-
-  if (!cardapioDocument || cardapioDocument === undefined) {
-    return (
-      <div>
-        <h2>Carregando ...</h2>
-      </div>
-    )
-  }
-
-  const itensPorTipo = cardapioDocument[0].itens.reduce((acc: any, item: any) => {
+  const itensPorTipo = cardapio.itens.reduce((acc: any, item: any) => {
     const tipoDescricao = item.tipo.descricao;
 
     if (!acc[tipoDescricao]) {
