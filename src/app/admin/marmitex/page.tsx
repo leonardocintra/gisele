@@ -15,9 +15,9 @@ export default function MarmitexPage() {
           <thead>
             <tr>
               <th></th>
-              <th>Name</th>
+              <th>Descrição</th>
               <th>Job</th>
-              <th>Favorite Color</th>
+              <th>Preço</th>
             </tr>
           </thead>
           <tbody>

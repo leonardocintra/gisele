@@ -12,7 +12,6 @@ export default function Cardapio(props: CardapioProps) {
   const cardapio = props.cardapios[0];
 
   const items = cardapio.itens.filter(item => !item.tipo.exibirPreco);
-  console.log(cardapio)
   const itensPorTipo = items.reduce((acc: any, item: any) => {
     const tipoDescricao = item.tipo.descricao;
 

@@ -5,6 +5,7 @@ import Cardapio from "./components/cardapio/Cardapio";
 import { URL_API_CARDAPIO, URL_API_ITEM, URL_API_TIPO_ITEM } from "@/constants/constants";
 import toast from "react-hot-toast";
 import { CardapioDocument } from "@/model/Cardapio";
+import Link from "next/link";
 
 export default function Home() {
 
@@ -51,22 +52,29 @@ export default function Home() {
         {carregado && cardapioDocument !== undefined ? (
           <div>
             <Cardapio cardapios={cardapioDocument} />
+            <div className="flex justify-center my-8">
+              <Link href={"/pedido"} className="btn btn-secondary">Fazer meu pedido</Link>
+            </div>
           </div>
         ) : (
-          <div className="mt-8 flex flex-col justify-center items-center space-y-5">
-            <div>
-              <span className="loading loading-spinner loading-lg text-success"></span>
-            </div>
-
-            <div className="flex flex-col gap-4 w-52">
-              <div className="skeleton h-32 w-full"></div>
-              <div className="skeleton h-4 w-28"></div>
-              <div className="skeleton h-4 w-full"></div>
-              <div className="skeleton h-4 w-full"></div>
-            </div>
-          </div>
+          cardapioSkeleton()
         )}
       </div>
     </div>
   );
+
+  function cardapioSkeleton() {
+    return <div className="mt-8 flex flex-col justify-center items-center space-y-5">
+      <div>
+        <span className="loading loading-spinner loading-lg text-success"></span>
+      </div>
+
+      <div className="flex flex-col gap-4 w-52">
+        <div className="skeleton h-32 w-full"></div>
+        <div className="skeleton h-4 w-28"></div>
+        <div className="skeleton h-4 w-full"></div>
+        <div className="skeleton h-4 w-full"></div>
+      </div>
+    </div>;
+  }
 }
