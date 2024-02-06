@@ -178,8 +178,6 @@ export default function CardapioItemPage() {
                       <span>
                         [{index + 1}] {item.descricao}
                       </span>
-                      <br />
-                      <span className="text-xs text-red-400">{item._id}</span>
                     </div>
                   </td>
                   <td>

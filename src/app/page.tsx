@@ -16,7 +16,7 @@ export default function Home() {
 
     const fetchData = async () => {
       try {
-        await Promise.all([
+        const response = await Promise.all([
           fetch(URL_API_TIPO_ITEM),
           fetch(URL_API_ITEM),
           fetch(URL_API_CARDAPIO).then((res) =>
@@ -26,6 +26,10 @@ export default function Home() {
           ),
         ]);
 
+        if (response) {
+          setCarregado(true);
+        }
+
 
       } catch (error: any) {
         toast.error(error.message);
@@ -33,7 +37,6 @@ export default function Home() {
     };
 
     fetchData();
-    setCarregado(true);
   }, []);
 
   return (
@@ -52,9 +55,8 @@ export default function Home() {
             <Cardapio cardapios={cardapioDocument} />
           </div>
         ) : (
-          <div className="mt-8 flex flex-col justify-center">
+          <div className="mt-8 flex flex-col justify-center items-center space-y-5">
             <div>
-
               <span className="loading loading-spinner loading-lg text-success"></span>
             </div>
 
