@@ -35,6 +35,14 @@ export default function NovoMarmitexPage() {
   console.log(stepsOk)
 
   function handleStep() {
+    if (tipoItems === undefined) {
+      return;
+    }
+
+    if (step > tipoItems.length) {
+      return;
+    }
+
     setStep(prevStep => {
       const novoStep = prevStep + 1;
       setStepsOk(prevStepsOk => [...prevStepsOk, novoStep]);
@@ -49,17 +57,20 @@ export default function NovoMarmitexPage() {
       return "";
     }
 
-    if (step > tipoItems.length) {
+    if (step === tipoItems.length) {
       return "";
     }
 
+    let descricao = "";
+
     if (step === -1) {
-      return "Descrição"
-    } else if (step === tipoItems?.length + 1) {
-      return "Salvar"
+      descricao = "Descrição"
+    } else if (step === tipoItems.length) {
+      descricao = "Salvar"
     } else {
-      return tipo.descricao
+      descricao = tipo.descricao
     }
+    return descricao;
   }
 
   return (
@@ -70,19 +81,16 @@ export default function NovoMarmitexPage() {
       </div>
 
       <div className="flex justify-center">
-
         <ul className="steps steps-vertical text-xs sm:text-xl sm:steps-horizontal">
           <li className={`step step-secondary`}>Descrição</li>
           {tipoItems.map((tipo, index) => (
             <li key={tipo._id} className={`step ${stepsOk.includes(index) ? "step-secondary" : ""}`}>{tipo.descricao.split(" ")[0]}</li>
           ))}
-          <li className={`step ${step === tipoItems.length + 1 ? "step-secondary" : ""}`}>Salvar</li>
+          <li className={`step ${step === tipoItems.length ? "step-secondary" : ""}`}>Salvar</li>
         </ul>
       </div>
 
-
       <div className="flex flex-col items-center mt-4 space-y-4">
-
         {stepsOk.length === 0 && (
           <div className="">
             <label className="form-control w-full max-w-xs">
@@ -112,18 +120,18 @@ export default function NovoMarmitexPage() {
           </div>
         ))}
 
+        {step === tipoItems.length && (
+          <div className="max-w-lg mx-auto">
+            <h2 className="font-bold text-2xl">Resumo</h2>
+            <div>
+              <h2>Descrição: {descricao}</h2>
+            </div>
+          </div>
+        )}
+
         <div className="flex flex-col space-y-3">
           <button onClick={handleStep} className="btn btn-secondary">{descricaoBotao}</button>
           <Link href={"/admin/marmitex"} className="btn btn-link">Cancelar</Link>
-        </div>
-      </div>
-
-      <div className="max-w-lg mx-auto">
-        <h2 className="font-bold text-2xl">Resumo</h2>
-        <div>
-          <h2>Step: {step}</h2>
-          <h2>Steps: {stepsOk}</h2>
-          {descricao}
         </div>
       </div>
     </div>
