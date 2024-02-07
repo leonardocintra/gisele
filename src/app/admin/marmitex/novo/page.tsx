@@ -35,17 +35,31 @@ export default function NovoMarmitexPage() {
   console.log(stepsOk)
 
   function handleStep() {
+    setStep(prevStep => {
+      const novoStep = prevStep + 1;
+      setStepsOk(prevStepsOk => [...prevStepsOk, novoStep]);
+      return novoStep;
+    });
+
+    setDescricaoBotao("Ola proximo")
+  }
+
+  function handleLabelInputStep(tipo: TipoItemDocument) {
     if (tipoItems === undefined) {
-      return;
+      return "";
     }
 
     if (step > tipoItems.length) {
-      return;
+      return "";
     }
 
-    setStep(step + 1)
-    setStepsOk([...stepsOk, step])
-    setDescricaoBotao("Ola proximo")
+    if (step === -1) {
+      return "Descrição"
+    } else if (step === tipoItems?.length + 1) {
+      return "Salvar"
+    } else {
+      return tipo.descricao
+    }
   }
 
   return (
@@ -68,19 +82,48 @@ export default function NovoMarmitexPage() {
 
 
       <div className="flex flex-col items-center mt-4 space-y-4">
-        <div>
 
-          <label className="form-control w-full max-w-xs">
-            <div className="label">
-              <span className="label-text">Descrição</span>
-            </div>
-            <input type="text" value={descricao} onChange={(e) => setDescricao(e.target.value)} placeholder="Nome marmitex ..." className="input input-bordered w-full max-w-xs" />
+        {stepsOk.length === 0 && (
+          <div className="">
+            <label className="form-control w-full max-w-xs">
+              <div className="label">
+                <span className="label-text">{handleLabelInputStep({
+                  _id: "1",
+                  descricao: "Descrição",
+                  exibirPreco: false,
+                  imagem: "sem imagem"
+                })}</span>
+              </div>
+              <input type="text" value={descricao} onChange={(e) => setDescricao(e.target.value)}
+                placeholder="Descricao" className="input input-bordered w-full max-w-xs" />
+            </label>
+          </div>
+        )}
 
-          </label>
-        </div>
+        {tipoItems.map((tipo, index) => (
+          <div key={tipo._id} className={step === index ? "" : `hidden`}>
+            <label className="form-control w-full max-w-xs">
+              <div className="label">
+                <span className="label-text">{handleLabelInputStep(tipo)}</span>
+              </div>
+              <input type="text" value={descricao} onChange={(e) => setDescricao(e.target.value)}
+                placeholder={`Quantidade ${tipo.descricao}`} className="input input-bordered w-full max-w-xs" />
+            </label>
+          </div>
+        ))}
+
         <div className="flex flex-col space-y-3">
           <button onClick={handleStep} className="btn btn-secondary">{descricaoBotao}</button>
           <Link href={"/admin/marmitex"} className="btn btn-link">Cancelar</Link>
+        </div>
+      </div>
+
+      <div className="max-w-lg mx-auto">
+        <h2 className="font-bold text-2xl">Resumo</h2>
+        <div>
+          <h2>Step: {step}</h2>
+          <h2>Steps: {stepsOk}</h2>
+          {descricao}
         </div>
       </div>
     </div>
