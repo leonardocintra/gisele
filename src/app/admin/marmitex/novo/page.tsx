@@ -1,16 +1,24 @@
 "use client"
 
+import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import { TipoItemDocument } from "@/model/TipoItemConsumivel";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+type MarmitexItem = {
+  descricao: string,
+  quantidade: number,
+}
+
 export default function NovoMarmitexPage() {
 
   const [tipoItems, setTipoItems] = useState<TipoItemDocument[]>();
-  const [descricao, setDescricao] = useState<string>("");
+  const [inputText, setInputText] = useState<string>("");
   const [descricaoBotao, setDescricaoBotao] = useState<string>("Proximo");
   const [step, setStep] = useState<number>(-1);
   const [stepsOk, setStepsOk] = useState<number[]>([])
+  const [descricao, setDescricao] = useState<string>("");
+  const [marmitexItems, setMarmitexItems] = useState<MarmitexItem[]>([])
 
   useEffect(() => {
     fetchTipoItems();
@@ -18,8 +26,9 @@ export default function NovoMarmitexPage() {
 
   function fetchTipoItems() {
     fetch("/api/tipoItem").then((res) =>
-      res.json().then((items) => {
-        setTipoItems(items);
+      res.json().then((items: ITipoItemConsumivel[]) => {
+        const data = items.filter((item) => item.exibirPreco === false);
+        setTipoItems(data);
       })
     );
   }
@@ -32,14 +41,13 @@ export default function NovoMarmitexPage() {
     )
   }
 
-  console.log(stepsOk)
-
   function handleStep() {
     if (tipoItems === undefined) {
       return;
     }
 
     if (step > tipoItems.length) {
+      setDescricaoBotao("Salvar")
       return;
     }
 
@@ -49,27 +57,27 @@ export default function NovoMarmitexPage() {
       return novoStep;
     });
 
+    if (step === -1) {
+      setDescricao(inputText)
+    }
+
+    setInputText("");
     setDescricaoBotao("Ola proximo")
   }
 
   function handleLabelInputStep(tipo: TipoItemDocument) {
-    if (tipoItems === undefined) {
-      return "";
-    }
-
-    if (step === tipoItems.length) {
-      return "";
-    }
-
     let descricao = "";
 
-    if (step === -1) {
+    if (tipoItems == undefined || step === tipoItems.length) {
+      return descricao;
+    } else if (step === -1) {
       descricao = "Descrição"
     } else if (step === tipoItems.length) {
       descricao = "Salvar"
     } else {
       descricao = tipo.descricao
     }
+
     return descricao;
   }
 
@@ -102,7 +110,7 @@ export default function NovoMarmitexPage() {
                   imagem: "sem imagem"
                 })}</span>
               </div>
-              <input type="text" value={descricao} onChange={(e) => setDescricao(e.target.value)}
+              <input type="text" value={inputText} onChange={(e) => setInputText(e.target.value)}
                 placeholder="Descricao" className="input input-bordered w-full max-w-xs" />
             </label>
           </div>
@@ -114,7 +122,7 @@ export default function NovoMarmitexPage() {
               <div className="label">
                 <span className="label-text">{handleLabelInputStep(tipo)}</span>
               </div>
-              <input type="text" value={descricao} onChange={(e) => setDescricao(e.target.value)}
+              <input type="text" value={inputText} onChange={(e) => setInputText(e.target.value)}
                 placeholder={`Quantidade ${tipo.descricao}`} className="input input-bordered w-full max-w-xs" />
             </label>
           </div>
@@ -128,6 +136,10 @@ export default function NovoMarmitexPage() {
             </div>
           </div>
         )}
+        <div>
+
+          <h2>Step: {step}</h2>
+        </div>
 
         <div className="flex flex-col space-y-3">
           <button onClick={handleStep} className="btn btn-secondary">{descricaoBotao}</button>
