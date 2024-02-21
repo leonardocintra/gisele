@@ -1,28 +1,34 @@
 "use client"
 
+import { URL_API_TIPO_MARMITEX } from "@/constants/constants";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import { TipoItemDocument } from "@/model/TipoItemConsumivel";
+import { TipoMarmitexDocument } from "@/model/TipoMarmitex";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 type MarmitexItem = {
-  descricao: string,
+  tipo: TipoItemDocument,
   quantidade: number,
 }
 
 export default function NovoMarmitexPage() {
 
   const [tipoItems, setTipoItems] = useState<TipoItemDocument[]>();
-  const [inputText, setInputText] = useState<string>("");
-  const [descricaoBotao, setDescricaoBotao] = useState<string>("Proximo");
-  const [step, setStep] = useState<number>(-1);
-  const [stepsOk, setStepsOk] = useState<number[]>([])
   const [descricao, setDescricao] = useState<string>("");
-  const [marmitexItems, setMarmitexItems] = useState<MarmitexItem[]>([])
+  const [marmitex, setMarmitex] = useState<MarmitexItem[]>([]);
+  const [redirectPage, setRedirectPage] = useState<boolean>(false);
+  const REDIRECT_URL = "/admin/marmitex";
 
   useEffect(() => {
     fetchTipoItems();
   }, []);
+
+  if (redirectPage) {
+    return redirect(REDIRECT_URL);
+  }
 
   function fetchTipoItems() {
     fetch("/api/tipoItem").then((res) =>
@@ -41,44 +47,70 @@ export default function NovoMarmitexPage() {
     )
   }
 
-  function handleStep() {
-    if (tipoItems === undefined) {
-      return;
-    }
+  async function salvar(event: any) {
+    event.preventDefault();
 
-    if (step > tipoItems.length) {
-      setDescricaoBotao("Salvar")
-      return;
-    }
+    const creationPromise = new Promise<void>(async (resolve, reject) => {
 
-    setStep(prevStep => {
-      const novoStep = prevStep + 1;
-      setStepsOk(prevStepsOk => [...prevStepsOk, novoStep]);
-      return novoStep;
+      let data: Partial<TipoMarmitexDocument> = {
+        descricao,
+        ativo: true,
+        configuracoes: marmitex,
+      };
+
+      const response = await fetch(URL_API_TIPO_MARMITEX, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        resolve();
+        setRedirectPage(true);
+      } else {
+        reject();
+      }
     });
 
-    if (step === -1) {
-      setDescricao(inputText)
-    }
+    await toast.promise(creationPromise, {
+      loading: "Salvando novo marmitex...",
+      success: "Novo marmitex salvo com sucesso!",
+      error: "Não foi possível criar/editar o marmitex!",
+    });
 
-    setInputText("");
-    setDescricaoBotao("Ola proximo")
+    setRedirectPage(true);
   }
 
-  function handleLabelInputStep(tipo: TipoItemDocument) {
-    let descricao = "";
-
-    if (tipoItems == undefined || step === tipoItems.length) {
-      return descricao;
-    } else if (step === -1) {
-      descricao = "Descrição"
-    } else if (step === tipoItems.length) {
-      descricao = "Salvar"
-    } else {
-      descricao = tipo.descricao
+  function handleMarmitex(quantidade: number, tipoId: string) {
+    if (tipoItems === undefined || Number.isNaN(quantidade)) {
+      return;
     }
 
-    return descricao;
+    const tipo = tipoItems.find((t) => t._id === tipoId);
+
+    if (tipo === undefined) {
+      toast.error('Ops ... item não encontrado');
+      return;
+    }
+
+    const existingItemIndex = marmitex.findIndex((item) => item.tipo._id === tipoId);
+
+    if (existingItemIndex !== -1) {
+      // Se o tipo já existe no array, atualize apenas a quantidade
+      const updatedMarmitex = [...marmitex];
+      updatedMarmitex[existingItemIndex].quantidade = quantidade;
+      setMarmitex(updatedMarmitex);
+    } else {
+      // Caso contrário, adicione um novo item ao array
+      const newItem: MarmitexItem = {
+        quantidade: quantidade,
+        tipo
+      };
+      setMarmitex([...marmitex, newItem]);
+    }
+    console.log(marmitex);
   }
 
   return (
@@ -88,64 +120,35 @@ export default function NovoMarmitexPage() {
         <button className="btn btn-primary">Novo marmitex</button>
       </div>
 
-      <div className="flex justify-center">
-        <ul className="steps steps-vertical text-xs sm:text-xl sm:steps-horizontal">
-          <li className={`step step-secondary`}>Descrição</li>
-          {tipoItems.map((tipo, index) => (
-            <li key={tipo._id} className={`step ${stepsOk.includes(index) ? "step-secondary" : ""}`}>{tipo.descricao.split(" ")[0]}</li>
-          ))}
-          <li className={`step ${step === tipoItems.length ? "step-secondary" : ""}`}>Salvar</li>
-        </ul>
-      </div>
 
-      <div className="flex flex-col items-center mt-4 space-y-4">
-        {stepsOk.length === 0 && (
-          <div className="">
+      <form className="flex flex-col items-center mt-4 space-y-4">
+        <div className="">
+          <label className="form-control w-full max-w-xs">
+            <div className="label">
+              <span className="label-text">Descrição marmitex</span>
+            </div>
+            <input type="text" value={descricao} onChange={(e) => setDescricao(e.target.value)}
+              placeholder="Descricao ..." className="input input-bordered w-full max-w-xs" />
+          </label>
+        </div>
+
+        {tipoItems.map((tipo) => (
+          <div key={tipo._id}>
             <label className="form-control w-full max-w-xs">
               <div className="label">
-                <span className="label-text">{handleLabelInputStep({
-                  _id: "1",
-                  descricao: "Descrição",
-                  exibirPreco: false,
-                  imagem: "sem imagem"
-                })}</span>
+                <span className="label-text">{tipo.descricao}</span>
               </div>
-              <input type="text" value={inputText} onChange={(e) => setInputText(e.target.value)}
-                placeholder="Descricao" className="input input-bordered w-full max-w-xs" />
-            </label>
-          </div>
-        )}
-
-        {tipoItems.map((tipo, index) => (
-          <div key={tipo._id} className={step === index ? "" : `hidden`}>
-            <label className="form-control w-full max-w-xs">
-              <div className="label">
-                <span className="label-text">{handleLabelInputStep(tipo)}</span>
-              </div>
-              <input type="text" value={inputText} onChange={(e) => setInputText(e.target.value)}
+              <input type="number" max={9} onChange={(e) => handleMarmitex(parseInt(e.target.value), tipo._id)}
                 placeholder={`Quantidade ${tipo.descricao}`} className="input input-bordered w-full max-w-xs" />
             </label>
           </div>
         ))}
 
-        {step === tipoItems.length && (
-          <div className="max-w-lg mx-auto">
-            <h2 className="font-bold text-2xl">Resumo</h2>
-            <div>
-              <h2>Descrição: {descricao}</h2>
-            </div>
-          </div>
-        )}
-        <div>
-
-          <h2>Step: {step}</h2>
-        </div>
-
         <div className="flex flex-col space-y-3">
-          <button onClick={handleStep} className="btn btn-secondary">{descricaoBotao}</button>
-          <Link href={"/admin/marmitex"} className="btn btn-link">Cancelar</Link>
+          <button type="submit" onClick={(e) => salvar(e)} className="btn btn-secondary">Salvar</button>
+          <Link href={REDIRECT_URL} className="btn btn-link">Cancelar</Link>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
