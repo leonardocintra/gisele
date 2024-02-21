@@ -32,7 +32,7 @@ export default function MarmitexPage() {
 
         <div className="p-4 rounded-md border-2 border-blue-400">
           {tipoMarmitex.map((tipo) => (
-            <div>
+            <div key={tipo._id}>
               <h2 className="mb-1 text-3xl text-center">{tipo.descricao}</h2>
               <h2 className="text-sm text-center font-semibold text-secondary">{tipo.ativo ? "Ativo" : "NÃO"}</h2>
               <div className="mb-4">
