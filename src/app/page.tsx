@@ -2,33 +2,30 @@
 
 import { useEffect, useState } from "react";
 import Cardapio from "./components/cardapio/Cardapio";
-import { URL_API_CARDAPIO, URL_API_ITEM, URL_API_TIPO_ITEM } from "@/constants/constants";
+import { URL_API_CARDAPIO, URL_API_TIPO_MARMITEX } from "@/constants/constants";
 import toast from "react-hot-toast";
 import { CardapioDocument } from "@/model/Cardapio";
-import Link from "next/link";
+import { TipoMarmitexDocument } from "@/model/TipoMarmitex";
 
 export default function Home() {
 
-  const [carregado, setCarregado] = useState<boolean>(false);
-  const [cardapioDocument, setCardapioDocument] = useState<CardapioDocument[]>();
+  const [tipoMarmitex, setTipoMarmitex] = useState<TipoMarmitexDocument[]>();
+  const [cardapio, setCardapio] = useState<CardapioDocument[]>();
+  const [itensSelecionados, setItensSelecionado] = useState<string[]>([]);
 
   useEffect(() => {
-
     const fetchData = async () => {
       try {
-        const response = await Promise.all([
-          fetch(URL_API_TIPO_ITEM),
-          fetch(URL_API_ITEM),
-          fetch(URL_API_CARDAPIO).then((res) =>
-            res.json().then((cardapios) => {
-              setCardapioDocument(cardapios);
-            })
-          ),
+        const [resCardapio, resMarmitex] = await Promise.all([
+          fetch(URL_API_CARDAPIO),
+          fetch(URL_API_TIPO_MARMITEX),
         ]);
 
-        if (response) {
-          setCarregado(true);
-        }
+        const cardapioData = await resCardapio.json();
+        const marmitextData = await resMarmitex.json();
+
+        setCardapio(cardapioData);
+        setTipoMarmitex(marmitextData);
 
       } catch (error: any) {
         toast.error(error.message);
@@ -38,43 +35,59 @@ export default function Home() {
     fetchData();
   }, []);
 
+  if (!tipoMarmitex || !cardapio) {
+    return (
+      <div>
+        <h2>Carregando ...</h2>
+      </div>
+    )
+  }
+
   return (
-    <div className="max-w-xs mx-auto">
-      <h2 className="text-center p-2 text-3xl font-mono text-cyan-700">
-        Faça seu pedido
-      </h2>
+    <div>
+      <div className="flex flex-col justify-center items-center">
+        {handleMarmitex(tipoMarmitex)}
 
-      <h3 className="text-center font-extralight text-2xl py-3">
-        Cardapio de hoje
-      </h3>
+        <Cardapio cardapios={cardapio} />
 
-      <div className="flex justify-center">
-        {carregado && cardapioDocument !== undefined ? (
-          <div>
-            <Cardapio cardapios={cardapioDocument} />
-            <div className="flex justify-center my-8">
-              <Link href={"/pedido"} className="btn btn-secondary">Fazer meu pedido</Link>
-            </div>
-          </div>
-        ) : (
-          cardapioSkeleton()
-        )}
+        <div className="my-4">
+          <button type="button" className="btn btn-secondary">Concluir pedido</button>
+        </div>
       </div>
     </div>
-  );
+  )
 
-  function cardapioSkeleton() {
-    return <div className="mt-8 flex flex-col justify-center items-center space-y-5">
-      <div>
-        <span className="loading loading-spinner loading-lg text-success"></span>
-      </div>
+  function handleMarmitex(data: TipoMarmitexDocument[]) {
+    return (
+      <>
+        <h1 className="text-2xl mt-2">Selecione o marmitex:</h1>
 
-      <div className="flex flex-col gap-4 w-52">
-        <div className="skeleton h-32 w-full"></div>
-        <div className="skeleton h-4 w-28"></div>
-        <div className="skeleton h-4 w-full"></div>
-        <div className="skeleton h-4 w-full"></div>
-      </div>
-    </div>;
+        <div className="flex text-sm sm:text-base cursor-pointer">
+          {data.map((m) => (
+            <div key={m._id} className="border m-1 rounded-md p-2 hover:bg-amber-300 transition-colors">
+              <div className="flex flex-col items-center">
+                <h2 className="font-mono text-secondary">{m.descricao}</h2>
+                <h3 className="text-xs sm:text-base font-semibold text-primary">R$ {m.preco}</h3>
+              </div>
+
+              <div className="mt-2">
+                {m.configuracoes.map((c, index) => (
+                  <div key={index}>
+                    <div className="font-light space-x-2">
+                      <span className="font-bold">
+                        {c.quantidade}
+                      </span>
+                      <span>
+                        {c.tipo.descricao.split(" ")[0]}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </>
+    )
   }
 }
