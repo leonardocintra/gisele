@@ -27,6 +27,7 @@ export async function POST(req: NextRequest) {
   const doc = await TipoMarmitex.create({
     descricao: data.descricao,
     ativo: data.ativo,
+    preco: data.preco,
     configuracoes: data.configuracoes
   });
 

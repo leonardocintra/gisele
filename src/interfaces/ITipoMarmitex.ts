@@ -8,5 +8,6 @@ export interface IConfiguracaoMarmitex {
 export interface ITipoMarmitex {
   descricao: string,
   ativo: boolean,
+  preco: number,
   configuracoes: IConfiguracaoMarmitex[]
 }

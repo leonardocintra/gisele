@@ -34,16 +34,19 @@ export default function MarmitexPage() {
           {tipoMarmitex.map((tipo) => (
             <div key={tipo._id}>
               <h2 className="mb-1 text-3xl text-center">{tipo.descricao}</h2>
-              <h2 className="text-sm text-center font-semibold text-secondary">{tipo.ativo ? "Ativo" : "NÃO"}</h2>
+              <div className="flex space-x-2 justify-center">
+                <h2 className="text-sm text-center font-semibold text-secondary">{tipo.ativo ? "Ativo" : "NÃO"}</h2>
+                <h2 className="text-sm text-center font-semibold text-primary">R$ {tipo.preco}</h2>
+              </div>
               <div className="mb-4">
                 {tipo.configuracoes.map((config, index) => (
                   <div key={`config-${index}`}>
                     <ul>
                       <li className="space-x-3">
-                        <span className="my-1 badge badge-lg badge-primary">
+                        <span className="my-1 badge badge-lg badge-neutral">
                           {config.quantidade}
                         </span>
-                        
+
                         <span className="font-light">
                           {config.tipo.descricao}
                         </span>

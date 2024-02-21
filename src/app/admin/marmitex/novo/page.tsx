@@ -18,6 +18,7 @@ export default function NovoMarmitexPage() {
 
   const [tipoItems, setTipoItems] = useState<TipoItemDocument[]>();
   const [descricao, setDescricao] = useState<string>("");
+  const [preco, setPreco] = useState<number>(0);
   const [marmitex, setMarmitex] = useState<MarmitexItem[]>([]);
   const [redirectPage, setRedirectPage] = useState<boolean>(false);
   const REDIRECT_URL = "/admin/marmitex";
@@ -54,6 +55,7 @@ export default function NovoMarmitexPage() {
 
       let data: Partial<TipoMarmitexDocument> = {
         descricao,
+        preco,
         ativo: true,
         configuracoes: marmitex,
       };
@@ -128,6 +130,16 @@ export default function NovoMarmitexPage() {
             </div>
             <input type="text" value={descricao} onChange={(e) => setDescricao(e.target.value)}
               placeholder="Descricao ..." className="input input-bordered w-full max-w-xs" />
+          </label>
+        </div>
+
+        <div className="">
+          <label className="form-control w-full max-w-xs">
+            <div className="label">
+              <span className="label-text">Preço marmitex</span>
+            </div>
+            <input type="number" value={preco} onChange={(e) => setPreco(parseFloat(e.target.value))}
+              placeholder="Preço ..." className="input input-bordered w-full max-w-xs" />
           </label>
         </div>
 

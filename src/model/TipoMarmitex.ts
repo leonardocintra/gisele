@@ -7,6 +7,7 @@ const marmitexSchema = new Schema<TipoMarmitexDocument>(
   {
     descricao: { type: String, required: true },
     ativo: { type: Boolean, default: true },
+    preco: { type: Number, required: true },
     configuracoes: [{
       quantidade: { type: Number, required: true },
       tipo: {
