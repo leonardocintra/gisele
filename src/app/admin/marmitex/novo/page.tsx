@@ -110,7 +110,6 @@ export default function NovoMarmitexPage() {
       };
       setMarmitex([...marmitex, newItem]);
     }
-    console.log(marmitex);
   }
 
   return (
