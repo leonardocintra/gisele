@@ -10,10 +10,10 @@ export default function MarmitexPage() {
   const [tipoMarmitex, setTipoMarmitex] = useState<TipoMarmitexDocument[]>();
 
   useEffect(() => {
-    fetchTipoItems();
+    fetchMarmitex();
   }, []);
 
-  function fetchTipoItems() {
+  function fetchMarmitex() {
     fetch(URL_API_TIPO_MARMITEX).then((res) =>
       res.json().then((mamitex) => {
         setTipoMarmitex(mamitex);
