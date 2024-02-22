@@ -1,14 +1,14 @@
 "use client"
 
 import { CardapioDocument } from "@/model/Cardapio";
+import { TipoMarmitexDocument } from "@/model/TipoMarmitex";
 
 type CardapioProps = {
   cardapios: CardapioDocument[]
+  tipoMarmitex: TipoMarmitexDocument
 }
 
-
 export default function Cardapio(props: CardapioProps) {
-
   const cardapio = props.cardapios[0];
 
   const items = cardapio.itens.filter(item => !item.tipo.exibirPreco);
@@ -28,10 +28,14 @@ export default function Cardapio(props: CardapioProps) {
   const tiposOrdenados = Object.keys(itensPorTipo).sort();
 
   return (
-    <div className="border p-4 rounded-lg shadow-lg">
+    <div className="">
       {tiposOrdenados.map((tipo) => (
-        <div key={tipo}>
-          <h3 className="font-bold mt-4 text-2xl">{tipo}</h3>
+        <div key={tipo} className="border rounded-2xl px-3 m-1 shadow-md">
+          <div className="flex items-center space-x-1">
+            <span className="mt-5">[3 / 0]</span>
+            <h3 className="font-bold mt-5 text-2xl">{tipo}</h3>
+          </div>
+
           {itensPorTipo[tipo]
             .sort((a: any, b: any) => a.descricao.localeCompare(b.descricao))
             .map((item: any) => (
@@ -42,6 +46,7 @@ export default function Cardapio(props: CardapioProps) {
                 </label>
               </div>
             ))}
+
         </div>
       ))}
     </div>

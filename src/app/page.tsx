@@ -10,6 +10,7 @@ import { TipoMarmitexDocument } from "@/model/TipoMarmitex";
 export default function Home() {
 
   const [tipoMarmitex, setTipoMarmitex] = useState<TipoMarmitexDocument[]>();
+  const [marmitex, setMarmitex] = useState<TipoMarmitexDocument>();
   const [cardapio, setCardapio] = useState<CardapioDocument[]>();
   const [descricaoMarmitexSelecionado, setDescricaoMarmitexSelecionado] = useState<string>("Selecione o tamanho")
   const [marmitexSelecionadoId, setMarmitexSelecionadoId] = useState<string>("");
@@ -45,10 +46,10 @@ export default function Home() {
     )
   }
 
-  function selecionarMarmitex(marmitex: TipoMarmitexDocument) {
-    setDescricaoMarmitexSelecionado(`Marmitex ${marmitex.descricao}`)
-    setMarmitexSelecionadoId(marmitex._id);
-
+  function selecionarMarmitex(objMarmitex: TipoMarmitexDocument) {
+    setDescricaoMarmitexSelecionado(`Marmitex ${objMarmitex.descricao} - R$ ${objMarmitex.preco}`)
+    setMarmitexSelecionadoId(objMarmitex._id);
+    setMarmitex(objMarmitex);
   }
 
   return (
@@ -60,7 +61,14 @@ export default function Home() {
           {descricaoMarmitexSelecionado}
         </div>
 
-        <Cardapio cardapios={cardapio} />
+        {marmitex ? (
+          <Cardapio cardapios={cardapio} tipoMarmitex={marmitex} />
+        ) : (
+          <div>
+            <h2>Selecione um marmitex</h2>
+          </div>
+        )}
+
 
         <div className="my-4">
           <button type="button" className="btn btn-secondary">Concluir pedido</button>
