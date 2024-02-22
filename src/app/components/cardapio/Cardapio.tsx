@@ -28,14 +28,19 @@ export default function Cardapio(props: CardapioProps) {
   const tiposOrdenados = Object.keys(itensPorTipo).sort();
 
   return (
-    <div>
+    <div className="border p-4 rounded-lg shadow-lg">
       {tiposOrdenados.map((tipo) => (
         <div key={tipo}>
           <h3 className="font-bold mt-4 text-2xl">{tipo}</h3>
           {itensPorTipo[tipo]
             .sort((a: any, b: any) => a.descricao.localeCompare(b.descricao))
             .map((item: any) => (
-              <div className="my-1" key={item._id}>- {item.descricao}</div>
+              <div key={item._id} className="form-control hover:bg-green-200 rounded-lg">
+                <label className="cursor-pointer label">
+                  <span className="label-text">{item.descricao}</span>
+                  <input type="checkbox" className="checkbox checkbox-success" />
+                </label>
+              </div>
             ))}
         </div>
       ))}

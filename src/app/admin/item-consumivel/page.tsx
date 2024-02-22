@@ -46,7 +46,6 @@ export default function AdminItemConsumivelPage() {
             <tr>
               <th>Nome do item</th>
               <th>Tipo</th>
-              <th>Preço</th>
             </tr>
           </thead>
           <tbody>
@@ -54,15 +53,15 @@ export default function AdminItemConsumivelPage() {
               items.map((item) => (
                 <tr key={item._id} className="hover:bg-gray-200">
                   <td>
-                    <span className="font-semibold text-gray-600 text-xl">{item.descricao}</span>
+                    <span className="font-semibold text-gray-600 text-base">{item.descricao}</span>
                   </td>
                   <td>
                     <div className="flex items-center gap-3">
                       <div className="avatar">
-                        <div className="mask mask-squircle w-12 h-12">
+                        <div className="mask mask-squircle h-9">
                           <Image
-                            width={50}
-                            height={50}
+                            width={60}
+                            height={60}
                             src={item.tipo.imagem}
                             alt={item.descricao}
                           />
@@ -78,8 +77,6 @@ export default function AdminItemConsumivelPage() {
                       </div>
                     </div>
                   </td>
-
-                  <td>{item.preco}</td>
                 </tr>
               ))
             ) : (

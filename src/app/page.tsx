@@ -11,6 +11,7 @@ export default function Home() {
 
   const [tipoMarmitex, setTipoMarmitex] = useState<TipoMarmitexDocument[]>();
   const [cardapio, setCardapio] = useState<CardapioDocument[]>();
+  const [descricaoMarmitexSelecionado, setDescricaoMarmitexSelecionado] = useState<string>("Selecione o tamanho")
   const [itensSelecionados, setItensSelecionado] = useState<string[]>([]);
 
   useEffect(() => {
@@ -48,6 +49,10 @@ export default function Home() {
       <div className="flex flex-col justify-center items-center">
         {handleMarmitex(tipoMarmitex)}
 
+        <div className="my-3 text-gray-700 font-serif text-xl">
+          {descricaoMarmitexSelecionado}
+        </div>
+
         <Cardapio cardapios={cardapio} />
 
         <div className="my-4">
@@ -64,7 +69,7 @@ export default function Home() {
 
         <div className="flex text-sm sm:text-base cursor-pointer">
           {data.map((m) => (
-            <div key={m._id} className="border m-1 rounded-md p-2 hover:bg-amber-300 transition-colors">
+            <div key={m._id} onClick={() => setDescricaoMarmitexSelecionado(`Marmitex ${m.descricao}`)} className="border m-1 rounded-md p-2 hover:bg-amber-300 transition-colors">
               <div className="flex flex-col items-center">
                 <h2 className="font-mono text-secondary">{m.descricao}</h2>
                 <h3 className="text-xs sm:text-base font-semibold text-primary">R$ {m.preco}</h3>
