@@ -1,24 +1,34 @@
 "use client";
 
+import AlertaBusca from "@/app/components/admin/AltertaBusca";
 import IdentificadorDaPagina from "@/app/components/admin/IdentificadorDaPagina";
-import { ItemConsumivelDocument } from "@/model/ItemConsumivel";
+import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+const TMP_URL = "/api/firebase/item";
+
 export default function AdminItemConsumivelPage() {
-  const [items, setItems] = useState<ItemConsumivelDocument[]>();
+  const [items, setItems] = useState<IItemConsumivel[]>();
+  const [statusItems, setStatusItems] = useState<number>(0);
 
   useEffect(() => {
     fetchItems();
   }, []);
 
   function fetchItems() {
-    fetch("/api/item").then((res) =>
-      res.json().then((items) => {
-        setItems(items);
-      })
-    );
+    fetch(TMP_URL).then((res) => {
+      if (res.status === 404) {
+        setStatusItems(404)
+      } else if (res.status === 200) {
+        res.json().then((items) => {
+          setItems(items);
+        })
+      } else {
+        setStatusItems(500);
+      }
+    });
   }
 
   return (
@@ -49,7 +59,7 @@ export default function AdminItemConsumivelPage() {
             </tr>
           </thead>
           <tbody>
-            {items ? (
+            {items && items.length > 0 ? (
               items.map((item) => (
                 <tr key={item._id} className="hover:bg-gray-200">
                   <td>
@@ -81,7 +91,9 @@ export default function AdminItemConsumivelPage() {
               ))
             ) : (
               <tr>
-                <td>Sem items</td>
+                <td>
+                  <AlertaBusca descricao="Nenhum item encontrado" status={statusItems} />
+                </td>
               </tr>
             )}
           </tbody>

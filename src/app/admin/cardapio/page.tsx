@@ -1,23 +1,33 @@
 "use client";
 
+import AlertaBusca from "@/app/components/admin/AltertaBusca";
 import CardTile from "@/app/components/admin/cardapio/CardTile";
 import { getDataFormatada } from "@/commons/date";
 import { TipoItemDocument } from "@/model/TipoItemConsumivel";
 import { useState, useEffect } from "react";
 
+const TMP_URL = "/api/firebase/tipoItem";
+
 export default function AdminCardapioPage() {
   const [tipoItems, setTipoItems] = useState<TipoItemDocument[]>();
+  const [statusTipoItems, setStatusTipoItems] = useState<number>(0);
 
   useEffect(() => {
     fetchTipoItems();
   }, []);
 
   function fetchTipoItems() {
-    fetch("/api/tipoItem").then((res) =>
-      res.json().then((items) => {
-        setTipoItems(items);
-      })
-    );
+    fetch(TMP_URL).then((res) => {
+      if (res.status === 404) {
+        setStatusTipoItems(404)
+      } else if (res.status === 200) {
+        res.json().then((items) => {
+          setTipoItems(items);
+        })
+      } else {
+        setStatusTipoItems(500);
+      }
+    });
   }
 
   return (
@@ -29,7 +39,7 @@ export default function AdminCardapioPage() {
         <h3 className="sm:text-3xl sm:my-8 text-gray-600">{getDataFormatada()}</h3>
       </div>
       <div className="flex flex-wrap gap-2 justify-center">
-        {tipoItems ? (
+        {tipoItems && tipoItems.length > 0 ? (
           tipoItems.map((item) => (
             <div key={item._id}>
               <CardTile
@@ -41,7 +51,7 @@ export default function AdminCardapioPage() {
           ))
         ) : (
           <div>
-            <h2>sem items</h2>
+            <AlertaBusca descricao="Tipo itens não encontrado" status={statusTipoItems} />
           </div>
         )}
       </div>

@@ -1,16 +1,20 @@
 "use client";
 
-import { ItemConsumivelDocument } from "@/model/ItemConsumivel";
-import { TipoItemDocument } from "@/model/TipoItemConsumivel";
+import { URL_PAGE_ADMIN_ITEM_CONSUMIVEL } from "@/constants/constants";
+import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
+import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import { redirect } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+const TMP_URL = "/api/firebase/tipoItem";
+const TMP_URL2 = "/api/firebase/item";
+
 export default function NovoItemPage() {
   const [descricao, setDescricao] = useState<string>("");
   const [preco, setPreco] = useState<number>(0);
-  const [tipoItems, setTipoItems] = useState<TipoItemDocument[]>();
-  const [tipoItem, setTipoItem] = useState<TipoItemDocument>();
+  const [tipoItems, setTipoItems] = useState<ITipoItemConsumivel[]>();
+  const [tipoItem, setTipoItem] = useState<ITipoItemConsumivel>();
   const [tipoItemSelectError, setTipoItemSelectError] = useState<string>("");
   const [redirectPage, setRedirectPage] = useState<boolean>(false);
 
@@ -19,11 +23,11 @@ export default function NovoItemPage() {
   }, []);
 
   if (redirectPage) {
-    return redirect("/admin/item-consumivel/");
+    return redirect(URL_PAGE_ADMIN_ITEM_CONSUMIVEL);
   }
 
   function fetchTipoItems() {
-    fetch("/api/tipoItem").then((res) =>
+    fetch(TMP_URL).then((res) =>
       res.json().then((items) => {
         setTipoItems(items);
       })
@@ -54,13 +58,13 @@ export default function NovoItemPage() {
     }
 
     const creationPromise = new Promise<void>(async (resolve, reject) => {
-      const data: Partial<ItemConsumivelDocument> = {
+      const data: Partial<IItemConsumivel> = {
         descricao,
         preco,
         tipo: tipoItem,
       };
 
-      const response = await fetch("/api/item/", {
+      const response = await fetch(TMP_URL2, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

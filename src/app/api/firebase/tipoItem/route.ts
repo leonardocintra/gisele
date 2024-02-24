@@ -1,3 +1,4 @@
+import { TIPO_ITEM_DOC } from "@/constants/constants";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import firebaseData from "@/libs/firebaseConfig";
 import { TipoItemConsumivel } from "@/model/TipoItemConsumivel";
@@ -5,11 +6,10 @@ import { addDoc, collection, getDocs } from "firebase/firestore";
 import { NextRequest } from "next/server";
 
 const db = firebaseData.db;
-const TIPO_ITEM = "tipo_item_consumivel"
 
 export async function GET(req: NextRequest) {
   const querySnapshotTipoItems = await getDocs(
-    collection(db, TIPO_ITEM)
+    collection(db, TIPO_ITEM_DOC)
   );
 
   const tipoItems: ITipoItemConsumivel[] = [];
@@ -33,14 +33,14 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const data: ITipoItemConsumivel = await req.json();
-  const docRef = await addDoc(collection(db, TIPO_ITEM), data);
+  const docRef = await addDoc(collection(db, TIPO_ITEM_DOC), data);
 
   return Response.json(docRef, { status: 201 });
 }
 
 export async function DELETE(req: NextRequest) {
 
-
+  // TODO: mudar de mongoDB para firebase
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
 
