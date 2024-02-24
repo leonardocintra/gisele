@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
+
   mongoose.connect(process.env.MONGODB_URI as string);
 
   return Response.json(await TipoItemConsumivel.find(), { status: 200 });

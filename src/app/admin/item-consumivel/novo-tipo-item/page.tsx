@@ -1,25 +1,36 @@
 "use client";
 
-import { TipoItemDocument } from "@/model/TipoItemConsumivel";
+import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+const TMP_URL = "/api/firebase/tipoItem";
+
 export default function NovoTipoItemPage() {
   const [exibirPreco, setExibirPreco] = useState<boolean>(false);
   const [descricao, setDescricao] = useState<string>("");
+  const [statusTipoItems, setStatusTipoItems] = useState<number>(0);
   const [imagem, setImagem] = useState<string>("sem-imagem.webp");
-  const [tipoItems, setTipoItems] = useState<TipoItemDocument[]>();
+  const [tipoItems, setTipoItems] = useState<ITipoItemConsumivel[]>();
 
   useEffect(() => {
     fetchTipoItems();
   }, []);
 
   function fetchTipoItems() {
-    fetch("/api/tipoItem").then((res) =>
-      res.json().then((items) => {
-        setTipoItems(items);
-      })
+    fetch(TMP_URL).then((res) => {
+      if (res.status === 404) {
+        setStatusTipoItems(404)
+      } else if (res.status === 200) {
+        setStatusTipoItems(200);
+        res.json().then((items) => {
+          setTipoItems(items);
+        })
+      } else {
+        setStatusTipoItems(500);
+      }
+    }
     );
   }
 
@@ -32,13 +43,13 @@ export default function NovoTipoItemPage() {
     }
 
     const creationPromise = new Promise<void>(async (resolve, reject) => {
-      const data: Partial<TipoItemDocument> = {
+      const data: Partial<ITipoItemConsumivel> = {
         descricao,
         exibirPreco,
         imagem: `/img/${imagem}`,
       };
 
-      const response = await fetch("/api/tipoItem/", {
+      const response = await fetch(TMP_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -121,7 +132,7 @@ export default function NovoTipoItemPage() {
         </div>
       </form>
 
-      {tipoItems ? (
+      {tipoItems && tipoItems.length > 0 ? (
         <div className="overflow-x-auto max-w-2xl mx-auto mt-8">
           <table className="table table-xs sm:table-md">
             {/* head */}
@@ -161,8 +172,25 @@ export default function NovoTipoItemPage() {
         </div>
       ) : (
         <div className="flex items-center justify-center my-9 p-2">
-          <span className="loading loading-spinner loading-lg"></span>
+          {statusTipoItems === 404 && (
+            <div role="alert" className="alert">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-info shrink-0 w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span>Nenhum item encontrado. Faça seu primeiro cadastro!</span>
+            </div>
+          )}
+
+          {statusTipoItems === 500 && (
+            <div role="alert" className="alert alert-error">
+              <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span>Error! Task failed successfully.</span>
+            </div>
+          )}
+
+          {statusTipoItems === 200 && (
+            <span className="loading loading-spinner loading-lg"></span>
+          )}
         </div>
+
       )}
     </div>
   );
