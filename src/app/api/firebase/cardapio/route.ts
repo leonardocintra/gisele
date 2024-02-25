@@ -44,8 +44,6 @@ export async function PUT(req: NextRequest) {
   const { id, ...data } = await req.json();
 
   const cardapioRef = doc(db, CARDAPIO_DOC, id)
-  console.log(cardapioRef);
-
   await updateDoc(cardapioRef, data);
 
   return Response.json(true);
