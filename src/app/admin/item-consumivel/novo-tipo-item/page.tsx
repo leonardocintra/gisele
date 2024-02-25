@@ -1,12 +1,11 @@
 "use client";
 
 import AlertaBusca from "@/app/components/admin/AltertaBusca";
+import { URL_API_TIPO_ITEM } from "@/constants/constants";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-
-const TMP_URL = "/api/firebase/tipoItem";
 
 export default function NovoTipoItemPage() {
   const [exibirPreco, setExibirPreco] = useState<boolean>(false);
@@ -20,7 +19,7 @@ export default function NovoTipoItemPage() {
   }, []);
 
   function fetchTipoItems() {
-    fetch(TMP_URL).then((res) => {
+    fetch(URL_API_TIPO_ITEM).then((res) => {
       if (res.status === 404) {
         setStatusTipoItems(404)
       } else if (res.status === 200) {
@@ -49,7 +48,7 @@ export default function NovoTipoItemPage() {
         imagem: `/img/${imagem}`,
       };
 
-      const response = await fetch(TMP_URL, {
+      const response = await fetch(URL_API_TIPO_ITEM, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -144,8 +143,8 @@ export default function NovoTipoItemPage() {
               </tr>
             </thead>
             <tbody>
-              {tipoItems.map((item) => (
-                <tr key={item._id}>
+              {tipoItems.map((item, index) => (
+                <tr key={index}>
                   <td>
                     <div className="flex items-center gap-3">
                       <div className="avatar">

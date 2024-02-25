@@ -3,13 +3,12 @@
 import AlertaBusca from "@/app/components/admin/AltertaBusca";
 import CardTile from "@/app/components/admin/cardapio/CardTile";
 import { getDataFormatada } from "@/commons/date";
-import { TipoItemDocument } from "@/model/TipoItemConsumivel";
+import { URL_API_TIPO_ITEM } from "@/constants/constants";
+import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import { useState, useEffect } from "react";
 
-const TMP_URL = "/api/firebase/tipoItem";
-
 export default function AdminCardapioPage() {
-  const [tipoItems, setTipoItems] = useState<TipoItemDocument[]>();
+  const [tipoItems, setTipoItems] = useState<ITipoItemConsumivel[]>();
   const [statusTipoItems, setStatusTipoItems] = useState<number>(0);
 
   useEffect(() => {
@@ -17,7 +16,7 @@ export default function AdminCardapioPage() {
   }, []);
 
   function fetchTipoItems() {
-    fetch(TMP_URL).then((res) => {
+    fetch(URL_API_TIPO_ITEM).then((res) => {
       if (res.status === 404) {
         setStatusTipoItems(404)
       } else if (res.status === 200) {
@@ -41,11 +40,11 @@ export default function AdminCardapioPage() {
       <div className="flex flex-wrap gap-2 justify-center">
         {tipoItems && tipoItems.length > 0 ? (
           tipoItems.map((item) => (
-            <div key={item._id}>
+            <div key={item.id}>
               <CardTile
                 image={item.imagem}
                 descricao={item.descricao}
-                id={item._id}
+                id={item.id}
               />
             </div>
           ))

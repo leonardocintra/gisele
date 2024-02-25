@@ -1,14 +1,11 @@
 "use client";
 
-import { URL_PAGE_ADMIN_ITEM_CONSUMIVEL } from "@/constants/constants";
+import { URL_API_ITEM, URL_API_TIPO_ITEM, URL_PAGE_ADMIN_ITEM_CONSUMIVEL } from "@/constants/constants";
 import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import { redirect } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-
-const TMP_URL = "/api/firebase/tipoItem";
-const TMP_URL2 = "/api/firebase/item";
 
 export default function NovoItemPage() {
   const [descricao, setDescricao] = useState<string>("");
@@ -27,7 +24,7 @@ export default function NovoItemPage() {
   }
 
   function fetchTipoItems() {
-    fetch(TMP_URL).then((res) =>
+    fetch(URL_API_TIPO_ITEM).then((res) =>
       res.json().then((items) => {
         setTipoItems(items);
       })
@@ -38,7 +35,7 @@ export default function NovoItemPage() {
     const tipoItemSelecionadoId = e.target.value;
 
     const tipoItemSelecionado = tipoItems?.find(
-      (c) => c._id === tipoItemSelecionadoId
+      (c) => c.id === tipoItemSelecionadoId
     );
     setTipoItem(tipoItemSelecionado);
   }
@@ -51,7 +48,7 @@ export default function NovoItemPage() {
       return;
     }
 
-    if (tipoItem === undefined || tipoItem._id === "0") {
+    if (tipoItem === undefined || tipoItem.id === "0") {
       toast.error("Selecione o tipo ...");
       setTipoItemSelectError("select-error");
       return;
@@ -64,7 +61,7 @@ export default function NovoItemPage() {
         tipo: tipoItem,
       };
 
-      const response = await fetch(TMP_URL2, {
+      const response = await fetch(URL_API_ITEM, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -126,12 +123,12 @@ export default function NovoItemPage() {
             className={`select select-bordered select-lg w-full ${tipoItemSelectError}`}
             name="tipoItem"
             id="tipoItem"
-            value={tipoItem?._id}
+            value={tipoItem?.id}
             onChange={(e) => handleSelectTipoItem(e)}
           >
             <option value="0">Selecione</option>
             {tipoItems.map((tipo) => (
-              <option key={tipo._id} value={tipo._id}>
+              <option key={tipo.id} value={tipo.id}>
                 {tipo.descricao}
               </option>
             ))}

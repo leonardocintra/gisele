@@ -1,7 +1,6 @@
 import { TIPO_ITEM_DOC } from "@/constants/constants";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import firebaseData from "@/libs/firebaseConfig";
-import { TipoItemConsumivel } from "@/model/TipoItemConsumivel";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { NextRequest } from "next/server";
 
@@ -16,7 +15,7 @@ export async function GET(req: NextRequest) {
 
   querySnapshotTipoItems.forEach((doc) => {
     tipoItems.push({
-      _id: doc.id,
+      id: doc.id,
       descricao: doc.data().descricao,
       exibirPreco: doc.data().exibirPreco,
       imagem: doc.data().imagem
@@ -36,15 +35,4 @@ export async function POST(req: NextRequest) {
   const docRef = await addDoc(collection(db, TIPO_ITEM_DOC), data);
 
   return Response.json(docRef, { status: 201 });
-}
-
-export async function DELETE(req: NextRequest) {
-
-  // TODO: mudar de mongoDB para firebase
-  const { searchParams } = new URL(req.url);
-  const id = searchParams.get("id");
-
-  await TipoItemConsumivel.findByIdAndDelete({ _id: id });
-
-  return Response.json(true);
 }
