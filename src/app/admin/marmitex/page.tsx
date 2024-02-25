@@ -1,13 +1,13 @@
 "use client";
 
 import { URL_API_TIPO_MARMITEX } from "@/constants/constants";
-import { TipoMarmitexDocument } from "@/model/TipoMarmitex";
+import { ITipoMarmitex } from "@/interfaces/ITipoMarmitex";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function MarmitexPage() {
 
-  const [tipoMarmitex, setTipoMarmitex] = useState<TipoMarmitexDocument[]>();
+  const [tipoMarmitex, setTipoMarmitex] = useState<ITipoMarmitex[]>();
 
   useEffect(() => {
     fetchMarmitex();
@@ -32,7 +32,7 @@ export default function MarmitexPage() {
 
         <div className="p-4 rounded-md border-2 border-blue-400">
           {tipoMarmitex.map((tipo) => (
-            <div key={tipo._id}>
+            <div key={tipo.id}>
               <h2 className="mb-1 text-3xl text-center">{tipo.descricao}</h2>
               <div className="flex space-x-2 justify-center">
                 <h2 className="text-sm text-center font-semibold text-secondary">{tipo.ativo ? "Ativo" : "NÃO"}</h2>

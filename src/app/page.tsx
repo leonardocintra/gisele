@@ -1,17 +1,17 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import Cardapio from "./components/cardapio/Cardapio";
 import { URL_API_CARDAPIO, URL_API_TIPO_MARMITEX } from "@/constants/constants";
 import toast from "react-hot-toast";
-import { CardapioDocument } from "@/model/Cardapio";
-import { TipoMarmitexDocument } from "@/model/TipoMarmitex";
+import { ITipoMarmitex } from "@/interfaces/ITipoMarmitex";
+import { ICardapio } from "@/interfaces/ICardapio";
+import Cardapio from "./components/cardapio/Cardapio";
 
 export default function Home() {
 
-  const [tipoMarmitex, setTipoMarmitex] = useState<TipoMarmitexDocument[]>();
-  const [marmitex, setMarmitex] = useState<TipoMarmitexDocument>();
-  const [cardapio, setCardapio] = useState<CardapioDocument[]>();
+  const [tipoMarmitex, setTipoMarmitex] = useState<ITipoMarmitex[]>();
+  const [marmitex, setMarmitex] = useState<ITipoMarmitex>();
+  const [cardapio, setCardapio] = useState<ICardapio[]>();
   const [descricaoMarmitexSelecionado, setDescricaoMarmitexSelecionado] = useState<string>("Selecione o tamanho")
   const [marmitexSelecionadoId, setMarmitexSelecionadoId] = useState<string>("");
   const [itensSelecionados, setItensSelecionado] = useState<string[]>([]);
@@ -46,9 +46,9 @@ export default function Home() {
     )
   }
 
-  function selecionarMarmitex(objMarmitex: TipoMarmitexDocument) {
+  function selecionarMarmitex(objMarmitex: ITipoMarmitex) {
     setDescricaoMarmitexSelecionado(`Marmitex ${objMarmitex.descricao} - R$ ${objMarmitex.preco}`)
-    setMarmitexSelecionadoId(objMarmitex._id);
+    setMarmitexSelecionadoId(objMarmitex.id);
     setMarmitex(objMarmitex);
   }
 
@@ -77,15 +77,15 @@ export default function Home() {
     </div>
   )
 
-  function handleMarmitex(data: TipoMarmitexDocument[]) {
+  function handleMarmitex(data: ITipoMarmitex[]) {
     return (
       <>
         <h1 className="text-2xl mt-2">Selecione o marmitex:</h1>
 
         <div className="flex text-sm sm:text-base cursor-pointer">
           {data.map((m) => (
-            <div id={m._id} key={m._id} onClick={() => selecionarMarmitex(m)}
-              className={`${marmitexSelecionadoId === m._id ? "bg-green-600" : ""}  border m-1 rounded-md p-2 hover:bg-amber-300 transition-colors`}>
+            <div id={m.id} key={m.id} onClick={() => selecionarMarmitex(m)}
+              className={`${marmitexSelecionadoId === m.id ? "bg-green-600" : ""}  border m-1 rounded-md p-2 hover:bg-amber-300 transition-colors`}>
               <div className="flex flex-col items-center">
                 <h2 className="font-mono text-secondary">{m.descricao}</h2>
                 <h3 className="text-xs sm:text-base font-semibold text-primary">R$ {m.preco}</h3>

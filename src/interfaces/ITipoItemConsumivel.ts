@@ -1,5 +1,5 @@
 export interface ITipoItemConsumivel {
-  _id: string;
+  id: string,
   descricao: string;
   exibirPreco: boolean;
   imagem: string;

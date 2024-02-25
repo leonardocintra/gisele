@@ -2,24 +2,22 @@
 
 import IdentificadorDaPagina from "@/app/components/admin/IdentificadorDaPagina";
 import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
-import { CardapioDocument } from "@/model/Cardapio";
-import { ItemConsumivelDocument } from "@/model/ItemConsumivel";
+import { ICardapio } from "@/interfaces/ICardapio";
 import { redirect, useParams } from "next/navigation";
 import { useState, useEffect } from "react";
+import { URL_API_CARDAPIO, URL_API_ITEM, URL_PAGE_ADMIN_ITEM_CONSUMIVEL } from '@/constants/constants'
 import toast from "react-hot-toast";
-import { URL_API_CARDAPIO, URL_API_ITEM } from '@/constants/constants'
+import AlertaBusca from "@/app/components/admin/AltertaBusca";
 
 export default function CardapioItemPage() {
   const { id } = useParams();
   const tipo = id;
 
-  const [itensDocument, setItensDocument] =
-    useState<ItemConsumivelDocument[]>();
-  const [cardapioDocument, setCardapioDocument] =
-    useState<CardapioDocument[]>();
+  const [items, setItems] = useState<IItemConsumivel[]>();
+  const [cardapioDocument, setCardapioDocument] = useState<ICardapio[]>();
   const [itensSelecionados, setItensSelecionado] = useState<string[]>([]);
   const [redirectPage, setRedirectPage] = useState<boolean>(false);
-
+  const [statusItem, setStatusItem] = useState<number>(0);
 
 
   useEffect(() => {
@@ -31,15 +29,19 @@ export default function CardapioItemPage() {
           fetch(`${URL_API_ITEM}/${tipo}`),
         ]);
 
+        if (resItems.status === 404) {
+          setStatusItem(404);
+        }
+
         const cardapioData = await resCardapio.json();
         const itemsData = await resItems.json();
 
         setCardapioDocument(cardapioData);
-        setItensDocument(itemsData);
+        setItems(itemsData);
 
         if (cardapioData.length > 0) {
           const itensNoCardapio = cardapioData[0].itens;
-          itensNoCardapio.forEach((itemConsumivel: ItemConsumivelDocument) => {
+          itensNoCardapio.forEach((itemConsumivel: IItemConsumivel) => {
             incluirOuRemoverItemSelecionado(itemConsumivel, true);
           });
         }
@@ -53,17 +55,17 @@ export default function CardapioItemPage() {
 
 
   if (redirectPage) {
-    return redirect("/admin/item-consumivel/");
+    return redirect(URL_PAGE_ADMIN_ITEM_CONSUMIVEL);
   }
 
   // Observacao: evitar estados derivados (Mais detalhes: https://youtu.be/kCpca2z2cls?t=611)
-  const items = itensDocument ? itensDocument : [];
+  const itemsData = items ? items : [];
 
   function incluirOuRemoverItemSelecionado(
-    itemConsumivel: ItemConsumivelDocument,
+    itemConsumivel: IItemConsumivel,
     carregamentoInicial: boolean = false
   ) {
-    const itemId = itemConsumivel._id
+    const itemId = itemConsumivel.id
 
     setItensSelecionado((prevItems) => {
       const isItemInArray = prevItems.includes(itemId);
@@ -88,7 +90,7 @@ export default function CardapioItemPage() {
   }
 
   async function salvar() {
-    if (items.length === 0) {
+    if (itemsData.length === 0) {
       toast.error("Nao foi possivel carregar os itens");
       return;
     }
@@ -103,14 +105,14 @@ export default function CardapioItemPage() {
         return;
       }
 
-      let data: Partial<CardapioDocument> = {
+      let data: Partial<ICardapio> = {
         data: new Date(),
         itens: itensIdSelecionados,
       };
 
       const method = defineCriarOuAtualizarCardapio();
       if (method === "PUT" && cardapioDocument !== undefined) {
-        data = { _id: cardapioDocument[0]._id, ...data };
+        data = { id: cardapioDocument[0].id, ...data };
       }
 
       const response = await fetch(URL_API_CARDAPIO, {
@@ -141,7 +143,7 @@ export default function CardapioItemPage() {
       <div className="my-4">
         <IdentificadorDaPagina
           descricao={
-            itensDocument ? itensDocument[0]?.tipo.descricao : "Carregando ..."
+            items ? items[0]?.tipo.descricao : "Carregando ..."
           }
         />
       </div>
@@ -161,14 +163,14 @@ export default function CardapioItemPage() {
             </tr>
           </thead>
           <tbody>
-            {itensDocument && itensDocument.length > 0 ? (
-              itensDocument.map((item, index) => (
+            {items && items.length > 0 ? (
+              items.map((item, index) => (
                 <tr
-                  key={item._id}
+                  key={item.id}
                   onClick={() =>
                     incluirOuRemoverItemSelecionado(item)
                   }
-                  className={` ${itensSelecionados.includes(item._id)
+                  className={` ${itensSelecionados.includes(item.id)
                     ? "bg-accent"
                     : "hover:bg-green-200"
                     }`}
@@ -181,7 +183,7 @@ export default function CardapioItemPage() {
                     </div>
                   </td>
                   <td>
-                    {itensSelecionados.includes(item._id)
+                    {itensSelecionados.includes(item.id)
                       ? "Desativar"
                       : "Ativar"}
                   </td>
@@ -190,10 +192,10 @@ export default function CardapioItemPage() {
             ) : (
               <tr>
                 <td>
-                  <span className="loading loading-spinner loading-md"></span>
+                  <AlertaBusca status={statusItem} descricao="Item" />
                 </td>
                 <td>
-                  <span className="loading loading-spinner loading-md"></span>
+                  <AlertaBusca status={statusItem} descricao="Ativar / Desativar" />
                 </td>
               </tr>
             )}
@@ -223,23 +225,23 @@ export default function CardapioItemPage() {
 
     if (cardapioDocument !== undefined && cardapioDocument.length > 0) {
       itensDeOutroTipo = cardapioDocument[0].itens.filter((item) => {
-        return item.tipo._id !== tipo;
+        return item.tipo.id !== tipo;
       });
     }
 
     if (itensDeOutroTipo.length > 0) {
       itensDeOutroTipo.forEach(element => {
-        idsOutroItem.push(element._id)
+        idsOutroItem.push(element.id)
       });
     }
 
     for (let i = 0; i < itensSelecionados.length; i++) {
       // Verificar se o item está em 'items'
-      let item = items.find((item) => item._id === itensSelecionados[i]);
+      let item = itemsData.find((item) => item.id === itensSelecionados[i]);
 
       // Se não encontrado em 'items', verificar em 'itensDeOutroTipo'
       if (item === undefined || !item) {
-        item = itensDeOutroTipo.find((item) => item._id === itensSelecionados[i]);
+        item = itensDeOutroTipo.find((item) => item.id === itensSelecionados[i]);
       }
 
       // Se ainda não encontrado, exibir um erro e interromper o loop
@@ -250,9 +252,9 @@ export default function CardapioItemPage() {
         return;
       }
 
-      // O que precisa mesmo aqui é somente o _id. Mas a inteface obriga a passar o restante dos dados
+      // O que precisa mesmo aqui é somente o id. Mas a inteface obriga a passar o restante dos dados
       itensIdSelecionados.push({
-        _id: item._id,
+        id: item.id,
         descricao: item.descricao,
         preco: item.preco,
         tipo: item.tipo,
