@@ -1,22 +1,21 @@
 "use client"
 
-import { URL_API_TIPO_MARMITEX } from "@/constants/constants";
+import { URL_API_TIPO_ITEM, URL_API_TIPO_MARMITEX } from "@/constants/constants";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
-import { TipoItemDocument } from "@/model/TipoItemConsumivel";
-import { TipoMarmitexDocument } from "@/model/TipoMarmitex";
+import { ITipoMarmitex } from "@/interfaces/ITipoMarmitex";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 type MarmitexItem = {
-  tipo: TipoItemDocument,
+  tipo: ITipoItemConsumivel,
   quantidade: number,
 }
 
 export default function NovoMarmitexPage() {
 
-  const [tipoItems, setTipoItems] = useState<TipoItemDocument[]>();
+  const [tipoItems, setTipoItems] = useState<ITipoItemConsumivel[]>();
   const [descricao, setDescricao] = useState<string>("");
   const [preco, setPreco] = useState<number>(0);
   const [marmitex, setMarmitex] = useState<MarmitexItem[]>([]);
@@ -32,7 +31,7 @@ export default function NovoMarmitexPage() {
   }
 
   function fetchTipoItems() {
-    fetch("/api/tipoItem").then((res) =>
+    fetch(URL_API_TIPO_ITEM).then((res) =>
       res.json().then((items: ITipoItemConsumivel[]) => {
         const data = items.filter((item) => item.exibirPreco === false);
         setTipoItems(data);
@@ -53,7 +52,7 @@ export default function NovoMarmitexPage() {
 
     const creationPromise = new Promise<void>(async (resolve, reject) => {
 
-      let data: Partial<TipoMarmitexDocument> = {
+      let data: Partial<ITipoMarmitex> = {
         descricao,
         preco,
         ativo: true,
@@ -90,14 +89,14 @@ export default function NovoMarmitexPage() {
       return;
     }
 
-    const tipo = tipoItems.find((t) => t._id === tipoId);
+    const tipo = tipoItems.find((t) => t.id === tipoId);
 
     if (tipo === undefined) {
       toast.error('Ops ... item não encontrado');
       return;
     }
 
-    const existingItemIndex = marmitex.findIndex((item) => item.tipo._id === tipoId);
+    const existingItemIndex = marmitex.findIndex((item) => item.tipo.id === tipoId);
 
     if (existingItemIndex !== -1) {
       // Se o tipo já existe no array, atualize apenas a quantidade
@@ -121,7 +120,6 @@ export default function NovoMarmitexPage() {
         <button className="btn btn-primary">Novo marmitex</button>
       </div>
 
-
       <form className="flex flex-col items-center mt-4 space-y-4">
         <div className="">
           <label className="form-control w-full max-w-xs">
@@ -144,12 +142,12 @@ export default function NovoMarmitexPage() {
         </div>
 
         {tipoItems.map((tipo) => (
-          <div key={tipo._id}>
+          <div key={tipo.id}>
             <label className="form-control w-full max-w-xs">
               <div className="label">
                 <span className="label-text">{tipo.descricao}</span>
               </div>
-              <input type="number" max={9} onChange={(e) => handleMarmitex(parseInt(e.target.value), tipo._id)}
+              <input type="number" max={9} onChange={(e) => handleMarmitex(parseInt(e.target.value), tipo.id)}
                 placeholder={`Quantidade ${tipo.descricao}`} className="input input-bordered w-full max-w-xs" />
             </label>
           </div>

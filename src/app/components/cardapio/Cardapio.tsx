@@ -1,11 +1,12 @@
 "use client"
 
-import { CardapioDocument } from "@/model/Cardapio";
-import { TipoMarmitexDocument } from "@/model/TipoMarmitex";
+import { ICardapio } from "@/interfaces/ICardapio";
+import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
+import { ITipoMarmitex } from "@/interfaces/ITipoMarmitex";
 
 type CardapioProps = {
-  cardapios: CardapioDocument[]
-  tipoMarmitex: TipoMarmitexDocument
+  cardapios: ICardapio[]
+  tipoMarmitex: ITipoMarmitex
 }
 
 export default function Cardapio(props: CardapioProps) {
@@ -38,8 +39,8 @@ export default function Cardapio(props: CardapioProps) {
 
           {itensPorTipo[tipo]
             .sort((a: any, b: any) => a.descricao.localeCompare(b.descricao))
-            .map((item: any) => (
-              <div key={item._id} className="form-control hover:bg-green-200 rounded-lg">
+            .map((item: IItemConsumivel) => (
+              <div key={item.id} className="form-control hover:bg-green-200 rounded-lg">
                 <label className="cursor-pointer label">
                   <span className="label-text">{item.descricao}</span>
                   <input type="checkbox" className="checkbox checkbox-success" />

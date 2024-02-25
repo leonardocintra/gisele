@@ -1,7 +1,6 @@
 import { ITEM_DOC } from "@/constants/constants";
 import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
 import firebaseData from "@/libs/firebaseConfig";
-import { ItemConsumivel } from "@/model/ItemConsumivel";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { NextRequest } from "next/server";
 
@@ -42,13 +41,5 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-
-  // TODO: mudar de mongodb para firebase
-
-  const { searchParams } = new URL(req.url);
-  const id = searchParams.get("id");
-
-  await ItemConsumivel.findByIdAndDelete({ _id: id });
-
-  return Response.json(true);
+  // TODO: implementar
 }
