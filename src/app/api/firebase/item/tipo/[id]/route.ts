@@ -5,14 +5,14 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 
 const db = firebaseData.db;
 
-export async function GET(request: Request, { params }: { params: { tipo: string } }) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
     const itemsRef = collection(db, ITEM_DOC);
-    const q = query(itemsRef, where("tipo.id", "==", params.tipo));
+    const q = query(itemsRef, where("tipo.id", "==", params.id));
     const querySnapshotItems = await getDocs(q);
 
     const items: IItemConsumivel[] = [];
-
+    
     querySnapshotItems.forEach((doc) => {
       items.push({
         id: doc.id,

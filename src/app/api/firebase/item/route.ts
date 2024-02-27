@@ -8,9 +8,8 @@ const db = firebaseData.db;
 
 export async function GET(req: NextRequest) {
   try {
-    // Buscar todos os itens populando o campo 'tipo'
     const querySnapshotItems = await getDocs(collection(db, ITEM_DOC));
-
+  
     const items: IItemConsumivel[] = [];
 
     querySnapshotItems.forEach((doc) => {
@@ -21,6 +20,8 @@ export async function GET(req: NextRequest) {
         tipo: doc.data().tipo,
       })
     });
+
+    console.log(items)
 
     // Retornar a resposta JSON com os itens populados
     if (items.length > 0) {

@@ -56,11 +56,12 @@ export default function AdminItemConsumivelPage() {
             <tr>
               <th>Nome do item</th>
               <th>Tipo</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {items && items.length > 0 ? (
-              items.map((item) => (
+              items.sort((a, b) => a.descricao.localeCompare(b.descricao)).map((item) => (
                 <tr key={item.id} className="hover:bg-gray-200">
                   <td>
                     <span className="font-semibold text-gray-600 text-base">{item.descricao}</span>
@@ -79,13 +80,11 @@ export default function AdminItemConsumivelPage() {
                       </div>
                       <div>
                         <div className="font-bold">{item.tipo.descricao}</div>
-                        <div className="text-sm opacity-50">
-                          {item.tipo.exibirPreco
-                            ? "Exibir preço"
-                            : "Não exibir preço"}
-                        </div>
                       </div>
                     </div>
+                  </td>
+                  <td>
+                    <Link href={`/admin/item-consumivel/editar/${item.id}`} className="btn btn-secondary btn-xs">Editar</Link>
                   </td>
                 </tr>
               ))
