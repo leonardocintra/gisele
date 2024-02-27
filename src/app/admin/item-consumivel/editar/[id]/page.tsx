@@ -1,23 +1,49 @@
 "use client";
 
-import { URL_API_ITEM, URL_API_TIPO_ITEM, URL_PAGE_ADMIN_ITEM_CONSUMIVEL } from "@/constants/constants";
+import { URL_PAGE_ADMIN_ITEM_CONSUMIVEL, URL_API_TIPO_ITEM, URL_API_ITEM } from "@/constants/constants";
 import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
-import { redirect } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-export default function NovoItemPage() {
+export default function EditarItemPage() {
+
+  const { id } = useParams();
+
   const [descricao, setDescricao] = useState<string>("");
   const [preco, setPreco] = useState<number>(0);
   const [tipoItems, setTipoItems] = useState<ITipoItemConsumivel[]>();
   const [tipoItem, setTipoItem] = useState<ITipoItemConsumivel>();
+  const [item, setItem] = useState<IItemConsumivel>();
   const [tipoItemSelectError, setTipoItemSelectError] = useState<string>("");
   const [redirectPage, setRedirectPage] = useState<boolean>(false);
+  const [statusItem, setStatusItem] = useState<number>(0);
 
   useEffect(() => {
     fetchTipoItems();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const [resTipoItem, resItem] = await Promise.all([
+        fetch(URL_API_TIPO_ITEM),
+        fetch(`${URL_API_ITEM}/id/${id}`),
+      ]);
+
+      if (resItem.status === 404) {
+        setStatusItem(404);
+      }
+
+      const tipoData = await resTipoItem.json();
+      const itemData = await resItem.json();
+
+      setTipoItems(tipoData);
+      setItem(itemData);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
 
   if (redirectPage) {
     return redirect(URL_PAGE_ADMIN_ITEM_CONSUMIVEL);
