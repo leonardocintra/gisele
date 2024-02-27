@@ -30,7 +30,7 @@ export default function EditarItemPage() {
       setPreco(item.preco);
       setTipoItem(item.tipo);
     }
-  })
+  }, [item])
 
   const fetchData = async () => {
     try {
@@ -80,15 +80,21 @@ export default function EditarItemPage() {
       return;
     }
 
+    if (item === undefined) {
+      toast.error("Ocorreu um erro ao buscar dados do item ...");
+      return;
+    }
+
     const creationPromise = new Promise<void>(async (resolve, reject) => {
-      const data: Partial<IItemConsumivel> = {
+      const data: IItemConsumivel = {
+        id: item.id,
         descricao,
         preco,
         tipo: tipoItem,
       };
 
       const response = await fetch(URL_API_ITEM, {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -104,14 +110,17 @@ export default function EditarItemPage() {
     });
 
     await toast.promise(creationPromise, {
-      loading: "Salvando novo item...",
-      success: "Novo item salvo com sucesso!",
-      error: "Não foi possível criar/editar o item!",
+      loading: "Atualizando o item...",
+      success: "Novo item atualizado com sucesso!",
+      error: "Não foi possível atualizar o item!",
     });
   }
 
   return (
     <div>
+      <div className="text-center text-3xl font-extralight my-5">
+        Atualizar o item {item?.descricao}
+      </div>
       <form className="max-w-96 mx-auto">
         <label className="form-control w-full">
           <div className="label">
@@ -164,7 +173,6 @@ export default function EditarItemPage() {
         <div className="flex justify-center mt-3">
           <button
             type="submit"
-            disabled
             onClick={(e) => salvar(e)}
             className="btn btn-accent px-16 text-2xl"
           >
