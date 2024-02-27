@@ -11,7 +11,6 @@ import AlertaBusca from "@/app/components/admin/AltertaBusca";
 
 export default function CardapioItemPage() {
   const { id } = useParams();
-  const tipo = id;
 
   const [items, setItems] = useState<IItemConsumivel[]>();
   const [cardapioDocument, setCardapioDocument] = useState<ICardapio[]>();
@@ -26,7 +25,7 @@ export default function CardapioItemPage() {
       try {
         const [resCardapio, resItems] = await Promise.all([
           fetch(URL_API_CARDAPIO),
-          fetch(`${URL_API_ITEM}/${tipo}`),
+          fetch(`${URL_API_ITEM}/tipo/${id}`),
         ]);
 
         if (resItems.status === 404) {
@@ -51,7 +50,7 @@ export default function CardapioItemPage() {
     };
 
     fetchData();
-  }, [tipo]);
+  }, []);
 
 
   if (redirectPage) {
@@ -225,7 +224,7 @@ export default function CardapioItemPage() {
 
     if (cardapioDocument !== undefined && cardapioDocument.length > 0) {
       itensDeOutroTipo = cardapioDocument[0].itens.filter((item) => {
-        return item.tipo.id !== tipo;
+        return item.tipo.id !== id;
       });
     }
 

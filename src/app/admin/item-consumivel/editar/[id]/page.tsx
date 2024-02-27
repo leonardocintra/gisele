@@ -21,24 +21,32 @@ export default function EditarItemPage() {
   const [statusItem, setStatusItem] = useState<number>(0);
 
   useEffect(() => {
-    fetchTipoItems();
+    fetchData();
   }, []);
+
+  useEffect(() => {
+    if (item) {
+      setDescricao(item.descricao);
+      setPreco(item.preco);
+      setTipoItem(item.tipo);
+    }
+  })
 
   const fetchData = async () => {
     try {
       const [resTipoItem, resItem] = await Promise.all([
         fetch(URL_API_TIPO_ITEM),
-        fetch(`${URL_API_ITEM}/id/${id}`),
+        fetch(`${URL_API_ITEM}/${id}`),
       ]);
 
       if (resItem.status === 404) {
         setStatusItem(404);
       }
 
-      const tipoData = await resTipoItem.json();
-      const itemData = await resItem.json();
+      const tiposData: ITipoItemConsumivel[] = await resTipoItem.json();
+      const itemData: IItemConsumivel = await resItem.json();
 
-      setTipoItems(tipoData);
+      setTipoItems(tiposData);
       setItem(itemData);
     } catch (error: any) {
       toast.error(error.message);
@@ -47,14 +55,6 @@ export default function EditarItemPage() {
 
   if (redirectPage) {
     return redirect(URL_PAGE_ADMIN_ITEM_CONSUMIVEL);
-  }
-
-  function fetchTipoItems() {
-    fetch(URL_API_TIPO_ITEM).then((res) =>
-      res.json().then((items) => {
-        setTipoItems(items);
-      })
-    );
   }
 
   function handleSelectTipoItem(e: ChangeEvent<HTMLSelectElement>) {
@@ -164,6 +164,7 @@ export default function EditarItemPage() {
         <div className="flex justify-center mt-3">
           <button
             type="submit"
+            disabled
             onClick={(e) => salvar(e)}
             className="btn btn-accent px-16 text-2xl"
           >
