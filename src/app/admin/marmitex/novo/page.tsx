@@ -5,7 +5,7 @@ import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import { ITipoMarmitex } from "@/interfaces/ITipoMarmitex";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 type MarmitexItem = {
@@ -47,7 +47,7 @@ export default function NovoMarmitexPage() {
     )
   }
 
-  async function salvar(event: any) {
+  async function salvar(event: FormEvent) {
     event.preventDefault();
 
     const creationPromise = new Promise<void>(async (resolve, reject) => {
