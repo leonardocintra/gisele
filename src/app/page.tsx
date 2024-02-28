@@ -5,7 +5,7 @@ import { URL_API_CARDAPIO, URL_API_TIPO_MARMITEX } from "@/constants/constants";
 import toast from "react-hot-toast";
 import { ITipoMarmitex } from "@/interfaces/ITipoMarmitex";
 import { ICardapio } from "@/interfaces/ICardapio";
-import Cardapio from "./components/cardapio/Cardapio";
+import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
 
 export default function Home() {
 
@@ -14,7 +14,7 @@ export default function Home() {
   const [cardapio, setCardapio] = useState<ICardapio[]>();
   const [descricaoMarmitexSelecionado, setDescricaoMarmitexSelecionado] = useState<string>("Selecione o tamanho")
   const [marmitexSelecionadoId, setMarmitexSelecionadoId] = useState<string>("");
-  const [itensSelecionados, setItensSelecionado] = useState<string[]>([]);
+  const [itensSelecionados, setItensSelecionados] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,6 +46,38 @@ export default function Home() {
     )
   }
 
+  const items = cardapio[0].itens.filter(item => !item.tipo.exibirPreco);
+  const itensPorTipo = items.reduce((acc: any, item: any) => {
+    const tipoDescricao = item.tipo.descricao;
+
+    if (!acc[tipoDescricao]) {
+      acc[tipoDescricao] = [];
+    }
+
+    acc[tipoDescricao].push(item);
+
+    return acc;
+  }, {});
+
+  function salvar(itemId: string) {    
+    // Verifica se o item já está selecionado
+    const itemIndex = itensSelecionados.indexOf(itemId);
+    if (itemIndex !== -1) {
+      // Se estiver selecionado, remove-o do array
+      const updatedItensSelecionados = [...itensSelecionados];
+      updatedItensSelecionados.splice(itemIndex, 1);
+      setItensSelecionados(updatedItensSelecionados);
+    } else {
+      // Se não estiver selecionado, adiciona-o ao array
+      setItensSelecionados([...itensSelecionados, itemId]);
+    }
+  }
+
+  console.log(marmitex)
+
+  // Mapear e renderizar cada tipo com suas descrições em ordem alfabética
+  const tiposOrdenados = Object.keys(itensPorTipo).sort();
+
   function selecionarMarmitex(objMarmitex: ITipoMarmitex) {
     setDescricaoMarmitexSelecionado(`Marmitex ${objMarmitex.descricao} - R$ ${objMarmitex.preco}`)
     setMarmitexSelecionadoId(objMarmitex.id);
@@ -62,13 +94,36 @@ export default function Home() {
         </div>
 
         {marmitex ? (
-          <Cardapio cardapios={cardapio} tipoMarmitex={marmitex} />
+          <div className="">
+
+            <progress className="progress progress-success w-56" value="55" max="100"></progress>
+
+            {tiposOrdenados.map((tipo) => (
+              <div key={tipo} className="border rounded-2xl px-3 m-1 shadow-md pb-2 transition-colors">
+                <div className="flex items-center space-x-1">
+                  <span className="mt-5">[3 / 0]</span>
+                  <h3 className="font-bold mt-5 text-2xl">{tipo}</h3>
+                </div>
+
+                {itensPorTipo[tipo]
+                  .sort((a: any, b: any) => a.descricao.localeCompare(b.descricao))
+                  .map((item: IItemConsumivel) => (
+                    <div key={item.id} className="form-control hover:bg-green-200 rounded-lg">
+                      <label className="cursor-pointer label">
+                        <span className="label-text">{item.descricao}</span>
+                        <input type="checkbox" className="checkbox checkbox-success" onClick={() => salvar(item.id)} />
+                      </label>
+                    </div>
+                  ))}
+
+              </div>
+            ))}
+          </div>
         ) : (
           <div>
             <h2>Selecione um marmitex</h2>
           </div>
         )}
-
 
         <div className="my-4">
           <button type="button" className="btn btn-secondary">Concluir pedido</button>
