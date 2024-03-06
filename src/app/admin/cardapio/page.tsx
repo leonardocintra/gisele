@@ -1,11 +1,11 @@
 "use client";
 
 import AlertaBusca from "@/app/components/admin/AltertaBusca";
-import CardTile from "@/app/components/admin/cardapio/CardTile";
 import { getDataFormatada } from "@/commons/date";
 import { URL_API_TIPO_ITEM } from "@/constants/constants";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import { useState, useEffect } from "react";
+import CardTipoItem from "./_components/card-tipo-item";
 
 export default function AdminCardapioPage() {
   const [tipoItems, setTipoItems] = useState<ITipoItemConsumivel[]>();
@@ -41,11 +41,10 @@ export default function AdminCardapioPage() {
         {tipoItems && tipoItems.length > 0 ? (
           tipoItems.map((item) => (
             <div key={item.id}>
-              <CardTile
+              <CardTipoItem
                 image={item.imagem}
                 descricao={item.descricao}
-                id={item.id}
-              />
+                id={item.id} />
             </div>
           ))
         ) : (

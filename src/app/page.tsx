@@ -93,9 +93,6 @@ export default function Home() {
 
         {marmitex ? (
           <div className="">
-
-            <progress className="progress progress-success w-56" value="55" max="100"></progress>
-
             {tiposOrdenados.map((tipo) => (
               <div key={tipo} className="border rounded-2xl px-3 m-1 shadow-md pb-2 transition-colors">
                 <div className="flex items-center space-x-1">

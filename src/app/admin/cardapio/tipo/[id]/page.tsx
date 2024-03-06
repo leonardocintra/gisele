@@ -8,6 +8,8 @@ import { useState, useEffect } from "react";
 import { URL_API_CARDAPIO, URL_API_ITEM, URL_PAGE_ADMIN_ITEM_CONSUMIVEL } from '@/constants/constants'
 import toast from "react-hot-toast";
 import AlertaBusca from "@/app/components/admin/AltertaBusca";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
 export default function CardapioItemPage() {
   const { id } = useParams();
@@ -137,6 +139,14 @@ export default function CardapioItemPage() {
     });
   }
 
+  if (!items) {
+    return (
+      <div>
+        <h2>Carregando ...</h2>
+      </div>
+    )
+  }
+
   return (
     <div>
       <div className="my-4">
@@ -148,58 +158,36 @@ export default function CardapioItemPage() {
       </div>
 
       <div className="flex items-center justify-center my-3">
-        <button type="button" className="btn px-10" onClick={() => salvar()}>
+        <Button onClick={() => salvar()}>
           Salvar
-        </button>
+        </Button>
       </div>
 
-      <div className="overflow-x-auto max-w-xl mx-auto">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th>Ativar/Desativar</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items && items.length > 0 ? (
-              items.map((item, index) => (
-                <tr
-                  key={item.id}
-                  onClick={() =>
-                    incluirOuRemoverItemSelecionado(item)
-                  }
-                  className={` ${itensSelecionados.includes(item.id)
-                    ? "bg-accent"
-                    : "hover:bg-green-200"
-                    }`}
-                >
-                  <td className="font-semibold hover:underline">
-                    <div className="">
-                      <span>
-                        [{index + 1}] {item.descricao}
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    {itensSelecionados.includes(item.id)
-                      ? "Desativar"
-                      : "Ativar"}
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td>
-                  <AlertaBusca status={statusItem} descricao="Item" />
-                </td>
-                <td>
-                  <AlertaBusca status={statusItem} descricao="Ativar / Desativar" />
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+      <div className="flex max-w-md mx-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Item</TableHead>
+              <TableHead>Ativar / Desativar</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {items.map((item, index) => (
+              <TableRow key={item.id}
+                className={`${itensSelecionados.includes(item.id) ? "bg-green-400" : "hover:bg-green-100"}`}
+                onClick={() => incluirOuRemoverItemSelecionado(item)}>
+                <TableCell>
+                  {item.descricao}</TableCell>
+                <TableCell>
+                  {itensSelecionados.includes(item.id)
+                    ? "Desativar"
+                    : "Ativar"}
+                </TableCell>
+              </TableRow>
+
+            ))}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );
