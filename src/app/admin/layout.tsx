@@ -1,6 +1,6 @@
 import MenuHeader from "../components/admin/MenuHeader";
 
-export default async function AdminLayout({
+export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
