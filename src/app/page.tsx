@@ -73,8 +73,6 @@ export default function Home() {
     }
   }
 
-  console.log(marmitex)
-
   // Mapear e renderizar cada tipo com suas descrições em ordem alfabética
   const tiposOrdenados = Object.keys(itensPorTipo).sort();
 

@@ -1,6 +1,6 @@
 import { TIPO_MARMITEX_DOC } from "@/constants/constants";
 import { ITipoMarmitex } from "@/interfaces/ITipoMarmitex";
-import firebaseData from "@/libs/firebaseConfig";
+import firebaseData from "@/lib/firebaseConfig";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { NextRequest } from "next/server";
 

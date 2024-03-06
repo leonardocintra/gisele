@@ -1,6 +1,6 @@
 import { ITEM_DOC } from "@/constants/constants";
 import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
-import firebaseData from "@/libs/firebaseConfig";
+import firebaseData from "@/lib/firebaseConfig";
 import { addDoc, collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { NextRequest } from "next/server";
 

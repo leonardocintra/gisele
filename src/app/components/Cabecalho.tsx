@@ -11,7 +11,7 @@ export default function Cabecalho() {
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <Link href={"/admin"}>Login</Link>
+            <Link href={"/auth"}>Login</Link>
           </li>
         </ul>
       </div>

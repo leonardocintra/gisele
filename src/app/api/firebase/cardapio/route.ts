@@ -1,6 +1,6 @@
 import { ICardapio } from '@/interfaces/ICardapio';
 import { CARDAPIO_DOC } from "@/constants/constants";
-import firebaseData from "@/libs/firebaseConfig";
+import firebaseData from "@/lib/firebaseConfig";
 import { addDoc, collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { NextRequest } from "next/server";
 

@@ -1,6 +1,6 @@
 import { ITEM_DOC, TIPO_ITEM_DOC } from "@/constants/constants";
 import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
-import firebaseData from "@/libs/firebaseConfig";
+import firebaseData from "@/lib/firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 
 const db = firebaseData.db;
