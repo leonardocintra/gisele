@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { auth } from "@/services/auth";
+import UserInfo from "./user/_components/user-info";
 
 export default async function AdminPage() {
 
@@ -15,9 +16,7 @@ export default async function AdminPage() {
         </div>
       </div>
 
-      <Avatar>
-        <AvatarFallback>{session?.user?.email}</AvatarFallback>
-      </Avatar>
+      <UserInfo user={session?.user} />
     </div>
   );
 }
