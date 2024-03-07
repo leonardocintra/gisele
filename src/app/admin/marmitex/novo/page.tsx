@@ -1,5 +1,9 @@
 "use client"
 
+import { SkeletonGisele } from "@/components/gisele/skeleton";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { URL_API_TIPO_ITEM, URL_API_TIPO_MARMITEX } from "@/constants/constants";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import { ITipoMarmitex } from "@/interfaces/ITipoMarmitex";
@@ -42,7 +46,7 @@ export default function NovoMarmitexPage() {
   if (!tipoItems || tipoItems.length === 0) {
     return (
       <div>
-        <h2>Carregando ...</h2>
+        <SkeletonGisele />
       </div>
     )
   }
@@ -115,47 +119,35 @@ export default function NovoMarmitexPage() {
 
   return (
     <div className="flex flex-col justify-center p-3">
-
-      <div className="flex justify-center mb-4">
-        <button className="btn btn-primary">Novo marmitex</button>
-      </div>
-
       <form className="flex flex-col items-center mt-4 space-y-4">
         <div className="">
-          <label className="form-control w-full max-w-xs">
-            <div className="label">
-              <span className="label-text">Descrição marmitex</span>
-            </div>
-            <input type="text" value={descricao} onChange={(e) => setDescricao(e.target.value)}
-              placeholder="Descricao ..." className="input input-bordered w-full max-w-xs" />
-          </label>
+          <Label>Descrição Marmitex</Label>
+          <Input type="text" value={descricao} onChange={(e) => setDescricao(e.target.value)}
+            placeholder="Descricao ..." />
         </div>
 
         <div className="">
-          <label className="form-control w-full max-w-xs">
-            <div className="label">
-              <span className="label-text">Preço marmitex</span>
-            </div>
-            <input type="number" value={preco} onChange={(e) => setPreco(parseFloat(e.target.value))}
-              placeholder="Preço ..." className="input input-bordered w-full max-w-xs" />
-          </label>
+          <Label>Preço do marmitex</Label>
+          <Input type="number" value={preco} onChange={(e) => setPreco(parseFloat(e.target.value))}
+            placeholder="Preço ..." />
         </div>
 
         {tipoItems.map((tipo) => (
           <div key={tipo.id}>
-            <label className="form-control w-full max-w-xs">
-              <div className="label">
-                <span className="label-text">{tipo.descricao}</span>
-              </div>
-              <input type="number" max={9} onChange={(e) => handleMarmitex(parseInt(e.target.value), tipo.id)}
-                placeholder={`Quantidade ${tipo.descricao}`} className="input input-bordered w-full max-w-xs" />
-            </label>
+            <Label>{tipo.descricao}</Label>
+            <Input type="number" max={9} onChange={(e) => handleMarmitex(parseInt(e.target.value), tipo.id)}
+              placeholder={`Quantidade ${tipo.descricao} ...`} />
           </div>
         ))}
 
         <div className="flex flex-col space-y-3">
-          <button type="submit" onClick={(e) => salvar(e)} className="btn btn-secondary">Salvar</button>
-          <Link href={REDIRECT_URL} className="btn btn-link">Cancelar</Link>
+          <Button type="submit" onClick={(e) => salvar(e)}>
+            Salvar
+          </Button>
+          
+          <Button variant={"link"}>
+            <Link href={REDIRECT_URL}>Cancelar</Link>
+          </Button>
         </div>
       </form>
     </div>

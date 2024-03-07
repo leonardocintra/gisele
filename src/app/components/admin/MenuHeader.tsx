@@ -22,18 +22,14 @@ export default function MenuHeader() {
 
         <div>
           <Button>
-            <Link href={"/admin/cardapio"} className="btn btn-sm btn-outline btn-info" >
+            <Link href={"/admin/cardapio"}>
               Cardapio do dia
             </Link>
           </Button>
         </div>
         <div>
           <Button>
-
-            <Link
-              href={"/admin/item-consumivel"}
-              className="btn btn-sm btn-outline btn-success"
-            >
+            <Link href={"/admin/item-consumivel"}            >
               Item Consumivel
             </Link>
           </Button>
@@ -41,7 +37,7 @@ export default function MenuHeader() {
 
         <div>
           <Button>
-            <Link href={"/"} className="btn btn-sm btn-outline btn-error">
+            <Link href={"/"}>
               Pedidos
             </Link>
           </Button>

@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { ITipoMarmitex } from "@/interfaces/ITipoMarmitex";
 import { ICardapio } from "@/interfaces/ICardapio";
 import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
 
@@ -59,7 +60,7 @@ export default function Home() {
     return acc;
   }, {});
 
-  function salvar(itemId: string) {    
+  function salvar(itemId: string) {
     // Verifica se o item já está selecionado
     const itemIndex = itensSelecionados.indexOf(itemId);
     if (itemIndex !== -1) {
@@ -121,7 +122,9 @@ export default function Home() {
         )}
 
         <div className="my-4">
-          <button type="button" className="btn btn-secondary">Concluir pedido</button>
+          <Button>
+            Concluir pedido
+          </Button>
         </div>
       </div>
     </div>

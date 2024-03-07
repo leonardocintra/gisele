@@ -1,10 +1,15 @@
 "use client";
 
+import { SkeletonGisele } from "@/components/gisele/skeleton";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { URL_PAGE_ADMIN_ITEM_CONSUMIVEL, URL_API_TIPO_ITEM, URL_API_ITEM } from "@/constants/constants";
 import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import { redirect, useParams } from "next/navigation";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function EditarItemPage() {
@@ -16,9 +21,7 @@ export default function EditarItemPage() {
   const [tipoItems, setTipoItems] = useState<ITipoItemConsumivel[]>();
   const [tipoItem, setTipoItem] = useState<ITipoItemConsumivel>();
   const [item, setItem] = useState<IItemConsumivel>();
-  const [tipoItemSelectError, setTipoItemSelectError] = useState<string>("");
   const [redirectPage, setRedirectPage] = useState<boolean>(false);
-  const [statusItem, setStatusItem] = useState<number>(0);
 
   useEffect(() => {
     fetchData();
@@ -39,10 +42,6 @@ export default function EditarItemPage() {
         fetch(`${URL_API_ITEM}/${id}`),
       ]);
 
-      if (resItem.status === 404) {
-        setStatusItem(404);
-      }
-
       const tiposData: ITipoItemConsumivel[] = await resTipoItem.json();
       const itemData: IItemConsumivel = await resItem.json();
 
@@ -57,9 +56,7 @@ export default function EditarItemPage() {
     return redirect(URL_PAGE_ADMIN_ITEM_CONSUMIVEL);
   }
 
-  function handleSelectTipoItem(e: ChangeEvent<HTMLSelectElement>) {
-    const tipoItemSelecionadoId = e.target.value;
-
+  function handleSelectTipoItem(tipoItemSelecionadoId: string) {
     const tipoItemSelecionado = tipoItems?.find(
       (c) => c.id === tipoItemSelecionadoId
     );
@@ -76,7 +73,6 @@ export default function EditarItemPage() {
 
     if (tipoItem === undefined || tipoItem.id === "0") {
       toast.error("Selecione o tipo ...");
-      setTipoItemSelectError("select-error");
       return;
     }
 
@@ -116,70 +112,63 @@ export default function EditarItemPage() {
     });
   }
 
-  return (
-    <div>
-      <div className="text-center text-3xl font-extralight my-5">
-        Atualizar o item {item?.descricao}
+  if (item && tipoItems && tipoItems.length > 0) {
+    return (
+      <div className="max-w-96 mx-auto">
+
+        <div className="text-center text-3xl font-extralight my-5 border rounded-full p-2">
+          Editar
+          <span className="italic"> {item?.descricao} </span>
+        </div>
+        <form className="space-y-2">
+
+          <div>
+            <Label htmlFor="descricao">Descrição:</Label>
+            <Input
+              id="descricao"
+              type="text"
+              onChange={(e) => setDescricao(e.target.value)}
+              value={descricao}
+              placeholder="Descrição ..."
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="preco">Preço:</Label>
+            <Input id="preco" type="number" min={0} onChange={(e) => setPreco(parseFloat(e.target.value))}
+              value={preco}
+              placeholder="Preço ..." />
+          </div>
+
+          <div className="pt-2">
+            <Select value={tipoItem?.id} onValueChange={(tipoItemId) => handleSelectTipoItem(tipoItemId)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Tipo de item" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Item</SelectLabel>
+                  {tipoItems.map((tipo) => (
+                    <SelectItem key={tipo.id} value={tipo.id}>{tipo.descricao}</SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex justify-center mt-3">
+            <Button size={"lg"} type="submit" onClick={(e) => salvar(e)}>
+              Salvar
+            </Button>
+          </div>
+        </form>
       </div>
-      <form className="max-w-96 mx-auto">
-        <label className="form-control w-full">
-          <div className="label">
-            <span className="label-text">Descrição</span>
-          </div>
-          <input
-            type="text"
-            onChange={(e) => setDescricao(e.target.value)}
-            value={descricao}
-            placeholder="Descrição ..."
-            className="input input-bordered w-full"
-          />
-        </label>
-
-        <label className="form-control w-full">
-          <div className="label">
-            <span className="label-text">Preço</span>
-          </div>
-          <input
-            type="number"
-            min={0}
-            onChange={(e) => setPreco(parseFloat(e.target.value))}
-            value={preco}
-            placeholder="Preço ..."
-            className="input input-bordered w-full"
-          />
-        </label>
-
-        <div className="label">
-          <span className="label-text">Tipo de item</span>
-        </div>
-
-        {tipoItems && tipoItems.length > 0 && (
-          <select
-            className={`select select-bordered select-lg w-full ${tipoItemSelectError}`}
-            name="tipoItem"
-            id="tipoItem"
-            value={tipoItem?.id}
-            onChange={(e) => handleSelectTipoItem(e)}
-          >
-            <option value="0">Selecione</option>
-            {tipoItems.map((tipo) => (
-              <option key={tipo.id} value={tipo.id}>
-                {tipo.descricao}
-              </option>
-            ))}
-          </select>
-        )}
-
-        <div className="flex justify-center mt-3">
-          <button
-            type="submit"
-            onClick={(e) => salvar(e)}
-            className="btn btn-accent px-16 text-2xl"
-          >
-            Salvar
-          </button>
-        </div>
-      </form>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div className="max-w-96 mx-auto">
+        <SkeletonGisele />
+      </div>
+    )
+  }
 }

@@ -1,10 +1,15 @@
 "use client";
 
+import { SkeletonGisele } from "@/components/gisele/skeleton";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { URL_API_ITEM, URL_API_TIPO_ITEM, URL_PAGE_ADMIN_ITEM_CONSUMIVEL } from "@/constants/constants";
 import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import { redirect } from "next/navigation";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function NovoItemPage() {
@@ -12,7 +17,6 @@ export default function NovoItemPage() {
   const [preco, setPreco] = useState<number>(0);
   const [tipoItems, setTipoItems] = useState<ITipoItemConsumivel[]>();
   const [tipoItem, setTipoItem] = useState<ITipoItemConsumivel>();
-  const [tipoItemSelectError, setTipoItemSelectError] = useState<string>("");
   const [redirectPage, setRedirectPage] = useState<boolean>(false);
 
   useEffect(() => {
@@ -31,9 +35,7 @@ export default function NovoItemPage() {
     );
   }
 
-  function handleSelectTipoItem(e: ChangeEvent<HTMLSelectElement>) {
-    const tipoItemSelecionadoId = e.target.value;
-
+  function handleSelectTipoItem(tipoItemSelecionadoId: string) {
     const tipoItemSelecionado = tipoItems?.find(
       (c) => c.id === tipoItemSelecionadoId
     );
@@ -50,7 +52,6 @@ export default function NovoItemPage() {
 
     if (tipoItem === undefined || tipoItem.id === "0") {
       toast.error("Selecione o tipo ...");
-      setTipoItemSelectError("select-error");
       return;
     }
 
@@ -84,65 +85,56 @@ export default function NovoItemPage() {
     });
   }
 
+  if (!tipoItems) {
+    return (
+      <div className="max-w-96 mx-auto mt-5">
+        <SkeletonGisele />
+      </div>
+    )
+  }
+
   return (
     <div>
       <form className="max-w-96 mx-auto">
-        <label className="form-control w-full">
-          <div className="label">
-            <span className="label-text">Descrição</span>
-          </div>
-          <input
-            type="text"
-            onChange={(e) => setDescricao(e.target.value)}
-            value={descricao}
-            placeholder="Descrição ..."
-            className="input input-bordered w-full"
-          />
-        </label>
+        <Label htmlFor="descricao">Descrição:</Label>
+        <Input
+          id="descricao"
+          type="text"
+          onChange={(e) => setDescricao(e.target.value)}
+          value={descricao}
+          placeholder="Descrição ..."
+        />
 
-        <label className="form-control w-full">
-          <div className="label">
-            <span className="label-text">Preço</span>
-          </div>
-          <input
-            type="number"
-            min={0}
-            onChange={(e) => setPreco(parseFloat(e.target.value))}
-            value={preco}
-            placeholder="Preço ..."
-            className="input input-bordered w-full"
-          />
-        </label>
+        <Label htmlFor="preco">Preço:</Label>
+        <Input
+          id="preco"
+          type="number"
+          min={0}
+          onChange={(e) => setPreco(parseFloat(e.target.value))}
+          value={preco}
+          placeholder="Preço ..."
+        />
 
-        <div className="label">
-          <span className="label-text">Tipo de item</span>
+        <div className="pt-2">
+          <Select value={tipoItem?.id} onValueChange={(tipoItemId) => handleSelectTipoItem(tipoItemId)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Tipo de item" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Item</SelectLabel>
+                {tipoItems.map((tipo) => (
+                  <SelectItem key={tipo.id} value={tipo.id}>{tipo.descricao}</SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
 
-        {tipoItems && tipoItems.length > 0 && (
-          <select
-            className={`select select-bordered select-lg w-full ${tipoItemSelectError}`}
-            name="tipoItem"
-            id="tipoItem"
-            value={tipoItem?.id}
-            onChange={(e) => handleSelectTipoItem(e)}
-          >
-            <option value="0">Selecione</option>
-            {tipoItems.map((tipo) => (
-              <option key={tipo.id} value={tipo.id}>
-                {tipo.descricao}
-              </option>
-            ))}
-          </select>
-        )}
-
         <div className="flex justify-center mt-3">
-          <button
-            type="submit"
-            onClick={(e) => salvar(e)}
-            className="btn btn-accent px-16 text-2xl"
-          >
+          <Button type="submit" onClick={(e) => salvar(e)}>
             Salvar
-          </button>
+          </Button>
         </div>
       </form>
     </div>
