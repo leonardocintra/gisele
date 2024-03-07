@@ -7,8 +7,7 @@ import { redirect, useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { URL_API_CARDAPIO, URL_API_ITEM, URL_PAGE_ADMIN_ITEM_CONSUMIVEL } from '@/constants/constants'
 import toast from "react-hot-toast";
-import AlertaBusca from "@/app/components/admin/AltertaBusca";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 
 export default function CardapioItemPage() {
@@ -174,7 +173,10 @@ export default function CardapioItemPage() {
           <TableBody>
             {items.map((item, index) => (
               <TableRow key={item.id}
-                className={`${itensSelecionados.includes(item.id) ? "bg-green-400" : "hover:bg-green-100"}`}
+                className={`
+                  ${itensSelecionados.includes(item.id) && "hover:bg-red-500 hover:italic"} 
+                  ${itensSelecionados.includes(item.id) ? "bg-green-400" : "hover:bg-lime-300"}`
+                }
                 onClick={() => incluirOuRemoverItemSelecionado(item)}>
                 <TableCell>
                   {item.descricao}</TableCell>

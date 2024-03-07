@@ -1,6 +1,10 @@
 "use client";
 
-import AlertaBusca from "@/app/components/admin/AltertaBusca";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { URL_API_TIPO_ITEM } from "@/constants/constants";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import Image from "next/image";
@@ -74,104 +78,78 @@ export default function NovoTipoItemPage() {
     });
   }
 
+  if (!tipoItems) {
+    return (
+      <div>
+        <h2>Carregando...</h2>
+      </div>
+    )
+  }
+
   return (
     <div>
-      <form className="max-w-96 mx-auto">
-        <label className="form-control w-full">
-          <div className="label">
-            <span className="label-text">Descrição</span>
-          </div>
-          <input
-            type="text"
+      <form className="max-w-96 mx-auto space-y-2">
+        <div>
+          <Label>Descrição</Label>
+          <Input type="text"
             onChange={(e) => setDescricao(e.target.value)}
             value={descricao}
-            placeholder="Descrição ..."
-            className="input input-bordered w-full"
-          />
-        </label>
+            placeholder="Descrição ..." />
+        </div>
 
-        <label className="form-control w-full">
-          <div className="label">
-            <span className="label-text">Imagem</span>
-          </div>
-          <input
-            type="text"
+        <div>
+          <Label>Imagem</Label>
+          <Input type="text"
             onChange={(e) => setImagem(e.target.value)}
             value={imagem}
-            placeholder="Imagem ..."
-            className="input input-bordered w-full"
-          />
-        </label>
+            placeholder="Imagem ..." />
+        </div>
 
-        <div className="flex justify-center space-x-4 my-7">
-          <div className="form-control">
-            <label className="cursor-pointer label space-x-3">
-              <span className="label-text">Exibir o preço ?</span>
-              <input
-                type="checkbox"
-                checked={exibirPreco}
-                className="toggle toggle-primary toggle-lg"
-                onChange={() => setExibirPreco(!exibirPreco)}
-              />
-            </label>
-          </div>
-          <div>
-            <span className="font-bold">{exibirPreco ? "Sim" : "Não"}</span>
-          </div>
+        <div className="flex items-center space-x-2 py-4 pl-1">
+          <Checkbox id="exibirPreco" checked={exibirPreco} onClick={() => setExibirPreco(!exibirPreco)} />
+          <label
+            htmlFor="exibirPreco"
+            className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Exibir o preço do item: {exibirPreco ? "SIM" : "NÃO"}
+          </label>
         </div>
 
         <div className="flex justify-center my-3">
-          <button
-            type="submit"
-            onClick={(e) => handleTipoItem(e)}
-            className="btn btn-accent px-16"
-          >
+          <Button type="submit" onClick={(e) => handleTipoItem(e)}>
             Salvar
-          </button>
+          </Button>
         </div>
       </form>
 
-      {tipoItems && tipoItems.length > 0 ? (
-        <div className="overflow-x-auto max-w-2xl mx-auto mt-8">
-          <table className="table table-xs sm:table-md">
-            {/* head */}
-            <thead>
-              <tr>
-                <th>Descrição</th>
-                <th>Exibi o preço</th>
-                <th>Imagem</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tipoItems.map((item, index) => (
-                <tr key={index}>
-                  <td>
-                    <div className="flex items-center gap-3">
-                      <div className="avatar">
-                        <div className="mask mask-squircle w-12 h-12">
-                          <Image
-                            width={50}
-                            height={50}
-                            src={item.imagem || "/img/carnes.jpg"}
-                            alt={item.descricao}
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <div className="font-bold">{item.descricao}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>{item.exibirPreco ? "SIM" : "NÃO"}</td>
-                  <td>{item.imagem || "não informado"}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <AlertaBusca status={statusTipoItems} descricao="Items" />
-      )}
+      <div className="flex max-w-md mx-auto mt-4">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Descrição</TableHead>
+              <TableHead>Preço</TableHead>
+              <TableHead>Imagem</TableHead>
+            </TableRow>
+          </TableHeader>
+
+          <TableBody>
+            {tipoItems.map((item, index) => (
+              <TableRow key={item.id}>
+                <TableCell>{item.descricao}</TableCell>
+                <TableCell>{item.exibirPreco ? "SIM" : "NÃO"}</TableCell>
+                <TableCell>
+                  <Image
+                    width={50}
+                    height={50}
+                    src={item.imagem || "/img/carnes.jpg"}
+                    alt={item.descricao}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

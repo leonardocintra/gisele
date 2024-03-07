@@ -34,7 +34,6 @@ export default function UserInfo(props: UserInfoProps) {
           Sair
         </Button>
       </div>
-
     </div>
 
   )
