@@ -7,6 +7,8 @@ import { ITipoMarmitex } from "@/interfaces/ITipoMarmitex";
 import { ICardapio } from "@/interfaces/ICardapio";
 import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function Home() {
 
@@ -41,8 +43,19 @@ export default function Home() {
 
   if (!tipoMarmitex || !cardapio) {
     return (
-      <div>
-        <h2>Carregando ...</h2>
+      <div className="flex flex-col space-y-3 max-w-md mx-auto p-10 justify-center items-center">
+        <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-[250px]" />
+        </div>
+        <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-[250px]" />
+        </div>
+        <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-[250px]" />
+        </div>
       </div>
     )
   }
@@ -60,7 +73,7 @@ export default function Home() {
     return acc;
   }, {});
 
-  function salvar(itemId: string) {
+  function selecionarItem(itemId: string) {
     // Verifica se o item já está selecionado
     const itemIndex = itensSelecionados.indexOf(itemId);
     if (itemIndex !== -1) {
@@ -72,10 +85,13 @@ export default function Home() {
       // Se não estiver selecionado, adiciona-o ao array
       setItensSelecionados([...itensSelecionados, itemId]);
     }
+
+
   }
 
   // Mapear e renderizar cada tipo com suas descrições em ordem alfabética
   const tiposOrdenados = Object.keys(itensPorTipo).sort();
+  const marmitexFullData = tipoMarmitex.find((tipoTipo) => tipoTipo.id === marmitexSelecionadoId)
 
   function selecionarMarmitex(objMarmitex: ITipoMarmitex) {
     setDescricaoMarmitexSelecionado(`Marmitex ${objMarmitex.descricao} - R$ ${objMarmitex.preco}`)
@@ -83,8 +99,17 @@ export default function Home() {
     setMarmitex(objMarmitex);
   }
 
+  function exibirQuantidadeAutorizada(marmitexSelecionado: ITipoMarmitex | undefined, descricaoTipo: string) {
+
+    const quantidade = marmitexSelecionado?.configuracoes.find(x => x.tipo.descricao === descricaoTipo)?.quantidade;
+
+    return (
+      <span className="mt-5">[{quantidade} / 0]</span>
+    )
+  }
+
   return (
-    <div>
+    <div className="mt-8">
       <div className="flex flex-col justify-center items-center">
         {handleMarmitex(tipoMarmitex)}
 
@@ -97,21 +122,21 @@ export default function Home() {
             {tiposOrdenados.map((tipo) => (
               <div key={tipo} className="border rounded-2xl px-3 m-1 shadow-md pb-2 transition-colors">
                 <div className="flex items-center space-x-1">
-                  <span className="mt-5">[3 / 0]</span>
+                  {exibirQuantidadeAutorizada(marmitexFullData, tipo)}
                   <h3 className="font-bold mt-5 text-2xl">{tipo}</h3>
                 </div>
 
                 {itensPorTipo[tipo]
                   .sort((a: any, b: any) => a.descricao.localeCompare(b.descricao))
                   .map((item: IItemConsumivel) => (
-                    <div key={item.id} className="form-control hover:bg-green-200 rounded-lg">
-                      <label className="cursor-pointer label">
-                        <span className="label-text">{item.descricao}</span>
-                        <input type="checkbox" className="checkbox checkbox-success" onClick={() => salvar(item.id)} />
+
+                    <div key={item.id} className="hover:bg-green-200 rounded-lg px-2 py-2">
+                      <label className="cursor-pointer label space-x-2 text-2xl">
+                        <Checkbox onClick={() => selecionarItem(item.id)} />
+                        <span className="font-light">{item.descricao}</span>
                       </label>
                     </div>
                   ))}
-
               </div>
             ))}
           </div>
@@ -140,8 +165,8 @@ export default function Home() {
             <div id={m.id} key={m.id} onClick={() => selecionarMarmitex(m)}
               className={`${marmitexSelecionadoId === m.id ? "bg-green-600" : ""}  border m-1 rounded-md p-2 hover:bg-amber-300 transition-colors`}>
               <div className="flex flex-col items-center">
-                <h2 className="font-mono text-secondary">{m.descricao}</h2>
-                <h3 className="text-xs sm:text-base font-semibold text-primary">R$ {m.preco}</h3>
+                <h2 className="font-mono">{m.descricao}</h2>
+                <h3 className="text-xs sm:text-base font-semibold">R$ {m.preco}</h3>
               </div>
 
               <div className="mt-2">

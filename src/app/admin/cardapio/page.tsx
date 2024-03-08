@@ -6,6 +6,7 @@ import { URL_API_TIPO_ITEM } from "@/constants/constants";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import { useState, useEffect } from "react";
 import CardTipoItem from "./_components/card-tipo-item";
+import { SkeletonGisele } from "@/components/gisele/skeleton";
 
 export default function AdminCardapioPage() {
   const [tipoItems, setTipoItems] = useState<ITipoItemConsumivel[]>();
@@ -29,6 +30,14 @@ export default function AdminCardapioPage() {
     });
   }
 
+  if (!tipoItems) {
+    return (
+      <div>
+        <SkeletonGisele />
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="text-center">
@@ -37,8 +46,8 @@ export default function AdminCardapioPage() {
         </h2>
         <h3 className="sm:text-3xl sm:my-8 text-gray-600">{getDataFormatada()}</h3>
       </div>
-      <div className="flex flex-wrap gap-2 justify-center">
-        {tipoItems && tipoItems.length > 0 ? (
+      <div className="flex flex-col lg:flex-row gap-2 justify-center">
+        {tipoItems.length > 0 ? (
           tipoItems.map((item) => (
             <div key={item.id}>
               <CardTipoItem
