@@ -1,13 +1,20 @@
-import { auth } from "@/services/auth";
-import UserInfo from "./user/_components/user-info";
+import {
+  DashboardPage,
+  DashboardPageHeader,
+  DashboardPageHeaderTitle,
+  DashboardPageMain,
+} from "@/components/gisele/admin-page-base";
 
-export default async function AdminPage() {
-
-  const session = await auth()
-
+export default function AdminPage() {
   return (
-    <div className="">
-      <UserInfo user={session?.user} />
-    </div>
+    <DashboardPage>
+      <DashboardPageHeader>
+        <DashboardPageHeaderTitle>Pedidos</DashboardPageHeaderTitle>
+      </DashboardPageHeader>
+
+      <DashboardPageMain>
+        <h2>Pedidos</h2>
+      </DashboardPageMain>
+    </DashboardPage>
   );
 }

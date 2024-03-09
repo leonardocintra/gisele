@@ -1,15 +1,32 @@
-"use client"
+"use client";
 
-import { Sidebar, SidebarHeader, SidebarMain, SidebarNav, SidebarNavMain, SidebarNavLink, SidebarNavHeader, SidebarNavHeaderTitle, SidebarFooter } from "@/components/gisele/sidebar";
-import { ArchiveIcon, CalendarIcon, HomeIcon, IdCardIcon, TableIcon } from "@radix-ui/react-icons";
+import {
+  Sidebar,
+  SidebarHeader,
+  SidebarMain,
+  SidebarNav,
+  SidebarNavMain,
+  SidebarNavLink,
+  SidebarNavHeader,
+  SidebarNavHeaderTitle,
+  SidebarFooter,
+} from "@/components/gisele/sidebar";
+import {
+  ArchiveIcon,
+  CalendarIcon,
+  HomeIcon,
+  IdCardIcon,
+  TableIcon,
+} from "@radix-ui/react-icons";
 import { usePathname } from "next/navigation";
+import { UserDropdown } from "./user-dropdown";
 
 export default function MainSidebar() {
-  const pathName = usePathname()
+  const pathName = usePathname();
 
   const isActive = (path: string) => {
-    return pathName === path
-  }
+    return pathName === path;
+  };
 
   return (
     <Sidebar>
@@ -19,9 +36,17 @@ export default function MainSidebar() {
       <SidebarMain className="flex flex-col flex-grow">
         <SidebarNav>
           <SidebarNavMain>
-            <SidebarNavLink href="/admin" active={isActive("/admin")}> <HomeIcon /> Inicio</SidebarNavLink>
-            <SidebarNavLink href="/admin/marmitex" active={isActive("/admin/marmitex")}> <ArchiveIcon /> Marmitex</SidebarNavLink>
-            <SidebarNavLink href="/admin/cardapio" active={isActive("/admin/cardapio")}> <CalendarIcon /> Cardapio do dia</SidebarNavLink>
+            <SidebarNavLink href="/admin" active={isActive("/admin")}>
+              {" "}
+              <HomeIcon /> Inicio
+            </SidebarNavLink>
+            <SidebarNavLink
+              href="/admin/cardapio"
+              active={isActive("/admin/cardapio")}
+            >
+              {" "}
+              <CalendarIcon /> Cardapio do dia
+            </SidebarNavLink>
           </SidebarNavMain>
         </SidebarNav>
 
@@ -30,23 +55,28 @@ export default function MainSidebar() {
             <SidebarNavHeaderTitle>Meus produtos</SidebarNavHeaderTitle>
           </SidebarNavHeader>
           <SidebarNavMain>
-            <SidebarNavLink href="/admin/item-consumivel" active={isActive("/admin/item-consumivel")}>
+            <SidebarNavLink
+              href="/admin/marmitex"
+              active={isActive("/admin/marmitex")}
+            >
+              {" "}
+              <ArchiveIcon /> Marmitex
+            </SidebarNavLink>
+            <SidebarNavLink
+              href="/admin/item-consumivel"
+              active={isActive("/admin/item-consumivel")}
+            >
               <TableIcon />
               Items
-            </SidebarNavLink>
-            <SidebarNavLink href="/admin" active={isActive("/admin")}>
-              <IdCardIcon />
-              Tipo Itens
             </SidebarNavLink>
           </SidebarNavMain>
         </SidebarNav>
       </SidebarMain>
 
       <SidebarFooter>
-        <h2>Usuario</h2>
+        <UserDropdown />
         <h2>Versão 0.3.0</h2>
       </SidebarFooter>
     </Sidebar>
-  )
-
+  );
 }

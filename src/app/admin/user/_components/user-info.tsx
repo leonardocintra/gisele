@@ -15,13 +15,10 @@ export default function UserInfo(props: UserInfoProps) {
 
   return (
     <div>
-
-
       <div className="flex flex-col p-3 space-y-3 items-center border-2 rounded-md mx-2">
         <Avatar>
           <AvatarFallback>L</AvatarFallback>
         </Avatar>
-
 
         <div className="flex flex-col">
           <span>
