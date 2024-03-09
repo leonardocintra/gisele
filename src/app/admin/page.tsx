@@ -6,7 +6,7 @@ export default async function AdminPage() {
   const session = await auth()
 
   return (
-    <div className="flex justify-center">
+    <div className="">
       <UserInfo user={session?.user} />
     </div>
   );

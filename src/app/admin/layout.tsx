@@ -1,14 +1,17 @@
-import MenuHeader from "../components/admin/MenuHeader";
+import { PropsWithChildren } from "react";
+import MainSidebar from "./_components/main-sidebar";
 
 export default function AdminLayout({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+}: PropsWithChildren) {
   return (
-    <section className="p-2">
-      <MenuHeader />
-      <div className="my-3">{children}</div>
-    </section>
+    <div className="grid grid-cols-[16rem_1fr]">
+      <MainSidebar />
+
+      <div className="py-4">
+        {children}
+      </div>
+
+    </div>
   );
 }

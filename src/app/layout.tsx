@@ -26,10 +26,14 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={inter.className}>
-        <main>
+        <main className="flex flex-col h-screen">
           <Toaster />
-          <Cabecalho />
-          {children}
+
+          <div className="mb-auto">
+            <Cabecalho />
+            {children}
+          </div>
+          
           <Rodape />
         </main>
       </body>

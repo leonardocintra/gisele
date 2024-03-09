@@ -6,7 +6,6 @@ import toast from "react-hot-toast";
 import { ITipoMarmitex } from "@/interfaces/ITipoMarmitex";
 import { ICardapio } from "@/interfaces/ICardapio";
 import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Checkbox } from "@/components/ui/checkbox";
 
@@ -147,9 +146,7 @@ export default function Home() {
         )}
 
         <div className="my-4">
-          <Button>
-            Concluir pedido
-          </Button>
+          <button className="bg-green-700 text-slate-200 p-4 rounded-xl text-2xl font-semibold hover:bg-green-500" type="button">Concluir pedido</button>
         </div>
       </div>
     </div>

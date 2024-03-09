@@ -14,27 +14,30 @@ export default function UserInfo(props: UserInfoProps) {
   if (!props.user) return;
 
   return (
-    <div className="flex flex-col p-3 space-y-3 items-center border-2 rounded-md mx-2">
-      <Avatar>
-        <AvatarFallback>L</AvatarFallback>
-      </Avatar>
+    <div>
 
 
-      <div className="flex flex-col">
-        <span>
-          Nome: {props.user.name === undefined ? "Não informado" : props.user.name}
-        </span>
-        <span>
-          Email: {props.user.email}
-        </span>
-      </div>
+      <div className="flex flex-col p-3 space-y-3 items-center border-2 rounded-md mx-2">
+        <Avatar>
+          <AvatarFallback>L</AvatarFallback>
+        </Avatar>
 
-      <div>
-        <Button variant={"outline"} onClick={() => signOut()}>
-          Sair
-        </Button>
+
+        <div className="flex flex-col">
+          <span>
+            Nome: {props.user.name === undefined ? "Não informado" : props.user.name}
+          </span>
+          <span>
+            Email: {props.user.email}
+          </span>
+        </div>
+
+        <div>
+          <Button variant={"outline"} onClick={() => signOut()}>
+            Sair
+          </Button>
+        </div>
       </div>
     </div>
-
   )
 }
