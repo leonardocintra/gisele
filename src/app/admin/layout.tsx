@@ -1,17 +1,16 @@
 import { PropsWithChildren } from "react";
 import MainSidebar from "./_components/main-sidebar";
+import { auth } from "@/services/auth";
 
-export default function AdminLayout({
-  children,
-}: PropsWithChildren) {
+export default async function AdminLayout({ children }: PropsWithChildren) {
+
+  const session = await auth()
+
   return (
     <div className="grid grid-cols-[16rem_1fr]">
-      <MainSidebar />
+      <MainSidebar user={session?.user} />
 
-      <div className="py-4">
-        {children}
-      </div>
-
+      {children}
     </div>
   );
 }

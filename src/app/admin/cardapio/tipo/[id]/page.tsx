@@ -51,7 +51,7 @@ export default function CardapioItemPage() {
     };
 
     fetchData();
-  }, []);
+  }, [id]);
 
 
   if (redirectPage) {

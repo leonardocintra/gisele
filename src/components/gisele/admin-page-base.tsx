@@ -6,8 +6,11 @@ export type DashboardPageGenericProps<T = unknown> = {
   className?: string;
 } & T;
 
-export function DashboardPage({ className, children }: DashboardPageGenericProps) {
-  return <section className={cn("", className)}>{children}</section>;
+export function DashboardPage({
+  className,
+  children,
+}: DashboardPageGenericProps) {
+  return <section className={cn("h-screen", className)}>{children}</section>;
 }
 
 export function DashboardPageHeader({
@@ -25,7 +28,11 @@ export function DashboardPageHeaderTitle({
   className,
   children,
 }: DashboardPageGenericProps) {
-  return <h1 className={cn("", className)}>{children}</h1>;
+  return (
+    <h1 className={cn("text-lg text-muted-foreground uppercase", className)}>
+      {children}
+    </h1>
+  );
 }
 
 export function DashboardPageHeaderNav({

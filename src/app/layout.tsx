@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Cabecalho from "./components/Cabecalho";
-import Rodape from "./components/Rodape";
 import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -26,15 +24,9 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={inter.className}>
-        <main className="flex flex-col h-screen">
+        <main className="flex flex-col">
           <Toaster />
-
-          <div className="mb-auto">
-            <Cabecalho />
-            {children}
-          </div>
-          
-          <Rodape />
+          {children}
         </main>
       </body>
     </html>

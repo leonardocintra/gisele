@@ -3,7 +3,8 @@
  * @see https://v0.dev/t/gc8GZQ29cro
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import Link from "next/link";
 
 type CardTipoItemProps = {
@@ -16,7 +17,7 @@ export default function CardTipoItem(props: CardTipoItemProps) {
   return (
     <div>
       <div className="flex items-center justify-center relative">
-        <img
+        <Image
           alt={props.descricao}
           className="rounded-lg object-cover"
           height={300}
@@ -32,13 +33,12 @@ export default function CardTipoItem(props: CardTipoItemProps) {
             {props.descricao}
           </div>
           <Button size="lg">
-            <Link href={`/admin/cardapio/tipo/${props.id}`} >
+            <Link href={`/admin/cardapio/tipo/${props.id}`}>
               Gerenciar itens
             </Link>
           </Button>
         </div>
       </div>
     </div>
-  )
+  );
 }
-

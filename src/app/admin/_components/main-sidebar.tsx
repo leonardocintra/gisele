@@ -1,27 +1,32 @@
 "use client";
 
 import {
-  Sidebar,
-  SidebarHeader,
-  SidebarMain,
-  SidebarNav,
+  DasboardSidebar,
+  DasbhoardSidebarHeader,
+  DasbhoardSidebarMain,
+  DasbhoardSidebarNav,
   SidebarNavMain,
-  SidebarNavLink,
-  SidebarNavHeader,
-  SidebarNavHeaderTitle,
+  DasbhoardSidebarNavLink,
+  DasbhoardSidebarNavHeader,
+  DasbhoardSidebarNavHeaderTitle,
   SidebarFooter,
 } from "@/components/gisele/sidebar";
 import {
   ArchiveIcon,
   CalendarIcon,
   HomeIcon,
-  IdCardIcon,
+  MixerVerticalIcon,
   TableIcon,
 } from "@radix-ui/react-icons";
 import { usePathname } from "next/navigation";
 import { UserDropdown } from "./user-dropdown";
+import { Session } from "next-auth";
 
-export default function MainSidebar() {
+type MainSidebarProps = {
+  user: Session["user"];
+};
+
+export default function MainSidebar({ user }: MainSidebarProps) {
   const pathName = usePathname();
 
   const isActive = (path: string) => {
@@ -29,54 +34,56 @@ export default function MainSidebar() {
   };
 
   return (
-    <Sidebar>
-      <SidebarHeader>
+    <DasboardSidebar>
+      <DasbhoardSidebarHeader>
         <h2>Dashboard</h2>
-      </SidebarHeader>
-      <SidebarMain className="flex flex-col flex-grow">
-        <SidebarNav>
+      </DasbhoardSidebarHeader>
+      <DasbhoardSidebarMain className="flex flex-col flex-grow">
+        <DasbhoardSidebarNav>
           <SidebarNavMain>
-            <SidebarNavLink href="/admin" active={isActive("/admin")}>
-              {" "}
+            <DasbhoardSidebarNavLink href="/" active={isActive("/")}>
               <HomeIcon /> Inicio
-            </SidebarNavLink>
-            <SidebarNavLink
+            </DasbhoardSidebarNavLink>
+            <DasbhoardSidebarNavLink href="/admin" active={isActive("/admin")}>
+              <MixerVerticalIcon /> Dashboard
+            </DasbhoardSidebarNavLink>
+            <DasbhoardSidebarNavLink
               href="/admin/cardapio"
               active={isActive("/admin/cardapio")}
             >
-              {" "}
               <CalendarIcon /> Cardapio do dia
-            </SidebarNavLink>
+            </DasbhoardSidebarNavLink>
           </SidebarNavMain>
-        </SidebarNav>
+        </DasbhoardSidebarNav>
 
-        <SidebarNav className="mt-5">
-          <SidebarNavHeader>
-            <SidebarNavHeaderTitle>Meus produtos</SidebarNavHeaderTitle>
-          </SidebarNavHeader>
+        <DasbhoardSidebarNav className="mt-5">
+          <DasbhoardSidebarNavHeader>
+            <DasbhoardSidebarNavHeaderTitle>
+              Meus produtos
+            </DasbhoardSidebarNavHeaderTitle>
+          </DasbhoardSidebarNavHeader>
           <SidebarNavMain>
-            <SidebarNavLink
+            <DasbhoardSidebarNavLink
               href="/admin/marmitex"
               active={isActive("/admin/marmitex")}
             >
-              {" "}
               <ArchiveIcon /> Marmitex
-            </SidebarNavLink>
-            <SidebarNavLink
+            </DasbhoardSidebarNavLink>
+            <DasbhoardSidebarNavLink
               href="/admin/item-consumivel"
               active={isActive("/admin/item-consumivel")}
             >
               <TableIcon />
               Items
-            </SidebarNavLink>
+            </DasbhoardSidebarNavLink>
           </SidebarNavMain>
-        </SidebarNav>
-      </SidebarMain>
+        </DasbhoardSidebarNav>
+      </DasbhoardSidebarMain>
 
       <SidebarFooter>
-        <UserDropdown />
-        <h2>Versão 0.3.0</h2>
+        <UserDropdown user={user} />
+        <h2 className="text-sm text-slate-400 text-right">v0.3.0</h2>
       </SidebarFooter>
-    </Sidebar>
+    </DasboardSidebar>
   );
 }
