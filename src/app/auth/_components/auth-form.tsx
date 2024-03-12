@@ -42,10 +42,6 @@ export default function AuthForm() {
           Envar link magico
         </Button>
       </form>
-      <div className="flex gap-3">
-        <Button type="button">Login com Google</Button>
-        <Button type="button">Login com Facebook</Button>
-      </div>
     </div>
   );
 }

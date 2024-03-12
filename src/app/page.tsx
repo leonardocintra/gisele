@@ -8,7 +8,7 @@ import { ICardapio } from "@/interfaces/ICardapio";
 import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Checkbox } from "@/components/ui/checkbox";
-import Cabecalho from "./components/Cabecalho";
+import Cabecalho from "../components/gisele/cabecalho";
 import Rodape from "./components/Rodape";
 
 export default function Home() {

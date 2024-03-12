@@ -1,4 +1,6 @@
 import Link from "next/link";
+import LoginButton from "../auth/login-button";
+import { Button } from "../ui/button";
 
 export default function Cabecalho() {
   return (
@@ -12,12 +14,10 @@ export default function Cabecalho() {
         <Link className="text-sm font-medium underline" href="/contato">
          Quero usar esse sistema
         </Link>
-        <Link
-          className="inline-flex h-8 items-center justify-center rounded-md bg-gray-900 px-2 text-[12px] text-gray-50 hover:bg-gray-900/90 focus:outline-none focus:ring-1 focus:ring-gray-900 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus:ring-gray-300"
-          href={"/auth"}
-        >
-          Login
-        </Link>
+        
+        <LoginButton>
+          <Button>Login / Entrar</Button>
+        </LoginButton>
       </div>
     </div>
   );

@@ -1,0 +1,17 @@
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+
+type BackButtonProps = {
+  href: string;
+  label: string;
+};
+
+export default function BackButton({ href, label }: BackButtonProps) {
+  return (
+    <Button variant={"link"} className="font-normal w-full" size={"sm"} asChild>
+      <Link href={href}>{label}</Link>
+    </Button>
+  );
+}
+
+// parei https://youtu.be/1MTyCvS05V4?t=3892

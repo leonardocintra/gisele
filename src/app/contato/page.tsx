@@ -1,4 +1,4 @@
-import Cabecalho from "../components/Cabecalho";
+import Cabecalho from "../../components/gisele/cabecalho";
 
 /**
  * v0 by Vercel.
