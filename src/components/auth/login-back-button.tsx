@@ -13,5 +13,3 @@ export default function BackButton({ href, label }: BackButtonProps) {
     </Button>
   );
 }
-
-// parei https://youtu.be/1MTyCvS05V4?t=3892
