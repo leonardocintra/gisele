@@ -15,8 +15,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { FormError } from "@/components/form-error";
+import { FormSuccess } from "@/components/form-success";
+import { login } from "@/actions/login";
+import { useState, useTransition } from "react";
 
 export default function LoginForm() {
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -26,7 +34,15 @@ export default function LoginForm() {
   });
 
   function handleSubmitForm(values: z.infer<typeof LoginSchema>) {
-    console.log(values);
+    setError("");
+    setSuccess("");
+
+    startTransition(() => {
+      login(values).then((data) => {
+        setError(data.error);
+        setSuccess(data.success);
+      });
+    });
   }
 
   return (
@@ -49,7 +65,11 @@ export default function LoginForm() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="meuemail@email.com.br" />
+                    <Input
+                      {...field}
+                      placeholder="meuemail@email.com.br"
+                      disabled={isPending}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -63,7 +83,12 @@ export default function LoginForm() {
                 <FormItem>
                   <FormLabel>Senha</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="senha ..." type="password" />
+                    <Input
+                      {...field}
+                      placeholder="senha ..."
+                      type="password"
+                      disabled={isPending}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -71,7 +96,10 @@ export default function LoginForm() {
             />
           </div>
 
-          <Button type="submit" className="w-full">
+          <FormError message={error} />
+          <FormSuccess message={success} />
+
+          <Button type="submit" className="w-full" disabled={isPending}>
             Entrar
           </Button>
         </form>
@@ -79,5 +107,3 @@ export default function LoginForm() {
     </CardWrapper>
   );
 }
-
-// parei https://youtu.be/1MTyCvS05V4?t=4689
