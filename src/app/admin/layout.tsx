@@ -1,4 +1,3 @@
-import { PropsWithChildren } from "react";
 import MainSidebar from "./_components/main-sidebar";
 import { auth } from "@/services/auth";
 

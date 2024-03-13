@@ -97,3 +97,6 @@ Vinagrete
 Beterraba
 
 
+## DICAS
+Ver prisma aqui https://youtu.be/1MTyCvS05V4?t=6300
+
