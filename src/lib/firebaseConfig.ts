@@ -22,4 +22,6 @@ const firebase_db = getFirestore(firebase_app);
 
 const firebaseData = { app: firebase_app, db: firebase_db };
 
+export const db = firebaseData.db;
+
 export default firebaseData;
