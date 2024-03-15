@@ -19,6 +19,7 @@ import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { login } from "@/actions/login";
 import { useState, useTransition } from "react";
+import Link from "next/link";
 
 export default function LoginForm() {
   const [error, setError] = useState<string | undefined>("");
@@ -39,9 +40,15 @@ export default function LoginForm() {
 
     startTransition(() => {
       login(values).then((data) => {
-        setError(data.error);
-        setSuccess(data.success);
-      });
+
+        if (data?.error) {
+          setError(data.error);
+        }
+
+        if (data?.success) {
+          setSuccess(data.success);
+        }
+      }).catch(() => setError("Ocorreu um grave erro aqui no login ..."));
     });
   }
 
@@ -52,6 +59,9 @@ export default function LoginForm() {
       showSocial
       backButtonHref="/auth/register"
     >
+      <div className="text-muted-foreground text-center text-sm">
+        <Link href={"/"}>Voltar para home</Link>
+      </div>
       <Form {...form}>
         <form
           className="space-y-6"

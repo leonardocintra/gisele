@@ -48,5 +48,3 @@ export function DashboardPageMain({
 }: DashboardPageGenericProps) {
   return <main className={cn("p-6", className)}>{children}</main>;
 }
-
-// PAREI https://youtu.be/d3AV4ulSYUU?t=3181
