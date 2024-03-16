@@ -1,5 +1,5 @@
 import HomePage from "@/components/home/home-page";
-import Cabecalho from "./components/Cabecalho";
+import Cabecalho from "@/components/home/cabecalho";
 
 export default function Home() {
   return (
