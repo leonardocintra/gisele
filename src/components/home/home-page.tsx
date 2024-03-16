@@ -40,8 +40,14 @@ export default function HomePage() {
 
   if (!tipoMarmitex || !cardapio) {
     return (
-      <div>
-        <h2>Carregando ...</h2>
+      <div className="flex flex-col justify-center items-center space-y-4">
+        <h3>Carregando nosso marmitex</h3>
+
+        <div className="flex space-x-2">
+          <div className="skeleton w-32 h-32"></div>
+          <div className="skeleton w-32 h-32"></div>
+          <div className="skeleton w-32 h-32"></div>
+        </div>
       </div>
     );
   }
@@ -72,8 +78,6 @@ export default function HomePage() {
       setItensSelecionados([...itensSelecionados, itemId]);
     }
   }
-
-  console.log(marmitex);
 
   // Mapear e renderizar cada tipo com suas descrições em ordem alfabética
   const tiposOrdenados = Object.keys(itensPorTipo).sort();
@@ -150,13 +154,13 @@ export default function HomePage() {
     </div>
   );
 
-  function handleMarmitex(data: ITipoMarmitex[]) {
+  function handleMarmitex(tipoMarmitex: ITipoMarmitex[]) {
     return (
       <>
         <h1 className="text-2xl mt-2">Selecione o marmitex:</h1>
 
         <div className="flex text-sm sm:text-base cursor-pointer">
-          {data.map((m) => (
+          {tipoMarmitex.map((m) => (
             <div
               id={m.id}
               key={m.id}
