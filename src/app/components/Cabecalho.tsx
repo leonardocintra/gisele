@@ -9,9 +9,9 @@ export default function Cabecalho() {
         </Link>
       </div>
       <div className="flex-none">
-        <ul className="menu menu-horizontal px-1">
+        <ul className="menu menu-horizontal px-1 text-sm">
           <li>
-            <Link href={"/admin"}>Login</Link>
+            <Link href={"/admin"}>Meu restaurante</Link>
           </li>
         </ul>
       </div>
