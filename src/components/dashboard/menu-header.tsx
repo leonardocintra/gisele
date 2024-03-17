@@ -4,14 +4,14 @@ export default function MenuHeader() {
   return (
     <div className="flex p-2 flex-wrap gap-3 justify-center">
       <div>
-        <Link href={"/admin"} className="btn btn-sm btn-outline btn-error">
+        <Link href={`/dashboard`} className="btn btn-sm btn-outline btn-error">
           Pedidos
           <div className="badge badge-secondary">+12</div>
         </Link>
       </div>
       <div>
         <Link
-          href={"/admin/marmitex"}
+          href={`/dashboard/marmitex`}
           className="btn btn-sm btn-outline btn-warning"
         >
           Marmitex
@@ -20,7 +20,7 @@ export default function MenuHeader() {
 
       <div>
         <Link
-          href={"/admin/cardapio"}
+          href={`/dashboard/cardapio`}
           className="btn btn-sm btn-outline btn-info"
         >
           Cardapio do dia
@@ -28,7 +28,7 @@ export default function MenuHeader() {
       </div>
       <div>
         <Link
-          href={"/admin/item-consumivel"}
+          href={`/dashboard/item-consumivel`}
           className="btn btn-sm btn-outline btn-success"
         >
           Item Consumivel

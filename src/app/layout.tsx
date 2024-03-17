@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-import Rodape from "./components/Rodape";
+import { ClerkProvider } from "@clerk/nextjs";
+import { ptBR } from "@clerk/localizations";
+import NavBar from "@/components/home/nav-bar";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Tempero & Amor",
-  description: "Restaurante Tempero & Amor",
+  title: "Nourriture",
+  description: "Gerencie cardapios on line",
   authors: [
     {
       name: "Leonardo Nascimento Cintra",
@@ -26,10 +28,11 @@ export default function RootLayout({
     <html lang="pt-br">
       <body className={inter.className}>
         <main>
-          <Toaster />
-          {children}
+          <ClerkProvider localization={ptBR}>
+            <Toaster />
+            {children}
+          </ClerkProvider>
         </main>
-        <Rodape />
       </body>
     </html>
   );
