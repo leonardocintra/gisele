@@ -27,9 +27,10 @@ export default function AdminPage() {
               <div className="text-2xl">
                 Restaurante: {organization.organization.name}
               </div>
-              <div className="text-slate-500 text-sm pl-2">
-                - ID: {organization.id}
-                <br />- Criação:{" "}
+              <div className="text-slate-400 text-xs pl-2">
+                ID: {organization.id}
+                <br />
+                Data criação:{" "}
                 {`${organization.createdAt.getDay()}/${organization.createdAt.getMonth()}/${organization.createdAt.getFullYear()}`}
               </div>
             </div>
@@ -44,7 +45,7 @@ export default function AdminPage() {
             <h2 className="text-center text-red-500 py-4 text-2xl font-bold">
               Defina o nome do seu restaurante
             </h2>
-            <CreateOrganization />
+            <CreateOrganization afterCreateOrganizationUrl={"/admin"} />
           </>
         )}
       </div>

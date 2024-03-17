@@ -52,6 +52,14 @@ export default function HomePage() {
     );
   }
 
+  if (cardapio.length === 0) {
+    return (
+      <div className="flex flex-col justify-center items-center space-y-4">
+        <h3>Poxa! Ainda não temos o cardapio para hoje!</h3>
+      </div>
+    );
+  }
+
   const items = cardapio[0].itens.filter((item) => !item.tipo.exibirPreco);
   const itensPorTipo = items.reduce((acc: any, item: any) => {
     const tipoDescricao = item.tipo.descricao;

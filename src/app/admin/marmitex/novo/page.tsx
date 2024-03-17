@@ -1,6 +1,10 @@
-"use client"
+"use client";
 
-import { URL_API_TIPO_ITEM, URL_API_TIPO_MARMITEX } from "@/constants/constants";
+import TipoItemNaoCadastrado from "@/components/admin/tipo-item-nao-cadastrado";
+import {
+  URL_API_TIPO_ITEM,
+  URL_API_TIPO_MARMITEX,
+} from "@/constants/constants";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import { ITipoMarmitex } from "@/interfaces/ITipoMarmitex";
 import Link from "next/link";
@@ -9,12 +13,11 @@ import { FormEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 type MarmitexItem = {
-  tipo: ITipoItemConsumivel,
-  quantidade: number,
-}
+  tipo: ITipoItemConsumivel;
+  quantidade: number;
+};
 
 export default function NovoMarmitexPage() {
-
   const [tipoItems, setTipoItems] = useState<ITipoItemConsumivel[]>();
   const [descricao, setDescricao] = useState<string>("");
   const [preco, setPreco] = useState<number>(0);
@@ -39,19 +42,22 @@ export default function NovoMarmitexPage() {
     );
   }
 
-  if (!tipoItems || tipoItems.length === 0) {
+  if (!tipoItems) {
     return (
       <div>
         <h2>Carregando ...</h2>
       </div>
-    )
+    );
+  }
+
+  if (tipoItems.length === 0) {
+    return <TipoItemNaoCadastrado />;
   }
 
   async function salvar(event: FormEvent) {
     event.preventDefault();
 
     const creationPromise = new Promise<void>(async (resolve, reject) => {
-
       let data: Partial<ITipoMarmitex> = {
         descricao,
         preco,
@@ -92,11 +98,13 @@ export default function NovoMarmitexPage() {
     const tipo = tipoItems.find((t) => t.id === tipoId);
 
     if (tipo === undefined) {
-      toast.error('Ops ... item não encontrado');
+      toast.error("Ops ... item não encontrado");
       return;
     }
 
-    const existingItemIndex = marmitex.findIndex((item) => item.tipo.id === tipoId);
+    const existingItemIndex = marmitex.findIndex(
+      (item) => item.tipo.id === tipoId
+    );
 
     if (existingItemIndex !== -1) {
       // Se o tipo já existe no array, atualize apenas a quantidade
@@ -107,7 +115,7 @@ export default function NovoMarmitexPage() {
       // Caso contrário, adicione um novo item ao array
       const newItem: MarmitexItem = {
         quantidade: quantidade,
-        tipo
+        tipo,
       };
       setMarmitex([...marmitex, newItem]);
     }
@@ -115,7 +123,6 @@ export default function NovoMarmitexPage() {
 
   return (
     <div className="flex flex-col justify-center p-3">
-
       <div className="flex justify-center mb-4">
         <button className="btn btn-primary">Novo marmitex</button>
       </div>
@@ -126,8 +133,13 @@ export default function NovoMarmitexPage() {
             <div className="label">
               <span className="label-text">Descrição marmitex</span>
             </div>
-            <input type="text" value={descricao} onChange={(e) => setDescricao(e.target.value)}
-              placeholder="Descricao ..." className="input input-bordered w-full max-w-xs" />
+            <input
+              type="text"
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
+              placeholder="Descricao ..."
+              className="input input-bordered w-full max-w-xs"
+            />
           </label>
         </div>
 
@@ -136,8 +148,13 @@ export default function NovoMarmitexPage() {
             <div className="label">
               <span className="label-text">Preço marmitex</span>
             </div>
-            <input type="number" value={preco} onChange={(e) => setPreco(parseFloat(e.target.value))}
-              placeholder="Preço ..." className="input input-bordered w-full max-w-xs" />
+            <input
+              type="number"
+              value={preco}
+              onChange={(e) => setPreco(parseFloat(e.target.value))}
+              placeholder="Preço ..."
+              className="input input-bordered w-full max-w-xs"
+            />
           </label>
         </div>
 
@@ -147,15 +164,30 @@ export default function NovoMarmitexPage() {
               <div className="label">
                 <span className="label-text">{tipo.descricao}</span>
               </div>
-              <input type="number" max={9} onChange={(e) => handleMarmitex(parseInt(e.target.value), tipo.id)}
-                placeholder={`Quantidade ${tipo.descricao}`} className="input input-bordered w-full max-w-xs" />
+              <input
+                type="number"
+                max={9}
+                onChange={(e) =>
+                  handleMarmitex(parseInt(e.target.value), tipo.id)
+                }
+                placeholder={`Quantidade ${tipo.descricao}`}
+                className="input input-bordered w-full max-w-xs"
+              />
             </label>
           </div>
         ))}
 
         <div className="flex flex-col space-y-3">
-          <button type="submit" onClick={(e) => salvar(e)} className="btn btn-secondary">Salvar</button>
-          <Link href={REDIRECT_URL} className="btn btn-link">Cancelar</Link>
+          <button
+            type="submit"
+            onClick={(e) => salvar(e)}
+            className="btn btn-secondary"
+          >
+            Salvar
+          </button>
+          <Link href={REDIRECT_URL} className="btn btn-link">
+            Cancelar
+          </Link>
         </div>
       </form>
     </div>

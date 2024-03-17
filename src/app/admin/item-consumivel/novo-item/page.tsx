@@ -1,6 +1,11 @@
 "use client";
 
-import { URL_API_ITEM, URL_API_TIPO_ITEM, URL_PAGE_ADMIN_ITEM_CONSUMIVEL } from "@/constants/constants";
+import TipoItemNaoCadastrado from "@/components/admin/tipo-item-nao-cadastrado";
+import {
+  URL_API_ITEM,
+  URL_API_TIPO_ITEM,
+  URL_PAGE_ADMIN_ITEM_CONSUMIVEL,
+} from "@/constants/constants";
 import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import { redirect } from "next/navigation";
@@ -82,6 +87,10 @@ export default function NovoItemPage() {
       success: "Novo item salvo com sucesso!",
       error: "Não foi possível criar/editar o item!",
     });
+  }
+
+  if (!tipoItems || tipoItems?.length === 0) {
+    return <TipoItemNaoCadastrado />;
   }
 
   return (
