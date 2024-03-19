@@ -34,11 +34,14 @@ export default function DashboardLayout({
     );
   }
 
-  const organization = user.organizationMemberships[0].organization.name;
+  const organization = user.organizationMemberships[0].organization;
 
   return (
     <div>
-      <NavBar organization={organization} />
+      <NavBar
+        organization={organization.name}
+        slug={organization.slug as string}
+      />
       <MenuHeader />
       {children}
     </div>

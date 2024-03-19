@@ -1,5 +1,6 @@
 "use client";
 
+import HomePage from "@/components/home/home-page";
 import NavBar from "@/components/home/nav-bar";
 import { usePathname } from "next/navigation";
 
@@ -8,10 +9,10 @@ export default function HomePageRestaurante() {
 
   return (
     <div>
-      <NavBar />
-      <div className="max-w-lg mx-auto text-center py-10">
-        <h2>Home page do restaurante {pathname.replace("/", "")} </h2>
-        <h3>Aqui que vai mostrar o cardapio</h3>
+      <NavBar slug={pathname} />
+      
+      <div>
+        <HomePage />
       </div>
     </div>
   );

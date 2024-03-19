@@ -23,7 +23,7 @@ export default function NovoMarmitexPage() {
   const [preco, setPreco] = useState<number>(0);
   const [marmitex, setMarmitex] = useState<MarmitexItem[]>([]);
   const [redirectPage, setRedirectPage] = useState<boolean>(false);
-  const REDIRECT_URL = "/admin/marmitex";
+  const REDIRECT_URL = "/dashboard/marmitex";
 
   useEffect(() => {
     fetchTipoItems();
@@ -37,14 +37,14 @@ export default function NovoMarmitexPage() {
 
   async function fetchTipoItems() {
     if (organization) {
-      const tipoItemsData = await getTiposItemByOrganizationId("");
+      const tipoItemsData = await getTiposItemByOrganizationId(organization.id);
       setTipoItems(tipoItemsData);
     }
   }
 
   if (!tipoItems) {
     return (
-      <div>
+      <div className="flex max-w-md mx-auto my-8">
         <h2>Carregando ...</h2>
       </div>
     );
@@ -62,6 +62,7 @@ export default function NovoMarmitexPage() {
         descricao,
         preco,
         ativo: true,
+        organizacaoId: organization?.id as string,
         configuracoes: marmitex,
       };
 

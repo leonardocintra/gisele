@@ -7,7 +7,9 @@ import { NextRequest } from "next/server";
 const db = firebaseData.db;
 
 export async function GET(req: NextRequest) {
-  const querySnapshotMarmitext = await getDocs(collection(db, TIPO_MARMITEX_DOC))
+  const querySnapshotMarmitext = await getDocs(
+    collection(db, TIPO_MARMITEX_DOC)
+  );
 
   const tipoMarmitex: ITipoMarmitex[] = [];
 
@@ -18,8 +20,9 @@ export async function GET(req: NextRequest) {
       configuracoes: doc.data().configuracoes,
       descricao: doc.data().descricao,
       preco: doc.data().preco,
-    })
-  })
+      organizacaoId: doc.data().organizacaoId,
+    });
+  });
 
   return Response.json(tipoMarmitex, { status: 200 });
 }

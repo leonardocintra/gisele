@@ -4,6 +4,7 @@ import {
   URL_PAGE_DASHBOARD_ITEM_CONSUMIVEL,
   URL_API_ITEM,
 } from "@/constants/constants";
+import { getItemById } from "@/data/item";
 import { getTiposItemByOrganizationId } from "@/data/tipo-item";
 import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
@@ -23,17 +24,8 @@ export default function EditarItemPage() {
   const [item, setItem] = useState<IItemConsumivel>();
   const [tipoItemSelectError, setTipoItemSelectError] = useState<string>("");
   const [redirectPage, setRedirectPage] = useState<boolean>(false);
-  const [statusItem, setStatusItem] = useState<number>(0);
 
   const organization = user?.organizationMemberships[0].organization;
-
-  if (!organization) {
-    return (
-      <div>
-        <h2>Ocorreu um erro ao buscar uma organização</h2>
-      </div>
-    );
-  }
 
   useEffect(() => {
     fetchData();
@@ -49,19 +41,14 @@ export default function EditarItemPage() {
 
   const fetchData = async () => {
     try {
-      const [resTipoItem, resItem] = await Promise.all([
-        getTiposItemByOrganizationId(organization.id),
-        fetch(`${URL_API_ITEM}/${id}`),
-      ]);
-
-      if (resItem.status === 404) {
-        setStatusItem(404);
+      if (organization) {
+        const itemsData = await getTiposItemByOrganizationId(organization?.id);
+        setTipoItems(itemsData);
+        const itemData = await getItemById(id as string);
+        setItem(itemData);
+      } else {
+        setTipoItems([]);
       }
-
-      const itemData: IItemConsumivel = await resItem.json();
-
-      setTipoItems(resTipoItem);
-      setItem(itemData);
     } catch (error: any) {
       toast.error(error.message);
     }

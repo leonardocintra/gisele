@@ -8,22 +8,30 @@ import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import { useUser } from "@clerk/nextjs";
 import { useState, useEffect } from "react";
 
-export default function AdminCardapioPage() {
+export default function DashboardCardapioPage() {
   const { user } = useUser();
   const [tipoItems, setTipoItems] = useState<ITipoItemConsumivel[]>();
 
-  useEffect(() => {
-    fetchTipoItems();
-  }, []);
-
   const organization = user?.organizationMemberships[0].organization;
 
-  async function fetchTipoItems() {
-    if (organization) {
-      const itemsData = await getTiposItemByOrganizationId(organization?.id);
-      setTipoItems(itemsData);
-    }
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (organization) {
+          const itemsData = await getTiposItemByOrganizationId(
+            organization?.id
+          );
+          setTipoItems(itemsData);
+        } else {
+          setTipoItems([]);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    fetchData();
+  }, [user, organization]);
 
   return (
     <div>

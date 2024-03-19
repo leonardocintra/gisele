@@ -27,3 +27,26 @@ export const getItemByOrganizationId = async (
     console.error(error);
   }
 };
+
+export const getItemById = async (
+  itemId: string
+): Promise<IItemConsumivel | undefined> => {
+  try {
+    const querySnapshotItems = await getDocs(collection(db, ITEM_DOC));
+
+    const items: IItemConsumivel[] = [];
+
+    querySnapshotItems.forEach((doc) => {
+      items.push({
+        id: doc.id,
+        descricao: doc.data().descricao,
+        preco: doc.data().preco,
+        tipo: doc.data().tipo,
+      });
+    });
+
+    return items.find((item) => item.id === itemId);
+  } catch (error) {
+    console.error(error);
+  }
+};

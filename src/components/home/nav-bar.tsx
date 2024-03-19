@@ -3,13 +3,19 @@ import Link from "next/link";
 
 type NavBarProps = {
   organization?: string;
+  slug?: string;
 };
 
-export default function NavBar({ organization }: NavBarProps) {
+export default function NavBar({ organization, slug }: NavBarProps) {
   return (
     <div className="navbar bg-base-100">
       <div className="flex-1">
-        <a className="btn btn-ghost text-xl">Restaurante {organization}</a>
+        <Link
+          href={`${slug === undefined ? "/" : slug}`}
+          className="btn btn-ghost text-xl"
+        >
+          Restaurante {organization}
+        </Link>
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
