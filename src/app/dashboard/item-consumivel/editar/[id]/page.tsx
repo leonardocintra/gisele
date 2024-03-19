@@ -1,14 +1,19 @@
 "use client";
 
-import { URL_PAGE_ADMIN_ITEM_CONSUMIVEL, URL_API_TIPO_ITEM, URL_API_ITEM } from "@/constants/constants";
+import {
+  URL_PAGE_DASHBOARD_ITEM_CONSUMIVEL,
+  URL_API_ITEM,
+} from "@/constants/constants";
+import { getTiposItemByOrganizationId } from "@/data/tipo-item";
 import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
+import { useUser } from "@clerk/nextjs";
 import { redirect, useParams } from "next/navigation";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function EditarItemPage() {
-
+  const { user } = useUser();
   const { id } = useParams();
 
   const [descricao, setDescricao] = useState<string>("");
@@ -20,6 +25,16 @@ export default function EditarItemPage() {
   const [redirectPage, setRedirectPage] = useState<boolean>(false);
   const [statusItem, setStatusItem] = useState<number>(0);
 
+  const organization = user?.organizationMemberships[0].organization;
+
+  if (!organization) {
+    return (
+      <div>
+        <h2>Ocorreu um erro ao buscar uma organização</h2>
+      </div>
+    );
+  }
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -30,12 +45,12 @@ export default function EditarItemPage() {
       setPreco(item.preco);
       setTipoItem(item.tipo);
     }
-  }, [item])
+  }, [item]);
 
   const fetchData = async () => {
     try {
       const [resTipoItem, resItem] = await Promise.all([
-        fetch(URL_API_TIPO_ITEM),
+        getTiposItemByOrganizationId(organization.id),
         fetch(`${URL_API_ITEM}/${id}`),
       ]);
 
@@ -43,10 +58,9 @@ export default function EditarItemPage() {
         setStatusItem(404);
       }
 
-      const tiposData: ITipoItemConsumivel[] = await resTipoItem.json();
       const itemData: IItemConsumivel = await resItem.json();
 
-      setTipoItems(tiposData);
+      setTipoItems(resTipoItem);
       setItem(itemData);
     } catch (error: any) {
       toast.error(error.message);
@@ -54,7 +68,7 @@ export default function EditarItemPage() {
   };
 
   if (redirectPage) {
-    return redirect(URL_PAGE_ADMIN_ITEM_CONSUMIVEL);
+    return redirect(URL_PAGE_DASHBOARD_ITEM_CONSUMIVEL);
   }
 
   function handleSelectTipoItem(e: ChangeEvent<HTMLSelectElement>) {

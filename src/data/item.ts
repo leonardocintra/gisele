@@ -5,7 +5,9 @@ import { collection, getDocs } from "firebase/firestore";
 
 const db = firebaseData.db;
 
-export const getItemsAll = async (): Promise<IItemConsumivel[] | undefined> => {
+export const getItemByOrganizationId = async (
+  organizationId: string
+): Promise<IItemConsumivel[] | undefined> => {
   try {
     const querySnapshotItems = await getDocs(collection(db, ITEM_DOC));
 
@@ -20,7 +22,7 @@ export const getItemsAll = async (): Promise<IItemConsumivel[] | undefined> => {
       });
     });
 
-    return items;
+    return items.filter((item) => item.tipo.organizacaoId === organizationId);
   } catch (error) {
     console.error(error);
   }

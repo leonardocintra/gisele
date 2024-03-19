@@ -3,16 +3,18 @@
 import TipoItemNaoCadastrado from "@/components/admin/tipo-item-nao-cadastrado";
 import {
   URL_API_ITEM,
-  URL_API_TIPO_ITEM,
-  URL_PAGE_ADMIN_ITEM_CONSUMIVEL,
+  URL_PAGE_DASHBOARD_ITEM_CONSUMIVEL,
 } from "@/constants/constants";
+import { getTiposItemByOrganizationId } from "@/data/tipo-item";
 import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
+import { useUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function NovoItemPage() {
+  const { user } = useUser();
   const [descricao, setDescricao] = useState<string>("");
   const [preco, setPreco] = useState<number>(0);
   const [tipoItems, setTipoItems] = useState<ITipoItemConsumivel[]>();
@@ -20,20 +22,23 @@ export default function NovoItemPage() {
   const [tipoItemSelectError, setTipoItemSelectError] = useState<string>("");
   const [redirectPage, setRedirectPage] = useState<boolean>(false);
 
+  const organization = user?.organizationMemberships[0].organization;
+
   useEffect(() => {
     fetchTipoItems();
   }, []);
 
   if (redirectPage) {
-    return redirect(URL_PAGE_ADMIN_ITEM_CONSUMIVEL);
+    return redirect(URL_PAGE_DASHBOARD_ITEM_CONSUMIVEL);
   }
 
-  function fetchTipoItems() {
-    fetch(URL_API_TIPO_ITEM).then((res) =>
-      res.json().then((items) => {
-        setTipoItems(items);
-      })
-    );
+  async function fetchTipoItems() {
+    if (organization) {
+      const tipoItemsData = await getTiposItemByOrganizationId(
+        organization?.id
+      );
+      setTipoItems(tipoItemsData);
+    }
   }
 
   function handleSelectTipoItem(e: ChangeEvent<HTMLSelectElement>) {

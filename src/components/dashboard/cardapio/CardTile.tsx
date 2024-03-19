@@ -23,7 +23,7 @@ export default function CardTile(props: CardTileProps) {
         <h2 className="card-title">{props.descricao}</h2>
         <div className="card-actions">
           <Link
-            href={`/admin/cardapio/tipo/${props.id}`}
+            href={`/dashboard/cardapio/tipo/${props.id}`}
             className="btn btn-primary"
           >
             Gerenciar

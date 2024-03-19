@@ -5,11 +5,13 @@ import { IItemConsumivel } from "@/interfaces/IItemConsumivel";
 import { ICardapio } from "@/interfaces/ICardapio";
 import { redirect, useParams } from "next/navigation";
 import { useState, useEffect } from "react";
-import { URL_API_CARDAPIO, URL_API_ITEM, URL_PAGE_ADMIN_ITEM_CONSUMIVEL } from '@/constants/constants'
+import { URL_API_CARDAPIO, URL_API_ITEM, URL_PAGE_DASHBOARD_ITEM_CONSUMIVEL } from '@/constants/constants'
 import toast from "react-hot-toast";
 import AlertaBusca from "@/app/components/admin/AltertaBusca";
+import { useUser } from "@clerk/nextjs";
 
 export default function CardapioItemPage() {
+  const { user} = useUser();
   const { id } = useParams();
 
   const [items, setItems] = useState<IItemConsumivel[]>();
@@ -17,6 +19,8 @@ export default function CardapioItemPage() {
   const [itensSelecionados, setItensSelecionado] = useState<string[]>([]);
   const [redirectPage, setRedirectPage] = useState<boolean>(false);
   const [statusItem, setStatusItem] = useState<number>(0);
+
+  const organiation = user?.organizationMemberships[0].organization;
 
 
   useEffect(() => {
@@ -54,7 +58,7 @@ export default function CardapioItemPage() {
 
 
   if (redirectPage) {
-    return redirect(URL_PAGE_ADMIN_ITEM_CONSUMIVEL);
+    return redirect(URL_PAGE_DASHBOARD_ITEM_CONSUMIVEL);
   }
 
   // Observacao: evitar estados derivados (Mais detalhes: https://youtu.be/kCpca2z2cls?t=611)
@@ -89,8 +93,8 @@ export default function CardapioItemPage() {
   }
 
   async function salvar() {
-    if (itemsData.length === 0) {
-      toast.error("Nao foi possivel carregar os itens");
+    if (itemsData.length === 0 || !organiation) {
+      toast.error("Nao foi possivel carregar os itens ou dados do restaurante.");
       return;
     }
 
@@ -105,6 +109,7 @@ export default function CardapioItemPage() {
       }
 
       let data: Partial<ICardapio> = {
+        organizacaoId: organiation.id,
         data: new Date(),
         itens: itensIdSelecionados,
       };

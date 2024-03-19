@@ -1,12 +1,11 @@
 "use client";
 
 import TipoItemNaoCadastrado from "@/components/admin/tipo-item-nao-cadastrado";
-import {
-  URL_API_TIPO_ITEM,
-  URL_API_TIPO_MARMITEX,
-} from "@/constants/constants";
+import { URL_API_TIPO_MARMITEX } from "@/constants/constants";
+import { getTiposItemByOrganizationId } from "@/data/tipo-item";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
 import { ITipoMarmitex } from "@/interfaces/ITipoMarmitex";
+import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
@@ -18,6 +17,7 @@ type MarmitexItem = {
 };
 
 export default function NovoMarmitexPage() {
+  const { user } = useUser();
   const [tipoItems, setTipoItems] = useState<ITipoItemConsumivel[]>();
   const [descricao, setDescricao] = useState<string>("");
   const [preco, setPreco] = useState<number>(0);
@@ -33,13 +33,13 @@ export default function NovoMarmitexPage() {
     return redirect(REDIRECT_URL);
   }
 
-  function fetchTipoItems() {
-    fetch(URL_API_TIPO_ITEM).then((res) =>
-      res.json().then((items: ITipoItemConsumivel[]) => {
-        const data = items.filter((item) => item.exibirPreco === false);
-        setTipoItems(data);
-      })
-    );
+  const organization = user?.organizationMemberships[0].organization;
+
+  async function fetchTipoItems() {
+    if (organization) {
+      const tipoItemsData = await getTiposItemByOrganizationId("");
+      setTipoItems(tipoItemsData);
+    }
   }
 
   if (!tipoItems) {

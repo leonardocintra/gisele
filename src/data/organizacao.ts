@@ -5,7 +5,7 @@ import { addDoc, collection, doc, getDoc } from "firebase/firestore";
 
 const db = firebaseData.db;
 
-export const getOrganizationBySlug = async (id: string) => {
+export const getOrganizationById = async (id: string) => {
   try {
     const snap = await getDoc(doc(db, ORGANIZACAO_DOC, id));
 
@@ -26,12 +26,12 @@ export const getOrganizationBySlug = async (id: string) => {
 };
 
 export const createOrganization = async (data: IOrganizacao) => {
-  const organization = await getOrganizationBySlug(data.id);
+  const organization = await getOrganizationById(data.id);
 
   if (organization) {
     return organization;
   } else {
     await addDoc(collection(db, ORGANIZACAO_DOC), data);
-    return await getOrganizationBySlug(data.id);
+    return await getOrganizationById(data.id);
   }
 };

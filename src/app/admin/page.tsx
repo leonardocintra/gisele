@@ -31,7 +31,7 @@ export default function AdminPage() {
         </h2>
         <CreateOrganization
           skipInvitationScreen={true}
-          afterCreateOrganizationUrl={"/admin"}
+          afterCreateOrganizationUrl={"/dashboard"}
         />
       </div>
     );

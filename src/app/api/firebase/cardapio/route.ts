@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
         id: doc.id,
         data: doc.data().data,
         itens: doc.data().itens,
-        restauranteId: doc.data().restauranteId,
+        organizacaoId: doc.data().organizacaoId,
       });
     });
 

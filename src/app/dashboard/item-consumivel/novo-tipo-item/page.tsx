@@ -2,15 +2,19 @@
 
 import AlertaBusca from "@/app/components/admin/AltertaBusca";
 import { URL_API_TIPO_ITEM } from "@/constants/constants";
+import { getTiposItemByOrganizationId } from "@/data/tipo-item";
 import { ITipoItemConsumivel } from "@/interfaces/ITipoItemConsumivel";
+import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function NovoTipoItemPage() {
+  const { user } = useUser();
+  const organization = user?.organizationMemberships[0].organization;
+
   const [exibirPreco, setExibirPreco] = useState<boolean>(false);
   const [descricao, setDescricao] = useState<string>("");
-  const [statusTipoItems, setStatusTipoItems] = useState<number>(0);
   const [imagem, setImagem] = useState<string>("sem-imagem.webp");
   const [tipoItems, setTipoItems] = useState<ITipoItemConsumivel[]>();
 
@@ -18,22 +22,14 @@ export default function NovoTipoItemPage() {
     fetchTipoItems();
   }, []);
 
-  function fetchTipoItems() {
-    fetch(URL_API_TIPO_ITEM).then((res) => {
-      if (res.status === 404) {
-        setStatusTipoItems(404)
-      } else if (res.status === 200) {
-        res.json().then((items) => {
-          setTipoItems(items);
-        })
-      } else {
-        setStatusTipoItems(500);
-      }
+  async function fetchTipoItems() {
+    if (organization) {
+      const itemsData = await getTiposItemByOrganizationId(organization.id);
+      setTipoItems(itemsData);
     }
-    );
   }
 
-  async function handleTipoItem(event: any) {
+  async function salvar(event: any) {
     event.preventDefault();
 
     if (descricao === "") {
@@ -46,6 +42,7 @@ export default function NovoTipoItemPage() {
         descricao,
         exibirPreco,
         imagem: `/img/${imagem}`,
+        organizacaoId: organization?.id,
       };
 
       const response = await fetch(URL_API_TIPO_ITEM, {
@@ -123,7 +120,7 @@ export default function NovoTipoItemPage() {
         <div className="flex justify-center my-3">
           <button
             type="submit"
-            onClick={(e) => handleTipoItem(e)}
+            onClick={(e) => salvar(e)}
             className="btn btn-accent px-16"
           >
             Salvar
@@ -170,7 +167,7 @@ export default function NovoTipoItemPage() {
           </table>
         </div>
       ) : (
-        <AlertaBusca status={statusTipoItems} descricao="Items" />
+        <AlertaBusca status={400} descricao="Items" />
       )}
     </div>
   );

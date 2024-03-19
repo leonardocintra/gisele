@@ -1,5 +1,6 @@
 export interface ITipoItemConsumivel {
-  id: string,
+  id: string;
+  organizacaoId: string;
   descricao: string;
   exibirPreco: boolean;
   imagem: string;

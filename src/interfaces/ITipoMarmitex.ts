@@ -7,6 +7,7 @@ export interface IConfiguracaoMarmitex {
 
 export interface ITipoMarmitex {
   id: string,
+  organizacaoId: string;
   descricao: string,
   ativo: boolean,
   preco: number,
