@@ -51,15 +51,14 @@ export async function getHomePageData() {
 
 export async function getGlobalPageData() {
   noStore();
-
   const url = new URL("/api/global", baseUrl);
 
   url.search = qs.stringify({
     populate: [
       "header.logoText",
-      "header.ctaButton",
+      "header.accountButton",
       "footer.logoText",
-      "footer.socialLink",
+      "footer.socialButtons",
     ],
   });
 
