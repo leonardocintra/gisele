@@ -1,0 +1,76 @@
+"use client";
+
+import { getMarmitexByOrganizationId } from "@/data/marmitex";
+import { ITipoMarmitex } from "@/interfaces/ITipoMarmitex";
+import { useUser } from "@clerk/nextjs";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+export default function MarmitexPage() {
+  const { user } = useUser();
+  const [tipoMarmitex, setTipoMarmitex] = useState<ITipoMarmitex[]>();
+
+  useEffect(() => {
+    fetchMarmitex();
+  }, []);
+
+  const organization = user?.organizationMemberships[0].organization;
+
+  async function fetchMarmitex() {
+    if (organization) {
+      const marmitexData = await getMarmitexByOrganizationId(organization.id);
+      setTipoMarmitex(marmitexData);
+    }
+  }
+
+  if (tipoMarmitex) {
+    return (
+      <div className="flex flex-col justify-center p-3 items-center">
+        <div className="flex justify-center mb-4">
+          <Link href={"/dashboard/marmitex/novo"} className="btn btn-primary">
+            Novo marmitex
+          </Link>
+        </div>
+
+        <div className="p-4 rounded-md border-2 border-blue-400">
+          {tipoMarmitex.map((tipo) => (
+            <div key={tipo.id}>
+              <h2 className="mb-1 text-3xl text-center">{tipo.descricao}</h2>
+              <div className="flex space-x-2 justify-center">
+                <h2 className="text-sm text-center font-semibold text-secondary">
+                  {tipo.ativo ? "Ativo" : "NÃO"}
+                </h2>
+                <h2 className="text-sm text-center font-semibold text-primary">
+                  R$ {tipo.preco}
+                </h2>
+              </div>
+              <div className="mb-4">
+                {tipo.configuracoes.map((config, index) => (
+                  <div key={`config-${index}`}>
+                    <ul>
+                      <li className="space-x-3">
+                        <span className="my-1 badge badge-lg badge-neutral">
+                          {config.quantidade}
+                        </span>
+
+                        <span className="font-light">
+                          {config.tipo.descricao}
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <h2> Carregando ...</h2>
+      </div>
+    );
+  }
+}
