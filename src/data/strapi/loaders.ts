@@ -59,6 +59,7 @@ export async function getGlobalPageData() {
       "header.accountButton",
       "footer.logoText",
       "footer.socialButtons",
+      "footer.icon",
     ],
   });
 

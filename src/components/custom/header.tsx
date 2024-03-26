@@ -27,7 +27,7 @@ export default function Header({ data }: HeaderProps) {
       <div className="flex items-center">
         <Link
           className="flex items-center gap-2 text-lg font-semibold"
-          href="#"
+          href="/"
         >
           <PackageIcon className="w-5 h-5" />
           <span>{logoText.texto}</span>
@@ -38,13 +38,7 @@ export default function Header({ data }: HeaderProps) {
           className="font-medium rounded-md px-2 py-1.5 text-sm hover:bg-gray-100/50 hover:text-gray-900"
           href="#"
         >
-          Home
-        </Link>
-        <Link
-          className="font-medium rounded-md px-2 py-1.5 text-sm hover:bg-gray-100/50 hover:text-gray-900"
-          href="#"
-        >
-          Login
+          Minha conta
         </Link>
       </nav>
     </header>

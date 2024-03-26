@@ -24,15 +24,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const globalMeta = await getGlobalPageData();
-  console.log(globalMeta);
+  const data = await getGlobalPageData();
+  console.log(data.footer);
 
   return (
     <html lang="pt-br">
       <body className={inter.className}>
-        <Header data={globalMeta.header} />
+        <Header data={data.header} />
         {children}
-        <Footer />
+        <Footer data={data.footer} />
       </body>
     </html>
   );
