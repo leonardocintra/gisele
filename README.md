@@ -1,4 +1,4 @@
-# Gisele
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
@@ -22,78 +22,15 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 ## Learn More
 
-### Receitas
+To learn more about Next.js, take a look at the following resources:
 
-Por favor específicar se gostaria de arroz e feijão  
-Na sua marmita 
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-Carnes  🍗🥩🍖
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-Carne panela
-Frango frito
-Copa Lombo 
+## Deploy on Vercel
 
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Guarnições🥦🌽🍟
-
-Lasanha de abobrinha molho
-Macarrão ao molho sugo 
-Quiabo
-Banana empanada 
-Batata frita 
-Mandioca frita 
-
-Saladas🍎🥬🍆  
-
-Maionese 
-Vinagrete
-Beterraba
-
----------------------------
-Carnes  🍗🥩🍖
-
-Rabada
-Frango empanado 
-Linguiça 
-
-
-Guarnições🥦🌽🍟
-
-Lasanha de batata molho branco
-Panqueca presunto/mussarela
-Abobrinha batida
-Repolho 
-Batata frita 
-Mandioca frita 
-
-Saladas🍎🥬🍆  
-
-Maionese 
-Vinagrete
-Beterraba
-
------------------------------
-Carnes  🍗🥩🍖
-
-Carne moída
-Frango empanado 
-Costelinha 
-
-
-Guarnições🥦🌽🍟
-
-Canelone presunto/ mussarela 
-Macarrão alho e óleo com bacon
-Farofa de abobrinha 
-Chuchu
-Batata doce
-Batata frita 
-Mandioca frita 
-
-Saladas🍎🥬🍆  
-
-Maionese 
-Vinagrete
-Beterraba
-
-
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

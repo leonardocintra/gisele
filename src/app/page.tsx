@@ -1,11 +1,12 @@
-import HomePage from "@/components/home/home-page";
-import Cabecalho from "@/components/home/cabecalho";
+import HeroSection from "@/components/custom/hero-section";
+import { getHomePageData } from "@/data/strapi/loaders";
 
-export default function Home() {
+export default async function Home() {
+  const homeData = await getHomePageData();
+
   return (
-    <div>
-      <Cabecalho />
-      <HomePage />
-    </div>
+    <main>
+      <HeroSection />
+    </main>
   );
 }
