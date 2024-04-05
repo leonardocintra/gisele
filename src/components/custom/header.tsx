@@ -1,27 +1,7 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/34JOEwqjDts
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
 import Link from "next/link";
 import { JSX, SVGProps } from "react";
 
-interface HeaderProps {
-  data: {
-    logoText: {
-      texto: string;
-      url: string;
-    };
-    accountButton: {
-      texto: string;
-      url: string;
-    };
-  };
-}
-
-export default function Header({ data }: HeaderProps) {
-  const { logoText } = data;
-
+export default function Header() {
   return (
     <header className="flex items-center h-16 px-4 w-full md:px-6">
       <div className="flex items-center">
@@ -30,7 +10,7 @@ export default function Header({ data }: HeaderProps) {
           href="/"
         >
           <PackageIcon className="w-5 h-5" />
-          <span>{logoText.texto}</span>
+          <span>Tempeiro & Amor</span>
         </Link>
       </div>
       <nav className="ml-auto flex items-center space-x-4">
