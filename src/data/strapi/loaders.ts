@@ -1,11 +1,8 @@
-import qs from "qs";
-
-import { unstable_noStore as noStore } from "next/cache";
 import { flattenAttributes, getStrapiURL } from "@/lib/utils";
 
-const baseUrl = getStrapiURL();
+export const strapiBaseUrl = getStrapiURL();
 
-async function fetchData(url: string) {
+export async function fetchDataStrapi(url: string) {
   const authToken = null; // we will implement this later getAuthToken() later
   const headers = {
     method: "GET",
