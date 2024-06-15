@@ -4,7 +4,7 @@ import "./globals.css";
 
 import Header from "@/components/custom/header";
 import Footer from "@/components/custom/footer";
-import { ClerkProvider } from "@clerk/nextjs";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,15 +20,16 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { isAuthenticated } = getKindeServerSession();
+  const isAuthed = await isAuthenticated();
+
   return (
-    <ClerkProvider>
-      <html lang="pt-br">
-        <body className={inter.className}>
-          <Header />
-          {children}
-          <Footer />
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="pt-br">
+      <body className={inter.className}>
+        <Header isAuthenticated={isAuthed} />
+        {children}
+        <Footer />
+      </body>
+    </html>
   );
 }

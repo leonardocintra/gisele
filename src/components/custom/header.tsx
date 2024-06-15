@@ -1,8 +1,17 @@
-import { SignedIn, UserButton } from "@clerk/nextjs";
+import {
+  LoginLink,
+  LogoutLink,
+  RegisterLink,
+} from "@kinde-oss/kinde-auth-nextjs/components";
 import Link from "next/link";
 import { JSX, SVGProps } from "react";
+import { Button } from "../ui/button";
 
-export default function Header() {
+type HeaderProps = {
+  isAuthenticated: boolean;
+};
+
+export default function Header({ isAuthenticated }: HeaderProps) {
   return (
     <header className="flex items-center h-16 px-4 w-full md:px-6">
       <div className="flex items-center">
@@ -11,13 +20,25 @@ export default function Header() {
           href="/"
         >
           <PackageIcon className="w-5 h-5" />
-          <span>Gerenciar meu restaurante</span>
+          <span>Meu restaurante</span>
         </Link>
       </div>
-      <nav className="ml-auto flex items-center space-x-4">
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
+      <nav className="ml-auto flex items-center space-x-2">
+        {isAuthenticated ? (
+          <LogoutLink>
+            <Button variant={"destructive"}>Sair</Button>
+          </LogoutLink>
+        ) : (
+          <>
+            <LoginLink>
+              <Button>Entrar</Button>
+            </LoginLink>
+
+            <RegisterLink>
+              <Button variant={"ghost"}>Criar uma conta</Button>
+            </RegisterLink>
+          </>
+        )}
       </nav>
     </header>
   );
