@@ -1,3 +1,4 @@
+import { SignedIn, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { JSX, SVGProps } from "react";
 
@@ -10,16 +11,13 @@ export default function Header() {
           href="/"
         >
           <PackageIcon className="w-5 h-5" />
-          <span>Tempeiro & Amor</span>
+          <span>Gerenciar meu restaurante</span>
         </Link>
       </div>
       <nav className="ml-auto flex items-center space-x-4">
-        <Link
-          className="font-medium rounded-md px-2 py-1.5 text-sm hover:bg-gray-100/50 hover:text-gray-900"
-          href="#"
-        >
-          Minha conta
-        </Link>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
       </nav>
     </header>
   );
