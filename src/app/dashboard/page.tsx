@@ -1,8 +1,10 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { ListaDePedidos } from "@/components/custom/dashboard/lista-de-pedidos";
+import { Button } from "@/components/ui/button";
 
 export default async function DashboardPage() {
-  const { getUser, getOrganization } = getKindeServerSession();
+  const { getUser } = getKindeServerSession();
   const user = await getUser();
 
   if (!user) {
@@ -18,8 +20,15 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="text-center py-8">
-      <h2 className="text-4xl text-fuchsia-600">Ola {user.given_name}!</h2>
+    <div className="">
+      <div className="flex justify-center my-8 gap-2">
+        <Button>Cardapio do dia</Button>
+        <Button variant={"secondary"} >Marmitex</Button>
+        <Button variant={"secondary"}>Tipo de item</Button>
+        <Button variant={"secondary"}>Itens</Button>
+      </div>
+
+      <ListaDePedidos />
     </div>
   );
 }

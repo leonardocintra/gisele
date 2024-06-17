@@ -6,6 +6,7 @@ import {
 import Link from "next/link";
 import { JSX, SVGProps } from "react";
 import { Button } from "../ui/button";
+import { LayoutDashboardIcon } from "lucide-react";
 
 type HeaderProps = {
   isAuthenticated: boolean;
@@ -14,7 +15,7 @@ type HeaderProps = {
 export default function Header({ isAuthenticated }: HeaderProps) {
   return (
     <header className="flex items-center h-16 px-4 w-full md:px-6">
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
         <Link
           className="flex items-center gap-2 text-lg font-semibold"
           href="/"
@@ -22,6 +23,16 @@ export default function Header({ isAuthenticated }: HeaderProps) {
           <PackageIcon className="w-5 h-5" />
           <span>Meu restaurante</span>
         </Link>
+
+        {isAuthenticated && (
+          <Link
+            className="flex items-center gap-2 text-lg font-semibold text-emerald-800 bg-slate-200 hover:bg-slate-300 py-2 px-4 rounded-md"
+            href="/dashboard"
+          >
+            <LayoutDashboardIcon />
+            <span>Minha área</span>
+          </Link>
+        )}
       </div>
       <nav className="ml-auto flex items-center space-x-2">
         {isAuthenticated ? (
