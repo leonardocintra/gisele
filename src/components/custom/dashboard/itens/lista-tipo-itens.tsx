@@ -1,11 +1,12 @@
-import Image from "next/image";
+"use client";
 
-import { Badge } from "@/components/ui/badge";
+import { ChefHatIcon, MoreHorizontal } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -17,15 +18,42 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { BananaIcon, BeefIcon, CupSodaIcon, SaladIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
 
 export default function ListaTipoItens() {
+  const [itens, setItems] = useState<IItemTipo[]>([]);
+
+  useEffect(() => {
+    fetch("/api/sandra/tipo-itens")
+      .then((res) => res.json())
+      .then((data) => {
+        setItems(data.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
+  if (!itens || itens.length === 0) {
+    return (
+      <div className="flex flex-col space-y-3 items-center justify-center my-8">
+        <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-[250px]" />
+          <Skeleton className="h-4 w-[200px]" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Tipo de itens vendidos</CardTitle>
+        <CardTitle>Itens do restaurante</CardTitle>
         <CardDescription>
-          Administre os itens categorizados abaixo
+          Administre os itens do seu restaurante por tipo
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -35,49 +63,34 @@ export default function ListaTipoItens() {
               <TableHead className="hidden w-[100px] sm:table-cell">
                 <span className="sr-only">Image</span>
               </TableHead>
-              <TableHead>Item</TableHead>
-              <TableHead>
-                <span className="sr-only">Ação</span>
-              </TableHead>
+
+              <TableHead># id</TableHead>
+              <TableHead>Descrição</TableHead>
+              <TableHead className="hidden md:table-cell">Itens</TableHead>
+              <TableHead>Modificar</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell className="hidden sm:table-cell">
-                <BeefIcon />
-              </TableCell>
-              <TableCell className="font-medium">Carnes</TableCell>
-              <TableCell>Ação</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="hidden sm:table-cell">
-                <BananaIcon />
-              </TableCell>
-              <TableCell className="font-medium">Guarnições</TableCell>
-              <TableCell>Ação</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="hidden sm:table-cell">
-                <SaladIcon />
-              </TableCell>
-              <TableCell className="font-medium">Saladas</TableCell>
-              <TableCell>Ação</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="hidden sm:table-cell">
-                <CupSodaIcon />
-              </TableCell>
-              <TableCell className="font-medium">Bebidas</TableCell>
-              <TableCell>Ação</TableCell>
-            </TableRow>
+            {itens.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell className="hidden sm:table-cell">
+                  <ChefHatIcon />
+                </TableCell>
+                <TableCell className="font-medium text-slate-500">#{item.id}</TableCell>
+                <TableCell className="font-medium">{item.descricao}</TableCell>
+                <TableCell className="hidden md:table-cell">
+                  <Link href={`tipo-itens/${item.id}`}>
+                    <Button variant={"link"} className="text-destructive">
+                      Gerenciar
+                    </Button>
+                  </Link>
+                </TableCell>
+                <TableCell>Editar</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </CardContent>
-      <CardFooter>
-        <div className="text-xs text-muted-foreground">
-          Showing <strong>1-10</strong> of <strong>32</strong> products
-        </div>
-      </CardFooter>
     </Card>
   );
 }

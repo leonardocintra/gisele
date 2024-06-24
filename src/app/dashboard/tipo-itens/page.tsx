@@ -4,7 +4,9 @@ export default function ItemPageDashboard() {
   return (
     <div>
       <div className="max-w-3xl mx-auto">
-        <ListaTipoItens />
+        <div className="my-8">
+          <ListaTipoItens />
+        </div>
       </div>
     </div>
   );

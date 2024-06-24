@@ -23,6 +23,18 @@ export default async function RootLayout({
   const { isAuthenticated } = getKindeServerSession();
   const isAuthed = await isAuthenticated();
 
+  if (!isAuthed) {
+    return (
+      <html lang="pt-br">
+        <body className={inter.className}>
+          <Header isAuthenticated={false} />
+          {children}
+          <Footer />
+        </body>
+      </html>
+    );
+  }
+
   return (
     <html lang="pt-br">
       <body className={inter.className}>

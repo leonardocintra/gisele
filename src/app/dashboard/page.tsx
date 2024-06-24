@@ -25,7 +25,7 @@ export default async function DashboardPage() {
       <div className="flex justify-center my-8 gap-2">
         <Button>Cardapio do dia</Button>
         <Button variant={"secondary"}>Marmitex</Button>
-        <Link href={"/dashboard/itens"}>
+        <Link href={"/dashboard/tipo-itens"}>
           <Button className="hover:bg-primary hover:text-white" variant={"secondary"}>Itens</Button>
         </Link>
       </div>

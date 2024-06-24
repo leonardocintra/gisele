@@ -1,9 +1,5 @@
-export interface IItemData {
-  data: IItem[];
-}
-
-interface IItem {
+export interface IItem {
   id: number;
   descricao: string;
-  item_tipo: IItemTipo;
+  tipoItem: IItemTipo;
 }
