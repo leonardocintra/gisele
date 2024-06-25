@@ -23,3 +23,24 @@ export async function GET(
   const data = await res.json();
   return Response.json(data);
 }
+
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { tipoItemId: number, descricao: string } }
+) {
+  const res = await fetch(`${url}/item/${params.tipoItemId}`);
+
+  if (res.status === 404) {
+    return Response.json(
+      {
+        message: "Item não encontrado",
+      },
+      {
+        status: 404,
+      }
+    );
+  }
+
+  const data = await res.json();
+  return Response.json(data);
+}

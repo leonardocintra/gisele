@@ -1,8 +1,7 @@
 "use client";
 
-import { ChefHatIcon } from "lucide-react";
+import { ChefHatIcon, EditIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -75,7 +74,6 @@ export default function ListaItensPorTipoItem({
 
                 <TableHead># id</TableHead>
                 <TableHead>Descrição</TableHead>
-                <TableHead className="hidden md:table-cell">Itens</TableHead>
                 <TableHead>Modificar</TableHead>
               </TableRow>
             </TableHeader>
@@ -91,14 +89,14 @@ export default function ListaItensPorTipoItem({
                   <TableCell className="font-medium">
                     {item.descricao}
                   </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    <Link href={`tipo-itens/item/${item.id}`}>
-                      <Button variant={"link"} className="text-destructive">
-                        Gerenciar
-                      </Button>
+                  <TableCell>
+                    <Link href={`/dashboard/item/${item.id}`}>
+                      <div className="flex gap-1 items-center hover:underline">
+                        Editar
+                        <EditIcon />
+                      </div>
                     </Link>
                   </TableCell>
-                  <TableCell>Editar</TableCell>
                 </TableRow>
               ))}
             </TableBody>
