@@ -40,6 +40,16 @@ export async function POST(req: Request) {
         status: 201,
       }
     );
+  } else if (res.status === 400) {
+    const resData = await res.json();
+    return Response.json(
+      {
+        message: resData.message,
+      },
+      {
+        status: res.status,
+      }
+    );
   } else {
     return Response.json(res.json());
   }

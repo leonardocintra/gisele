@@ -54,6 +54,8 @@ export default function ItemTipoForm({ itemTipo }: ItemTipoFormProps) {
       body: JSON.stringify(tipo),
     });
 
+    const data = await res.json();
+
     if (res.status === 201 && method === "POST") {
       toast({
         title: `Tipo ${tipo.descricao}`,
@@ -62,11 +64,19 @@ export default function ItemTipoForm({ itemTipo }: ItemTipoFormProps) {
       });
       router.push(`/dashboard/`);
     } else {
-      toast({
-        title: `Tipo ${tipo.descricao} não foi cadastrado!`,
-        variant: "destructive",
-        description: `Erro: ${res.text}`,
-      });
+      if (res.status === 400) {
+        toast({
+          title: `${tipo.descricao} não foi cadastrado!`,
+          variant: "destructive",
+          description: `Erro: ${data.message}`,
+        });
+      } else {
+        toast({
+          title: `${tipo.descricao} não foi cadastrado!`,
+          variant: "destructive",
+          description: `Erro: ${res.text}`,
+        });
+      }
     }
   };
 
