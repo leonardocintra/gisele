@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from "@/components/custom/header";
 import Footer from "@/components/custom/footer";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -41,6 +42,7 @@ export default async function RootLayout({
         <Header isAuthenticated={isAuthed} />
         {children}
         <Footer />
+        <Toaster />
       </body>
     </html>
   );
