@@ -1,3 +1,4 @@
+import { IItem } from "@/interfaces/IItem";
 import { SANDRA_BASE_URL } from "@/lib/utils";
 import { NextRequest } from "next/server";
 
@@ -7,7 +8,9 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { id: number } }
 ) {
-  const res = await fetch(`${url}/item/${params.id}`);
+  const res = await fetch(`${url}/item/${params.id}`, {
+    next: { revalidate: 10 },
+  });
 
   if (res.status === 404) {
     return Response.json(
@@ -24,11 +27,21 @@ export async function GET(
   return Response.json(data);
 }
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { tipoItemId: number, descricao: string } }
-) {
-  const res = await fetch(`${url}/item/${params.tipoItemId}`);
+export async function POST(req: Request) {
+  const data = await req.json();
+
+  const item: Partial<IItem> = {
+    descricao: data.descricao,
+    tipoItemId: +data.tipoItemId,
+  };
+
+  const res = await fetch(`${url}/item`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(item),
+  });
 
   if (res.status === 404) {
     return Response.json(
@@ -41,6 +54,18 @@ export async function POST(
     );
   }
 
-  const data = await res.json();
-  return Response.json(data);
+  if (res.status === 201) {
+    return Response.json(res, {
+      status: 201,
+    });
+  } else {
+    return Response.json(
+      {
+        message: res.json(),
+      },
+      {
+        status: res.status,
+      }
+    );
+  }
 }

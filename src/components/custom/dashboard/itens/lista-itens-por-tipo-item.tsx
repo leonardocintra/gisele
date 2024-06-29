@@ -35,7 +35,7 @@ export default function ListaItensPorTipoItem({
     fetch(`/api/sandra/item/${tipoItemId}`)
       .then((res) => res.json())
       .then((data) => {
-        setItems(data);
+        setItems(data.data);
       })
       .catch((err) => {
         // TODO: add toast error

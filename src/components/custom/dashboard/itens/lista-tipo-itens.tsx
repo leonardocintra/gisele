@@ -1,6 +1,6 @@
 "use client";
 
-import { ChefHatIcon, MoreHorizontal } from "lucide-react";
+import { ChefHatIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +21,7 @@ import {
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import { IItemTipo } from "@/interfaces/IItemTIpo";
 
 export default function ListaTipoItens() {
   const [itens, setItems] = useState<IItemTipo[]>([]);
@@ -76,7 +77,9 @@ export default function ListaTipoItens() {
                 <TableCell className="hidden sm:table-cell">
                   <ChefHatIcon />
                 </TableCell>
-                <TableCell className="font-medium text-slate-500">#{item.id}</TableCell>
+                <TableCell className="font-medium text-slate-500">
+                  #{item.id}
+                </TableCell>
                 <TableCell className="font-medium">{item.descricao}</TableCell>
                 <TableCell className="hidden md:table-cell">
                   <Link href={`tipo-itens/${item.id}`}>

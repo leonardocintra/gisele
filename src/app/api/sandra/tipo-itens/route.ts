@@ -16,8 +16,6 @@ export async function GET() {
 export async function POST(req: Request) {
   const data = await req.json();
 
-  console.log(data);
-
   const tipo: Partial<IItemTipo> = {
     descricao: data.descricao,
     restauranteId: RESTAURANTE_TEMPEIRO_E_AMOR_ID,

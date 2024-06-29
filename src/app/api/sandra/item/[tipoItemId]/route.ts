@@ -7,7 +7,9 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { tipoItemId: number } }
 ) {
-  const res = await fetch(`${url}/tipo-item/${params.tipoItemId}`);
+  const res = await fetch(`${url}/tipo-item/${params.tipoItemId}`, {
+    next: { revalidate: 10 },
+  });
 
   if (res.status === 404) {
     return Response.json(
@@ -21,5 +23,5 @@ export async function GET(
   }
 
   const data = await res.json();
-  return Response.json(data);
+  return Response.json({ data });
 }
