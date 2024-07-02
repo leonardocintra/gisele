@@ -29,21 +29,21 @@ type ListaItensPorTipoItemProps = {
 export default function ListaItensPorTipoItem({
   tipoItemId,
 }: ListaItensPorTipoItemProps) {
-  const [item, setItems] = useState<IItem[]>([]);
+  const [itens, setItens] = useState<IItem[]>([]);
 
   useEffect(() => {
-    fetch(`/api/sandra/item/${tipoItemId}`)
+    fetch(`/api/sandra/item/tipoItem/${tipoItemId}`)
       .then((res) => res.json())
       .then((data) => {
-        setItems(data.data);
+        setItens(data.data);
       })
       .catch((err) => {
         // TODO: add toast error
         console.error(err);
       });
-  }, []);
+  }, [tipoItemId]);
 
-  if (!item) {
+  if (!itens) {
     return (
       <div className="flex flex-col space-y-3 items-center justify-center my-8">
         <Skeleton className="h-[125px] w-[250px] rounded-xl" />
@@ -59,9 +59,10 @@ export default function ListaItensPorTipoItem({
     <div className="max-w-4xl mx-auto my-8">
       <Card>
         <CardHeader>
-          <CardTitle>Itens do restaurante</CardTitle>
+          <CardTitle>{itens[0]?.tipoItem.descricao}</CardTitle>
           <CardDescription>
-            Administre os itens do seu restaurante por tipo
+            Administre {itens[0]?.tipoItem.descricao.toLowerCase()} do seu
+            restaurante
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -71,14 +72,13 @@ export default function ListaItensPorTipoItem({
                 <TableHead className="hidden w-[100px] sm:table-cell">
                   <span className="sr-only">Image</span>
                 </TableHead>
-
                 <TableHead># id</TableHead>
                 <TableHead>Descrição</TableHead>
                 <TableHead>Modificar</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {item.map((item) => (
+              {itens.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell className="hidden sm:table-cell">
                     <ChefHatIcon />

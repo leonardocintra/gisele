@@ -28,16 +28,32 @@ import {
 } from "@/components/ui/select";
 
 type ItemFormProps = {
-  item?: IItem;
+  itemId?: number;
 };
 
-export default function ItemForm({ item }: ItemFormProps) {
+export default function ItemForm({ itemId }: ItemFormProps) {
   const router = useRouter();
   const { toast } = useToast();
 
   const [tipoItens, setTipoItens] = useState<IItemTipo[]>([]);
+  const [item, setItem] = useState<IItem>();
 
   useEffect(() => {
+    if (itemId && itemId > 0) {
+      fetch(`/api/sandra/item/${itemId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setItem(data.data);
+        })
+        .catch((err) => {
+          toast({
+            title: `Não conseguimos buscar o item no sistema.`,
+            variant: "destructive",
+            description: `Erro: ${err.message}`,
+          });
+        });
+    }
+
     fetch("/api/sandra/tipo-itens")
       .then((res) => res.json())
       .then((data) => {
@@ -50,7 +66,7 @@ export default function ItemForm({ item }: ItemFormProps) {
           description: `Erro: ${err.message}`,
         });
       });
-  }, []);
+  }, [itemId]);
 
   const formSchema = z.object({
     descricao: z.string().max(60).min(2),
@@ -60,7 +76,7 @@ export default function ItemForm({ item }: ItemFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      descricao: "",
+      descricao: item?.descricao || "",
       tipoItemId: "",
     },
   });
@@ -74,7 +90,7 @@ export default function ItemForm({ item }: ItemFormProps) {
   }
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-    let url = `${BASE_URL}/api/sandra/item`;
+    let url = `${BASE_URL}/api/sandra/item/tipoItem`;
     let method = "POST";
 
     const res = await fetch(url, {
@@ -126,7 +142,7 @@ export default function ItemForm({ item }: ItemFormProps) {
                 <FormLabel>Tipo</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={item?.tipoItem.id.toString()}
+                  // defaultValue={item?.tipoItem.id.toString()}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -156,7 +172,7 @@ export default function ItemForm({ item }: ItemFormProps) {
               <FormItem>
                 <FormLabel>Descrição</FormLabel>
                 <FormControl>
-                  <Input placeholder="Tipo de item ..." {...field} />
+                  <Input placeholder="Nome do item ..." {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

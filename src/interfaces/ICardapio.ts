@@ -1,7 +1,7 @@
-import { IItemData } from "@/interfaces/IItem";
+import { IItem } from "./IItem";
 
 export interface ICardapio {
   id: number;
   data_cardapio: Date;
-  items: IItemData;
+  items: IItem;
 }
