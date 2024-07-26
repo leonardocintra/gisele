@@ -1,7 +1,7 @@
 "use client";
 
-import { ITipoMarmitex } from "@/interfaces/ITipoMarmitex";
 import { useEffect, useState } from "react";
+import { ITipoMarmitex } from "restaurante";
 
 export default function TiposMarmitex() {
   const [tipos, setTipos] = useState<ITipoMarmitex[]>([]);

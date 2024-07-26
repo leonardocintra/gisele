@@ -21,7 +21,7 @@ import {
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
-import { IItemTipo } from "@/interfaces/IItemTIpo";
+import { IItemTipo } from "restaurante";
 
 export default function ListaTipoItens() {
   const [itens, setItems] = useState<IItemTipo[]>([]);

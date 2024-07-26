@@ -1,6 +1,6 @@
-import { IItem } from "@/interfaces/IItem";
 import { SANDRA_BASE_URL } from "@/lib/utils";
 import { NextRequest } from "next/server";
+import { IItem } from "restaurante";
 
 const url = `${SANDRA_BASE_URL}`;
 

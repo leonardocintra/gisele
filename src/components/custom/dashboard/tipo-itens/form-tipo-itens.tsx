@@ -15,8 +15,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { IItemTipo } from "@/interfaces/IItemTIpo";
 import { BASE_URL } from "@/lib/utils";
+import { IItemTipo } from "restaurante";
 
 type ItemTipoFormProps = {
   itemTipo?: IItemTipo;

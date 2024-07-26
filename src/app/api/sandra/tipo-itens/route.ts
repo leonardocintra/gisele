@@ -1,5 +1,5 @@
-import { IItemTipo } from "@/interfaces/IItemTIpo";
 import { RESTAURANTE_TEMPEIRO_E_AMOR_ID, SANDRA_BASE_URL } from "@/lib/utils";
+import { IItemTipo } from "restaurante"
 
 const url = `${SANDRA_BASE_URL}/tipo-item`;
 

@@ -20,7 +20,7 @@ import {
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
-import { IItem } from "@/interfaces/IItem";
+import { IItem } from "restaurante";
 
 type ListaItensPorTipoItemProps = {
   tipoItemId: number;

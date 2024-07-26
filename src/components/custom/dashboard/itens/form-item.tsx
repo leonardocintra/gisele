@@ -15,9 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { IItemTipo } from "@/interfaces/IItemTIpo";
 import { BASE_URL } from "@/lib/utils";
-import { IItem } from "@/interfaces/IItem";
 import { useEffect, useState } from "react";
 import {
   Select,
@@ -26,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { IItem, IItemTipo } from "restaurante";
 
 type ItemFormProps = {
   itemId?: number;
@@ -66,7 +65,7 @@ export default function ItemForm({ itemId }: ItemFormProps) {
           description: `Erro: ${err.message}`,
         });
       });
-  }, [itemId]);
+  }, [itemId, toast]);
 
   const formSchema = z.object({
     descricao: z.string().max(60).min(2),
