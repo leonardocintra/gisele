@@ -28,8 +28,7 @@ export default function ListaTipoItens() {
     fetch("/api/sandra/item")
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        setItems(data.data);
+        setItems(data);
       })
       .catch((err) => {
         console.error(err);
