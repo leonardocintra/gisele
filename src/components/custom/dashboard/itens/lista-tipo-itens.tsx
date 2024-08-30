@@ -2,7 +2,6 @@
 
 import { ChefHatIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -20,16 +19,16 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import Link from "next/link";
-import { IItemTipo } from "restaurante";
+import { IItem } from "restaurante";
 
 export default function ListaTipoItens() {
-  const [itens, setItems] = useState<IItemTipo[]>([]);
+  const [itens, setItems] = useState<IItem[]>([]);
 
   useEffect(() => {
-    fetch("/api/sandra/tipo-itens")
+    fetch("/api/sandra/item")
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         setItems(data.data);
       })
       .catch((err) => {
@@ -65,28 +64,28 @@ export default function ListaTipoItens() {
                 <span className="sr-only">Image</span>
               </TableHead>
 
-              <TableHead># id</TableHead>
-              <TableHead>Descrição</TableHead>
+              <TableHead>Tipo</TableHead>
               <TableHead className="hidden md:table-cell">Itens</TableHead>
               <TableHead>Modificar</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {itens.map((item) => (
-              <TableRow key={item.id}>
+              <TableRow key={item.tipo}>
                 <TableCell className="hidden sm:table-cell">
                   <ChefHatIcon />
                 </TableCell>
                 <TableCell className="font-medium text-slate-500">
-                  #{item.id}
+                  {item.tipo}
                 </TableCell>
-                <TableCell className="font-medium">{item.descricao}</TableCell>
                 <TableCell className="hidden md:table-cell">
-                  <Link href={`tipo-itens/${item.id}`}>
-                    <Button variant={"link"} className="text-destructive">
-                      Gerenciar
-                    </Button>
-                  </Link>
+                  {item.items.map((item, index) => (
+                    <div key={index}>
+                      <span>{item}</span>
+                      <br />
+                      <br />
+                    </div>
+                  ))}
                 </TableCell>
                 <TableCell>Editar</TableCell>
               </TableRow>

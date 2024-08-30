@@ -30,12 +30,9 @@ export default async function DashboardLayout({
           <Button>Pedidos</Button>
         </Link>
         <Link href={"/dashboard/cardapio"}>
-          <Button>Cardapio do dia</Button>
+          <Button variant={"secondary"}>Cardapio do dia</Button>
         </Link>
-        <Link href={"/dashboard/marmitex"}>
-          <Button variant={"secondary"}>Marmitex</Button>
-        </Link>
-        <Link href={"/dashboard/tipo-itens"}>
+        <Link href={"/dashboard/item"}>
           <Button
             className="hover:bg-primary hover:text-white"
             variant={"secondary"}

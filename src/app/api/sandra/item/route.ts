@@ -4,11 +4,8 @@ import { IItem } from "restaurante";
 
 const url = `${SANDRA_BASE_URL}`;
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: number } }
-) {
-  const res = await fetch(`${url}/item/${params.id}`, {
+export async function GET(req: NextRequest) {
+  const res = await fetch(`${url}/item`, {
     next: { revalidate: 10 },
   });
 
@@ -30,9 +27,9 @@ export async function GET(
 export async function POST(req: Request) {
   const data = await req.json();
 
-  const item: Partial<IItem> = {
-    descricao: data.descricao,
-    tipoItemId: +data.tipoItemId,
+  const item: IItem = {
+    tipo: "carne",
+    items: data.items
   };
 
   const res = await fetch(`${url}/item`, {

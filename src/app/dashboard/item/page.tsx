@@ -7,9 +7,9 @@ export default function ItemPageDashboard() {
     <div>
       <div className="max-w-3xl mx-auto">
         <div className="mb-8 flex justify-end">
-          <Link href={"/dashboard/tipo-itens/novo/"}>
-            <Button className="bg-green-600">Novo tipo de item</Button>
-          </Link>
+          <Button disabled className="bg-green-600">
+            Novo tipo de item
+          </Button>
         </div>
         <div className="my-8">
           <ListaTipoItens />
