@@ -12,16 +12,27 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Beef, Salad, Soup } from "lucide-react";
 import { useEffect, useState } from "react";
 import { IItem } from "restaurante";
 
 export default function ListaCardapio() {
   const [itens, setItens] = useState<IItem[]>([]);
+  const [cardapio, setCardapio] = useState<IItem[]>([]);
+
+  useEffect(() => {
+    // TODO: salvar no bd
+    console.log(cardapio);
+  }, [cardapio]);
 
   useEffect(() => {
     fetch("/api/sandra/item")
       .then((response) => response.json())
       .then((data) => setItens(data));
+
+    fetch("/api/sandra/cardapio")
+      .then((response) => response.json())
+      .then((data) => setCardapio(data));
   }, []);
 
   if (itens && itens.length < 1) {
@@ -32,13 +43,42 @@ export default function ListaCardapio() {
     );
   }
 
+  function itemJaSelecionado(tipo: string, item: string): boolean {
+    return cardapio.some((c) => c.tipo === tipo && c.items.includes(item));
+  }
+
+  function incluirRemoverItemCardapio(tipo: string, item: string) {
+    setCardapio((prevCardapio) =>
+      prevCardapio.map((c) => {
+        if (c.tipo === tipo) {
+          const itemExists = c.items.includes(item);
+          return {
+            ...c,
+            items: itemExists
+              ? c.items.filter((i) => i !== item) // Remove o item se existir
+              : [...c.items, item], // Adiciona o item se não existir
+          };
+        }
+        return c;
+      })
+    );
+  }
+
   return (
     <div className="max-w-md mx-auto my-8">
       <Tabs defaultValue="carnes">
         <TabsList className="flex">
-          <TabsTrigger value="carnes">Carnes</TabsTrigger>
-          <TabsTrigger value="guarnicao">Guarnicao</TabsTrigger>
-          <TabsTrigger value="salada">Salada</TabsTrigger>
+          <TabsTrigger value="carnes">
+            <Beef /> Carnes
+          </TabsTrigger>
+          <TabsTrigger value="guarnicao">
+            <Soup />
+            Guarnicao
+          </TabsTrigger>
+          <TabsTrigger value="salada">
+            <Salad />
+            Salada
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="carnes">
@@ -57,9 +97,7 @@ export default function ListaCardapio() {
                     items.items.map((item) => (
                       <TableRow key={item.trim().toLowerCase()}>
                         <TableCell>{item}</TableCell>
-                        <TableCell>
-                          <Switch id={item.trim().toLowerCase()} />
-                        </TableCell>
+                        <TableCell>{renderToggle(item, "carne")}</TableCell>
                       </TableRow>
                     ))
                   )}
@@ -84,9 +122,7 @@ export default function ListaCardapio() {
                     items.items.map((item) => (
                       <TableRow key={item.trim().toLowerCase()}>
                         <TableCell>{item}</TableCell>
-                        <TableCell>
-                          <Switch id={item.trim().toLowerCase()} />
-                        </TableCell>
+                        <TableCell>{renderToggle(item, "guarnicao")}</TableCell>
                       </TableRow>
                     ))
                   )}
@@ -111,9 +147,7 @@ export default function ListaCardapio() {
                     items.items.map((item) => (
                       <TableRow key={item.trim().toLowerCase()}>
                         <TableCell>{item}</TableCell>
-                        <TableCell>
-                          <Switch id={item.trim().toLowerCase()} />
-                        </TableCell>
+                        <TableCell>{renderToggle(item, "salada")}</TableCell>
                       </TableRow>
                     ))
                   )}
@@ -124,4 +158,16 @@ export default function ListaCardapio() {
       </Tabs>
     </div>
   );
+
+  function renderToggle(item: String, tipo: string) {
+    return (
+      <Switch
+        checked={itemJaSelecionado(tipo, item.toString())}
+        onCheckedChange={() =>
+          incluirRemoverItemCardapio(tipo, item.toString())
+        }
+        id={item.trim().toLowerCase()}
+      />
+    );
+  }
 }

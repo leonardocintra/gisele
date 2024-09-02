@@ -1,6 +1,6 @@
 "use client";
 
-import { ChefHatIcon } from "lucide-react";
+import { Beef, ChefHatIcon, Salad, Soup } from "lucide-react";
 
 import {
   Card,
@@ -47,6 +47,19 @@ export default function ListaTipoItens() {
     );
   }
 
+  function getIcon(tipo: string) {
+    switch (tipo) {
+      case "carne":
+        return <Beef />;
+      case "guarnicao":
+        return <Soup />;
+      case "salada":
+        return <Salad />;
+      default:
+        return <ChefHatIcon />;
+    }
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -72,7 +85,7 @@ export default function ListaTipoItens() {
             {itens.map((item) => (
               <TableRow key={item.tipo}>
                 <TableCell className="hidden sm:table-cell">
-                  <ChefHatIcon />
+                  {getIcon(item.tipo)}
                 </TableCell>
                 <TableCell className="font-medium text-slate-500">
                   {item.tipo}

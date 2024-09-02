@@ -6,7 +6,7 @@ import {
 import Link from "next/link";
 import { JSX, SVGProps } from "react";
 import { Button } from "../ui/button";
-import { LayoutDashboardIcon } from "lucide-react";
+import { ChefHatIcon, LayoutDashboardIcon } from "lucide-react";
 
 type HeaderProps = {
   isAuthenticated: boolean;
@@ -20,7 +20,7 @@ export default function Header({ isAuthenticated }: HeaderProps) {
           className="flex items-center gap-2 text-lg font-semibold"
           href="/"
         >
-          <PackageIcon className="w-5 h-5" />
+          <ChefHatIcon className="w-5 h-5" />
           <span>Meu restaurante</span>
         </Link>
 
