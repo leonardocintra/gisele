@@ -14,16 +14,34 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Beef, Salad, Soup } from "lucide-react";
 import { useEffect, useState } from "react";
-import { IItem } from "restaurante";
+import { ICardapio, IItem } from "restaurante";
 
 export default function ListaCardapio() {
+  const MENSAGEM_SALVA = "Cardapio atualizado!";
+
   const [itens, setItens] = useState<IItem[]>([]);
-  const [cardapio, setCardapio] = useState<IItem[]>([]);
+  const [cardapio, setCardapio] = useState<ICardapio[]>([]);
+  const [isInteracting, setIsInteracting] = useState(false);
+  const [mensagemSalvamento, setMensagemSalvamento] = useState(MENSAGEM_SALVA);
 
   useEffect(() => {
-    // TODO: salvar no bd
-    console.log(cardapio);
-  }, [cardapio]);
+    // Função que será chamada para salvar automaticamente após 2 segundos
+    const salvarAutomaticamente = () => {
+      salvarNoBancoDeDados(cardapio);
+    };
+
+    // Defina um temporizador de 2 segundos
+    const timer = setTimeout(() => {
+      if (isInteracting) {
+        salvarAutomaticamente();
+        setIsInteracting(false);
+        setMensagemSalvamento(MENSAGEM_SALVA); // Reseta o estado de interação
+      }
+    }, 3000);
+
+    // Limpa o temporizador se o usuário interagir antes de 2 segundos
+    return () => clearTimeout(timer);
+  }, [cardapio, isInteracting]);
 
   useEffect(() => {
     fetch("/api/sandra/item")
@@ -41,6 +59,10 @@ export default function ListaCardapio() {
         <Skeleton />
       </div>
     );
+  }
+
+  function salvarNoBancoDeDados(cardapio: ICardapio[]) {
+    console.log("Usuario não esta mexendo - Vou salvar no BD");
   }
 
   function itemJaSelecionado(tipo: string, item: string): boolean {
@@ -62,10 +84,16 @@ export default function ListaCardapio() {
         return c;
       })
     );
+    setIsInteracting(true);
+    setMensagemSalvamento("Salvando ...");
   }
 
   return (
     <div className="max-w-md mx-auto my-8">
+      <div className={`text-center my-3 italic text-slate-500`}>
+        {mensagemSalvamento}
+      </div>
+
       <Tabs defaultValue="carnes">
         <TabsList className="flex">
           <TabsTrigger value="carnes">
@@ -87,7 +115,7 @@ export default function ListaCardapio() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Carne</TableHead>
-                  <TableHead>Disponivel</TableHead>
+                  <TableHead className="text-right">Disponivel</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -97,7 +125,9 @@ export default function ListaCardapio() {
                     items.items.map((item) => (
                       <TableRow key={item.trim().toLowerCase()}>
                         <TableCell>{item}</TableCell>
-                        <TableCell>{renderToggle(item, "carne")}</TableCell>
+                        <TableCell className="text-right">
+                          {renderToggle(item, "carne")}
+                        </TableCell>
                       </TableRow>
                     ))
                   )}
@@ -112,7 +142,7 @@ export default function ListaCardapio() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Guarnição</TableHead>
-                  <TableHead>Disponivel</TableHead>
+                  <TableHead className="text-right">Disponivel</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -122,7 +152,9 @@ export default function ListaCardapio() {
                     items.items.map((item) => (
                       <TableRow key={item.trim().toLowerCase()}>
                         <TableCell>{item}</TableCell>
-                        <TableCell>{renderToggle(item, "guarnicao")}</TableCell>
+                        <TableCell className="text-right">
+                          {renderToggle(item, "guarnicao")}
+                        </TableCell>
                       </TableRow>
                     ))
                   )}
@@ -137,7 +169,7 @@ export default function ListaCardapio() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Saladas</TableHead>
-                  <TableHead>Disponivel</TableHead>
+                  <TableHead className="text-right">Disponivel</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -147,7 +179,9 @@ export default function ListaCardapio() {
                     items.items.map((item) => (
                       <TableRow key={item.trim().toLowerCase()}>
                         <TableCell>{item}</TableCell>
-                        <TableCell>{renderToggle(item, "salada")}</TableCell>
+                        <TableCell className="text-right">
+                          {renderToggle(item, "salada")}
+                        </TableCell>
                       </TableRow>
                     ))
                   )}
