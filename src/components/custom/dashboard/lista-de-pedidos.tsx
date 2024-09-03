@@ -1,3 +1,5 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -9,53 +11,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Pago",
-    totalAmount: "R$ 25.00",
-    paymentMethod: "Retirar no local",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pendente",
-    totalAmount: "R$ 15.00",
-    paymentMethod: "Entregar",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Pendente",
-    totalAmount: "R$ 35.00",
-    paymentMethod: "Retirar no local",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Pago",
-    totalAmount: "R$ 45.00",
-    paymentMethod: "Retirar no local",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Pago",
-    totalAmount: "R$ 55.00",
-    paymentMethod: "Entregar",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pendente",
-    totalAmount: "R$ 20.00",
-    paymentMethod: "Retirar no local",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Pendente",
-    totalAmount: "R$ 30.00",
-    paymentMethod: "Retirar no local",
-  },
-];
+import { PersonStanding, PhoneIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { IPedido } from "restaurante";
 
 export function ListaDePedidos() {
+  const [pedidos, setPedidos] = useState<IPedido[]>([]);
+
+  useEffect(() => {
+    fetch("/api/sandra/pedido")
+      .then((res) => res.json())
+      .then((data) => {
+        setPedidos(data);
+      });
+  }, []);
+
+  if (!pedidos || pedidos.length === 0) {
+    return <p>Nenhum pedido encontrado.</p>;
+  }
+
   return (
     <div>
       <div className="max-w-2xl mx-auto">
@@ -63,30 +37,34 @@ export function ListaDePedidos() {
           <TableCaption>Ultimos pedidos</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="">Pedido</TableHead>
+              <TableHead>Pedido</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Modalidade</TableHead>
-              <TableHead className="">Valor</TableHead>
+              <TableHead>Cliente</TableHead>
+              <TableHead>Whatsapp</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {invoices.map((invoice) => (
-              <TableRow key={invoice.invoice}>
-                <TableCell className="font-medium">{invoice.invoice}</TableCell>
+            {pedidos.map((pedido) => (
+              <TableRow key={pedido.pedidoId}>
+                <TableCell className="font-medium">{pedido.pedidoId}</TableCell>
                 <TableCell>
-                  <Badge>{invoice.paymentStatus}</Badge>
+                  <Badge>Pronto</Badge>
                 </TableCell>
-                <TableCell>{invoice.paymentMethod}</TableCell>
-                <TableCell className="">{invoice.totalAmount}</TableCell>
+                <TableCell>
+                  <div className="flex space-x-2">
+                    <PersonStanding />
+                    <div>{pedido.nome}</div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex space-x-2">
+                    <PhoneIcon />
+                    <div>{pedido.telefone}</div>
+                  </div>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan={3}>Total</TableCell>
-              <TableCell className="">R$ 36,00</TableCell>
-            </TableRow>
-          </TableFooter>
         </Table>
       </div>
     </div>
