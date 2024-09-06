@@ -27,7 +27,11 @@ export function ListaDePedidos() {
   }, []);
 
   if (!pedidos || pedidos.length === 0) {
-    return <p>Nenhum pedido encontrado.</p>;
+    return (
+      <div className="text-4xl text-center my-12 text-slate-700">
+        <p>Por enquanto não tem nenhum pedido hoje :( </p>
+      </div>
+    );
   }
 
   return (
