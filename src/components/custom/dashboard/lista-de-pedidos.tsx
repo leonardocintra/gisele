@@ -18,7 +18,6 @@ import {
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -26,9 +25,27 @@ import {
 import { PersonStanding, PhoneIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { IPedido } from "restaurante";
+import io from "socket.io-client";
 
 export function ListaDePedidos() {
   const [pedidos, setPedidos] = useState<IPedido[]>([]);
+  const [temNovoPedido, setTemNovoPedido] = useState(false);
+
+  useEffect(() => {
+    // Inicializa a conexão com o socket
+    const socket = io("http://localhost:3006");
+
+    // Escuta por novos pedidos
+    socket.on("novo-pedido-gerado", (order: IPedido) => {
+      setPedidos((prevPedidos) => [...prevPedidos, order]);
+      setTemNovoPedido(true);
+    });
+
+    // Cleanup na desmontagem do componente
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     fetch("/api/sandra/pedido")
@@ -92,6 +109,13 @@ export function ListaDePedidos() {
   return (
     <div>
       <div className="max-w-3xl mx-auto">
+        <div className="text-center my-2">
+          <h2>
+            {temNovoPedido
+              ? "Opa tem novo pedido"
+              : "Não tem novo pedido manin"}
+          </h2>
+        </div>
         <Table>
           <TableCaption>Ultimos pedidos</TableCaption>
           <TableHeader>
