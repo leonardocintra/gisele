@@ -50,7 +50,7 @@ export function ListaDePedidos() {
   }, []);
 
   useEffect(() => {
-    fetch("/api/sandra/pedido")
+    fetch("/api/sandra/pedido", { cache: "no-cache" })
       .then((res) => res.json())
       .then((data) => {
         setPedidos(data);
@@ -86,7 +86,9 @@ export function ListaDePedidos() {
             ))}
           </div>
           <DialogFooter>
-            <Button variant={"destructive"} type="button">Cancelar pedido</Button>
+            <Button variant={"destructive"} type="button">
+              Cancelar pedido
+            </Button>
             <Button type="button">Imprimir</Button>
           </DialogFooter>
         </DialogContent>

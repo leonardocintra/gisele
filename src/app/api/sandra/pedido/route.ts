@@ -5,7 +5,7 @@ const url = `${SANDRA_BASE_URL}`;
 
 export async function GET(req: NextRequest) {
   const res = await fetch(`${url}/pedido`, {
-    next: { revalidate: 2 },
+    cache: "no-cache"
   });
 
   if (res.status === 404) {
