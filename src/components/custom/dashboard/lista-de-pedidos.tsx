@@ -35,6 +35,7 @@ export function ListaDePedidos() {
     // Inicializa a conexão com o socket
     // TODO: alterar para .env
     const socket = io("https://restaurante-worker-isadora.ypg4r9.easypanel.host");
+    //const socket = io("http://localhost:3006");
 
     // Escuta por novos pedidos
     socket.on("novo-pedido-gerado", (order: IPedido) => {
