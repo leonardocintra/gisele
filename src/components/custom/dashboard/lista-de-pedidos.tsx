@@ -34,9 +34,7 @@ export function ListaDePedidos() {
   useEffect(() => {
     // Inicializa a conexão com o socket
     // TODO: alterar para .env
-    const socket = io(
-      "https://socket-isadora.ypg4r9.easypanel.host"
-    );
+    const socket = io("https://socket-isadora.ypg4r9.easypanel.host");
     //const socket = io("http://localhost:3006");
 
     // Escuta por novos pedidos
@@ -67,7 +65,7 @@ export function ListaDePedidos() {
     );
   }
 
-  function renderItemsDialog() {
+  function renderItemsDialog(items: string[]) {
     return (
       <Dialog>
         <DialogTrigger asChild>
@@ -81,29 +79,15 @@ export function ListaDePedidos() {
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input
-                id="name"
-                defaultValue="Pedro Duarte"
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
-                Username
-              </Label>
-              <Input
-                id="username"
-                defaultValue="@peduarte"
-                className="col-span-3"
-              />
-            </div>
+            {items.map((item, index) => (
+              <div key={index}>
+                <p> - {item}</p>
+              </div>
+            ))}
           </div>
           <DialogFooter>
-            <Button type="submit">Save changes</Button>
+            <Button variant={"destructive"} type="button">Cancelar pedido</Button>
+            <Button type="button">Imprimir</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -150,7 +134,7 @@ export function ListaDePedidos() {
                     <div>{pedido.telefone}</div>
                   </div>
                 </TableCell>
-                <TableCell>{renderItemsDialog()}</TableCell>
+                <TableCell>{renderItemsDialog(pedido.items)}</TableCell>
               </TableRow>
             ))}
           </TableBody>
