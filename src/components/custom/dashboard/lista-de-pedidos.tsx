@@ -11,8 +11,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Table,
   TableBody,
@@ -65,11 +63,11 @@ export function ListaDePedidos() {
     );
   }
 
-  function renderItemsDialog(items: string[]) {
+  function renderItemsDialog(items: string[], nomeCliente: string) {
     return (
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="link">Verificar itens</Button>
+          <Button variant="link">Verificar itens de {nomeCliente} </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -127,7 +125,9 @@ export function ListaDePedidos() {
                 <TableCell>
                   <div className="flex space-x-2">
                     <PersonStanding />
-                    <div>{pedido.nome}</div>
+                    <div>
+                      {pedido.nome} {pedido.sobrenome}
+                    </div>
                   </div>
                 </TableCell>
                 <TableCell>
@@ -136,7 +136,9 @@ export function ListaDePedidos() {
                     <div>{pedido.telefone}</div>
                   </div>
                 </TableCell>
-                <TableCell>{renderItemsDialog(pedido.items)}</TableCell>
+                <TableCell>
+                  {renderItemsDialog(pedido.items, pedido.nome)}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
