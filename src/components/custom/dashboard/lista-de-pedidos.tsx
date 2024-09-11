@@ -67,13 +67,13 @@ export function ListaDePedidos() {
     return (
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="link">Verificar itens de {nomeCliente} </Button>
+          <Button variant="link">Verificar itens </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Passei pra muié montar</DialogTitle>
+            <DialogTitle>Cliente: {nomeCliente}</DialogTitle>
             <DialogDescription>
-              Aqui irá aparecer os itens que o caboclo pediu
+              Itens carne, guarnições e salada do pedido
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
