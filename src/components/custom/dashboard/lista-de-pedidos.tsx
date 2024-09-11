@@ -30,10 +30,19 @@ export function ListaDePedidos() {
   const [temNovoPedido, setTemNovoPedido] = useState(false);
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setTemNovoPedido(false);
+    }, 3000);
+
+    // Limpa o timer quando o componente é desmontado
+    return () => clearTimeout(timer);
+  });
+
+  useEffect(() => {
     // Inicializa a conexão com o socket
     // TODO: alterar para .env
-    const socket = io("https://socket-isadora.ypg4r9.easypanel.host");
-    //const socket = io("http://localhost:3006");
+    //const socket = io("https://socket-isadora.ypg4r9.easypanel.host");
+    const socket = io("http://localhost:3006");
 
     // Escuta por novos pedidos
     socket.on("novo-pedido-gerado", (order: IPedido) => {
@@ -97,12 +106,12 @@ export function ListaDePedidos() {
   return (
     <div>
       <div className="max-w-3xl mx-auto">
-        <div className="text-center my-2">
-          <h2>
-            {temNovoPedido
-              ? "Opa tem novo pedido"
-              : "Não tem novo pedido manin"}
-          </h2>
+        <div className="text-center my-2 italic text-slate-500">
+          {temNovoPedido ? (
+            <div className="text-green-700 font-bold">Novo pedidooo!!</div>
+          ) : (
+            <div>Aguardando novos pedidos ...</div>
+          )}
         </div>
         <Table>
           <TableCaption>Ultimos pedidos</TableCaption>
