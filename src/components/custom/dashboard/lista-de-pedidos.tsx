@@ -40,9 +40,7 @@ export function ListaDePedidos() {
 
   useEffect(() => {
     // Inicializa a conexão com o socket
-    // TODO: alterar para .env
-    //const socket = io("https://socket-isadora.ypg4r9.easypanel.host");
-    const socket = io("http://localhost:3006");
+    const socket = io(process.env.NEXT_PUBLIC_ISADORA_SOCKET_URL as string);
 
     // Escuta por novos pedidos
     socket.on("novo-pedido-gerado", (order: IPedido) => {
