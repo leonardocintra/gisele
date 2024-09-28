@@ -2,10 +2,10 @@ import { SANDRA_BASE_URL } from "@/lib/utils";
 import { NextRequest } from "next/server";
 import { ICardapio } from "restaurante";
 
-const url = `${SANDRA_BASE_URL}`;
+const baseUrl = `${SANDRA_BASE_URL}`;
 
 export async function GET(req: NextRequest) {
-  const res = await fetch(`${url}/cardapio`, {
+  const res = await fetch(`${baseUrl}/cardapio`, {
     cache: "no-cache"
   });
 
@@ -25,6 +25,14 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: Request) {
+  return _insertOrUpdateCardapio(req, false);
+}
+
+export async function PATCH(req: Request) {
+  return _insertOrUpdateCardapio(req, true);
+}
+
+async function _insertOrUpdateCardapio(req: Request, isUpdate: boolean) {
   const data = await req.json();
 
   const cardapio: ICardapio = {
@@ -33,8 +41,16 @@ export async function POST(req: Request) {
     items: data.items,
   };
 
-  const res = await fetch(`${url}/cardapio`, {
-    method: "POST",
+  let url = `${baseUrl}/cardapio`;
+  let method = "POST";
+
+  if (isUpdate) {
+    url += `/${cardapio.restaurante}`;
+    method = "PATCH";
+  }
+
+  const res = await fetch(url, {
+    method,
     headers: {
       "Content-Type": "application/json",
     },
@@ -52,9 +68,9 @@ export async function POST(req: Request) {
     );
   }
 
-  if (res.status === 201) {
+  if (res.status === 201 || res.status === 200) {
     return Response.json(res, {
-      status: 201,
+      status: res.status,
     });
   } else {
     return Response.json(

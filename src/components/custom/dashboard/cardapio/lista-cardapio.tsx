@@ -25,12 +25,15 @@ export default function ListaCardapio() {
   const [mensagemSalvamento, setMensagemSalvamento] = useState(MENSAGEM_SALVA);
 
   useEffect(() => {
-    // Função que será chamada para salvar automaticamente após 2 segundos
+    // Função que será chamada para salvar automaticamente após 3 segundos
     const salvarAutomaticamente = () => {
-      salvarNoBancoDeDados(cardapio);
+      cardapio.map((c) => {
+        insertOrUpdateCardapio(c);
+      });
+      console.log("Cardapio atualizado!");
     };
 
-    // Defina um temporizador de 2 segundos
+    // Defina um temporizador de 3 segundos
     const timer = setTimeout(() => {
       if (isInteracting) {
         salvarAutomaticamente();
@@ -61,8 +64,14 @@ export default function ListaCardapio() {
     );
   }
 
-  function salvarNoBancoDeDados(cardapio: ICardapio[]) {
-    console.log("Usuario não esta mexendo - Vou salvar no BD");
+  function insertOrUpdateCardapio(cardapio: ICardapio) {
+    fetch("/api/sandra/cardapio", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cardapio),
+    });
   }
 
   function itemJaSelecionado(tipo: string, item: string): boolean {
