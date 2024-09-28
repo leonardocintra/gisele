@@ -1,18 +1,18 @@
-import {
-  LoginLink,
-  LogoutLink,
-  RegisterLink,
-} from "@kinde-oss/kinde-auth-nextjs/components";
+import { LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import Link from "next/link";
 import { JSX, SVGProps } from "react";
 import { Button } from "../ui/button";
 import { ChefHatIcon, LayoutDashboardIcon } from "lucide-react";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
 type HeaderProps = {
   isAuthenticated: boolean;
 };
 
-export default function Header({ isAuthenticated }: HeaderProps) {
+export default async function Header({ isAuthenticated }: HeaderProps) {
+  const { getOrganization } = getKindeServerSession();
+  const organization = await getOrganization();
+
   return (
     <header className="flex items-center h-16 px-4 w-full md:px-6">
       <div className="flex items-center gap-2">
@@ -21,17 +21,23 @@ export default function Header({ isAuthenticated }: HeaderProps) {
           href="/"
         >
           <ChefHatIcon className="w-5 h-5" />
-          <span>Meu restaurante</span>
+
+          <span>Meu restaurante {organization?.orgName}</span>
         </Link>
 
         {isAuthenticated && (
-          <Link
-            className="flex items-center gap-2 text-lg font-semibold text-emerald-800 bg-slate-200 hover:bg-slate-300 py-2 px-4 rounded-md"
-            href="/dashboard"
-          >
-            <LayoutDashboardIcon />
-            <span>Minha área</span>
-          </Link>
+          <div className="flex items-center space-x-3">
+            <Link
+              className="flex items-center gap-2 text-lg font-semibold text-emerald-800 bg-slate-200 hover:bg-slate-300 py-2 px-4 rounded-md"
+              href="/dashboard"
+            >
+              <LayoutDashboardIcon />
+              <span>Minha área</span>
+            </Link>
+            <span className="text-xs text-slate-400 font-light">
+              code: {organization?.orgCode}
+            </span>
+          </div>
         )}
       </div>
       <nav className="ml-auto flex items-center space-x-2">
@@ -45,9 +51,9 @@ export default function Header({ isAuthenticated }: HeaderProps) {
               <Button>Entrar</Button>
             </LoginLink>
 
-            <RegisterLink>
-              <Button variant={"ghost"}>Criar uma conta</Button>
-            </RegisterLink>
+            <Link href={"/novo-restaurante"}>
+              <Button variant={"ghost"}>Criar meu restaurante</Button>
+            </Link>
           </>
         )}
       </nav>

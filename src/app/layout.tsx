@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "Admin Restaurante",
+    title: "Seu restaurante",
     description: "Facilita sua vida na cozinha",
   };
 }
