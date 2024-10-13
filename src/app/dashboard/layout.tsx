@@ -1,30 +1,29 @@
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({
-  children, // will be a page or nested layout
+  children,
 }: {
   children: React.ReactNode;
 }) {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
+  const { getOrganization, getUser } = getKindeServerSession();
+  const organization = await getOrganization();
 
-  if (!user) {
-    return (
-      <div className="flex items-center space-x-4">
-        <Skeleton className="h-12 w-12 rounded-full" />
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-[250px]" />
-          <Skeleton className="h-4 w-[200px]" />
-        </div>
-      </div>
-    );
+  if (!organization || organization.orgCode === null) {
+    redirect("/novo-restaurante");
   }
+
+  const user = await getUser();
 
   return (
     <div>
+      <div className="text-center text-slate-400">
+        <h2>
+          {JSON.stringify(organization)} - User ID: {user.id}
+        </h2>
+      </div>
       <div className="flex justify-center my-8 gap-2">
         <Link href={"/dashboard"}>
           <Button>Pedidos</Button>

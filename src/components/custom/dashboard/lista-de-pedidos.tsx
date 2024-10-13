@@ -26,6 +26,7 @@ import { IPedido } from "restaurante";
 import io from "socket.io-client";
 
 export function ListaDePedidos() {
+  
   const [pedidos, setPedidos] = useState<IPedido[]>([]);
   const [temNovoPedido, setTemNovoPedido] = useState(false);
 
