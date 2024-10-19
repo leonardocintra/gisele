@@ -5,7 +5,10 @@ import { ICardapio } from "restaurante";
 const baseUrl = `${SANDRA_BASE_URL}`;
 
 export async function GET(req: NextRequest) {
-  const res = await fetch(`${baseUrl}/cardapio`, {
+  const { searchParams } = new URL(req.url);
+  const restauranteId = searchParams.get('restauranteId')
+
+  const res = await fetch(`${baseUrl}/cardapio/${restauranteId}`, {
     cache: "no-cache"
   });
 
@@ -33,10 +36,13 @@ export async function PATCH(req: Request) {
 }
 
 async function _insertOrUpdateCardapio(req: Request, isUpdate: boolean) {
+  const { searchParams } = new URL(req.url);
+  const restauranteId = searchParams.get('restauranteId')
+
   const data = await req.json();
 
   const cardapio: ICardapio = {
-    restaurante: "tempeiro-e-amor",
+    restaurante: restauranteId as string,
     tipo: data.tipo,
     items: data.items,
   };
@@ -45,7 +51,7 @@ async function _insertOrUpdateCardapio(req: Request, isUpdate: boolean) {
   let method = "POST";
 
   if (isUpdate) {
-    url += `/${cardapio.restaurante}`;
+    url += `/${restauranteId}`;
     method = "PATCH";
   }
 

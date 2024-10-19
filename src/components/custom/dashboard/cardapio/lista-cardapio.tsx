@@ -1,5 +1,6 @@
 "use client";
 
+import { useOrganizationKinde } from "@/components/context/kinde-organization";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
@@ -20,14 +21,15 @@ export default function ListaCardapio() {
   const MENSAGEM_SALVA = "Cardapio atualizado!";
 
   const [itens, setItens] = useState<IItem[]>([]);
-  const [cardapio, setCardapio] = useState<ICardapio[]>([]);
+  const [cardapios, setCardapios] = useState<ICardapio[]>([]);
   const [isInteracting, setIsInteracting] = useState(false);
   const [mensagemSalvamento, setMensagemSalvamento] = useState(MENSAGEM_SALVA);
+  const organization = useOrganizationKinde();
 
   useEffect(() => {
     // Função que será chamada para salvar automaticamente após 3 segundos
     const salvarAutomaticamente = () => {
-      cardapio.map((c) => {
+      cardapios.map((c) => {
         insertOrUpdateCardapio(c);
       });
       console.log("Cardapio atualizado!");
@@ -44,16 +46,18 @@ export default function ListaCardapio() {
 
     // Limpa o temporizador se o usuário interagir antes de 2 segundos
     return () => clearTimeout(timer);
-  }, [cardapio, isInteracting]);
+  }, [cardapios, isInteracting]);
+
+  const urlCardapio = `/api/sandra/cardapio?restauranteId=${organization?.orgCode}`;
 
   useEffect(() => {
-    fetch("/api/sandra/item")
+    fetch(`/api/sandra/item?restauranteId=${organization?.orgCode}`)
       .then((response) => response.json())
       .then((data) => setItens(data));
 
-    fetch("/api/sandra/cardapio")
+    fetch(urlCardapio)
       .then((response) => response.json())
-      .then((data) => setCardapio(data));
+      .then((data) => setCardapios(data));
   }, []);
 
   if (itens && itens.length < 1) {
@@ -65,8 +69,8 @@ export default function ListaCardapio() {
   }
 
   function insertOrUpdateCardapio(cardapio: ICardapio) {
-    fetch("/api/sandra/cardapio", {
-      method: "PATCH",
+    fetch(urlCardapio, {
+      method: cardapios.length > 0 ? "PATCH" : "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -75,11 +79,11 @@ export default function ListaCardapio() {
   }
 
   function itemJaSelecionado(tipo: string, item: string): boolean {
-    return cardapio.some((c) => c.tipo === tipo && c.items.includes(item));
+    return cardapios.some((c) => c.tipo === tipo && c.items.includes(item));
   }
 
   function incluirRemoverItemCardapio(tipo: string, item: string) {
-    setCardapio((prevCardapio) =>
+    setCardapios((prevCardapio) =>
       prevCardapio.map((c) => {
         if (c.tipo === tipo) {
           const itemExists = c.items.includes(item);

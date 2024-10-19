@@ -4,7 +4,10 @@ import { NextRequest } from "next/server";
 const url = `${SANDRA_BASE_URL}`;
 
 export async function GET(req: NextRequest) {
-  const res = await fetch(`${url}/item`, {
+  const { searchParams } = new URL(req.url);
+  const restauranteId = searchParams.get('restauranteId')
+  
+  const res = await fetch(`${url}/item/${restauranteId}`, {
     next: { revalidate: 10 },
   });
 

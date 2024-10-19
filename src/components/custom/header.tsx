@@ -51,10 +51,6 @@ export default async function Header({ isAuthenticated }: HeaderProps) {
             <LoginLink>
               <Button>Entrar</Button>
             </LoginLink>
-
-            <Link href={"/novo-restaurante"}>
-              <Button variant={"ghost"}>Criar meu restaurante</Button>
-            </Link>
           </>
         )}
       </nav>

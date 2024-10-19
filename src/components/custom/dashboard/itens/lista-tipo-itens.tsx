@@ -20,12 +20,14 @@ import {
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { IItem } from "restaurante";
+import { useOrganizationKinde } from "@/components/context/kinde-organization";
 
 export default function ListaTipoItens() {
+  const organization = useOrganizationKinde();
   const [itens, setItems] = useState<IItem[]>([]);
 
   useEffect(() => {
-    fetch("/api/sandra/item")
+    fetch(`/api/sandra/item?restauranteId=${organization?.orgCode}`)
       .then((res) => res.json())
       .then((data) => {
         setItems(data);

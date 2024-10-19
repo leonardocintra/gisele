@@ -1,6 +1,5 @@
 import ListaTipoItens from "@/components/custom/dashboard/itens/lista-tipo-itens";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 export default function ItemPageDashboard() {
   return (
