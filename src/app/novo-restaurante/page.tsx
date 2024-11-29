@@ -55,9 +55,10 @@ export default function NovoRestaurantePage() {
       } else {
         console.log("Ocorreu um erro 500 - Analisar");
       }
-      const errorResponse = await res.json();
+      // const errorResponse = await res.json();
+      const errorResponse = await res.text();
       logErrorOnEmail(
-        errorResponse?.message || "erro-desconhecido",
+        errorResponse || "erro-desconhecido",
         user || "usuario-undefined"
       );
     }
