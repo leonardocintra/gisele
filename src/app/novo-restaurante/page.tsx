@@ -38,7 +38,7 @@ export default function NovoRestaurantePage() {
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     let url = `/api/sandra/restaurante`;
-    
+
     const res = await fetch(url, {
       method: "POST",
       headers: {
@@ -55,7 +55,11 @@ export default function NovoRestaurantePage() {
       } else {
         console.log("Ocorreu um erro 500 - Analisar");
       }
-      logErrorOnEmail(res.text.toString(), user || 'usuario-undefined');
+      const errorResponse = await res.json();
+      logErrorOnEmail(
+        errorResponse?.message || "erro-desconhecido",
+        user || "usuario-undefined"
+      );
     }
   };
 

@@ -29,9 +29,7 @@ export async function POST(req: Request) {
         status: 404,
       }
     );
-  }
-
-  if (res.status === 201 || res.status === 200) {
+  } else if (res.status === 201 || res.status === 200) {
     return Response.json(res, {
       status: res.status,
     });
