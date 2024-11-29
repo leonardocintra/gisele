@@ -50,17 +50,19 @@ export default function NovoRestaurantePage() {
     if (res.status === 201) {
       router.push(`/dashboard`);
     } else {
+      const errorResponse = await res.json();
+      console.log(errorResponse);
+      console.log(res);
       if (res.status === 400) {
-        console.log("Ocorreu um erro 400 - Analisar");
+        console.log(`Ocorreu um erro 400 - Analisar ${errorResponse}`);
       } else {
-        console.log("Ocorreu um erro 500 - Analisar");
+        console.log(`Ocorreu um erro 500 - Analisar ${errorResponse}`);
       }
-      // const errorResponse = await res.json();
-      const errorResponse = await res.text();
-      logErrorOnEmail(
-        errorResponse || "erro-desconhecido",
-        user || "usuario-undefined"
-      );
+
+      // logErrorOnEmail(
+      //   errorResponse.message || "erro-desconhecido",
+      //   user || "usuario-undefined"
+      // );
     }
   };
 
