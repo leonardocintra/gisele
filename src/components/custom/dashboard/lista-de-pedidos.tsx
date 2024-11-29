@@ -24,9 +24,9 @@ import { PersonStanding, PhoneIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { IPedido } from "restaurante";
 import io from "socket.io-client";
+import NoDataMessage from "./commons/no-data-message";
 
 export function ListaDePedidos() {
-  
   const [pedidos, setPedidos] = useState<IPedido[]>([]);
   const [temNovoPedido, setTemNovoPedido] = useState(false);
 
@@ -56,7 +56,7 @@ export function ListaDePedidos() {
   }, []);
 
   useEffect(() => {
-    fetch("/api/sandra/pedido", { cache: "no-cache" })
+    fetch("/api/sandra/pedido", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         setPedidos(data);
@@ -65,9 +65,7 @@ export function ListaDePedidos() {
 
   if (!pedidos || pedidos.length === 0) {
     return (
-      <div className="text-4xl text-center my-12 text-slate-700">
-        <p>Por enquanto não tem nenhum pedido hoje :( </p>
-      </div>
+      <NoDataMessage description="Por enquanto não tem nenhum pedido hoje :(" />
     );
   }
 

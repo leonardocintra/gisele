@@ -18,9 +18,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
 import { IItem } from "restaurante";
 import { useOrganizationKinde } from "@/components/context/kinde-organization";
+import NoDataMessage from "../commons/no-data-message";
 
 export default function ListaTipoItens() {
   const organization = useOrganizationKinde();
@@ -28,7 +28,11 @@ export default function ListaTipoItens() {
 
   useEffect(() => {
     fetch(`/api/sandra/item?restauranteId=${organization?.orgCode}`)
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+      })
       .then((data) => {
         setItems(data);
       })
@@ -37,16 +41,8 @@ export default function ListaTipoItens() {
       });
   }, []);
 
-  if (!itens || itens.length === 0) {
-    return (
-      <div className="flex flex-col space-y-3 items-center justify-center my-8">
-        <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-[250px]" />
-          <Skeleton className="h-4 w-[200px]" />
-        </div>
-      </div>
-    );
+  if (!itens) {
+    return <NoDataMessage description="Você não possui itens cadastrados." />;
   }
 
   function getIcon(tipo: string) {

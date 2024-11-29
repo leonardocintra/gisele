@@ -37,9 +37,7 @@ export default function NovoRestaurantePage() {
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     let url = `/api/sandra/restaurante`;
-
-    console.log(values);
-
+    
     const res = await fetch(url, {
       method: "POST",
       headers: {

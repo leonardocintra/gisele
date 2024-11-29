@@ -16,6 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Beef, Salad, Soup } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ICardapio, IItem } from "restaurante";
+import NoDataMessage from "../commons/no-data-message";
 
 export default function ListaCardapio() {
   const MENSAGEM_SALVA = "Cardapio atualizado!";
@@ -52,21 +53,21 @@ export default function ListaCardapio() {
 
   useEffect(() => {
     fetch(`/api/sandra/item?restauranteId=${organization?.orgCode}`)
-      .then((response) => response.json())
-      .then((data) => setItens(data));
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+      })
+      .then((data) => {
+        if (data) {
+          setItens(data);
+        }
+      });
 
     fetch(urlCardapio)
       .then((response) => response.json())
       .then((data) => setCardapios(data));
-  }, []);
-
-  if (itens && itens.length < 1) {
-    return (
-      <div className="flex justify-center">
-        <Skeleton />
-      </div>
-    );
-  }
+  }, [organization?.orgCode]);
 
   function insertOrUpdateCardapio(cardapio: ICardapio) {
     fetch(urlCardapio, {
@@ -99,6 +100,10 @@ export default function ListaCardapio() {
     );
     setIsInteracting(true);
     setMensagemSalvamento("Salvando ...");
+  }
+
+  if (!itens || itens.length === 0) {
+    return <NoDataMessage description="Você não possui itens cadastrados" />;
   }
 
   return (
