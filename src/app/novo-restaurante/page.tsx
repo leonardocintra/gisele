@@ -15,6 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { logErrorOnEmail } from "@/lib/utils";
 
 export default function NovoRestaurantePage() {
   const router = useRouter();
@@ -54,6 +55,7 @@ export default function NovoRestaurantePage() {
       } else {
         console.log("Ocorreu um erro 500 - Analisar");
       }
+      logErrorOnEmail(res.text.toString(), user || 'usuario-undefined');
     }
   };
 

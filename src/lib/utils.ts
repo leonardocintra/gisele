@@ -12,3 +12,18 @@ export const RESTAURANTE_TEMPEIRO_E_AMOR_ID =
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export function logErrorOnEmail(descricao: string, userId: string) {
+  const errorMessage = {
+    descricao,
+    userId
+  };
+
+  fetch(`${BASE_URL}/api/n8n/error`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(errorMessage),
+  })
+}
