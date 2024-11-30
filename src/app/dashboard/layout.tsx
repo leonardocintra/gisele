@@ -20,7 +20,7 @@ export default async function DashboardLayout({
     const response = await fetch(url);
 
     if (response.ok) {
-      // TODO: cliente com mais de um restaurante precisa selecionar qual restaurante ele quer tratar
+      // TODO: cliente com mais de um restaurante precisa selecionar qual restaurante ele quer administrar
       const res = await response.json();
       organization = {
         orgCode: res[0].code,

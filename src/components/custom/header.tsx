@@ -33,9 +33,14 @@ export default async function Header({ isAuthenticated }: HeaderProps) {
               <LayoutDashboardIcon />
               <span>Minha área</span>
             </Link>
-            {organization?.orgCode && (
+            {organization?.orgCode ? (
               <span className="text-xs text-slate-400 font-light">
                 code: {organization.orgCode}
+              </span>
+            ) : (
+              <span className="text-xs text-red-600 font-semibold">
+                Você precisa sair e entrar novamente para sincronizar
+                corretamente.
               </span>
             )}
           </div>
