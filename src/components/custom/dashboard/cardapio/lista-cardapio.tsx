@@ -67,7 +67,7 @@ export default function ListaCardapio() {
     fetch(urlCardapio)
       .then((response) => response.json())
       .then((data) => setCardapios(data));
-  }, [organization?.orgCode]);
+  }, [organization?.orgCode, urlCardapio]);
 
   function insertOrUpdateCardapio(cardapio: ICardapio) {
     fetch(urlCardapio, {

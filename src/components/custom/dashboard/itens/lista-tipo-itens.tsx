@@ -39,7 +39,7 @@ export default function ListaTipoItens() {
       .catch((err) => {
         console.error(err);
       });
-  }, []);
+  }, [organization]);
 
   if (!itens) {
     return <NoDataMessage description="Você não possui itens cadastrados." />;

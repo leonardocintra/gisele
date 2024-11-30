@@ -16,28 +16,34 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { logErrorOnEmail } from "@/lib/utils";
+import { useState } from "react";
 
 export default function NovoRestaurantePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const user = searchParams.get("usuario");
 
+  const [submitDisabled, setSubmitDisable] = useState<boolean>(false);
+
   const formSchema = z.object({
     descricao: z
       .string()
       .min(4, { message: "Nome restaurante deve ter no minimo 4 caracteres." })
       .max(50),
-    userId: z
-      .string()
-      .default(user || "usuario-kinde-nao-informado-no-request"),
+    userId: z.string(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      descricao: "",
+      userId: user || "usuario-kinde-nao-informado-no-request",
+    },
   });
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     let url = `/api/sandra/restaurante`;
+    setSubmitDisable(true);
 
     const res = await fetch(url, {
       method: "POST",
@@ -47,22 +53,18 @@ export default function NovoRestaurantePage() {
       body: JSON.stringify(values),
     });
 
+    const response = await res.json();
+
     if (res.status === 201) {
       router.push(`/dashboard`);
     } else {
-      const errorResponse = await res.json();
-      console.log(errorResponse);
-      console.log(res);
-      if (res.status === 400) {
-        console.log(`Ocorreu um erro 400 - Analisar ${errorResponse}`);
-      } else {
-        console.log(`Ocorreu um erro 500 - Analisar ${errorResponse}`);
-      }
+      console.log(`Ocorreu um erro ${res.status} - Analisar ${response}`);
 
-      // logErrorOnEmail(
-      //   errorResponse.message || "erro-desconhecido",
-      //   user || "usuario-undefined"
-      // );
+      logErrorOnEmail(
+        response.message || "erro-desconhecido",
+        user || "usuario-undefined"
+      );
+      setSubmitDisable(false);
     }
   };
 
@@ -97,7 +99,11 @@ export default function NovoRestaurantePage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={submitDisabled}
+              >
                 Salvar
               </Button>
             </form>
